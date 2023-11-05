@@ -1,4 +1,4 @@
-# Game development Platform Game (Name tbd)
+# "Mini ninja" platformer game alpha
 
 ## Description 
 

@@ -30,4 +30,4 @@ Designer
 
 ## License
 
-This project is licensed under an unmodified MIT license, which is an OSI-certified license that allows static linking with closed source software. Check [LICENSE]() for further details.
+This project is licensed under an unmodified MIT license, Check [LICENSE](https://github.com/Jusstox/DevelopmentGame1/blob/main/LICENSE) for further details.

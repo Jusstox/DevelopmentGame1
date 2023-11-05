@@ -1,4 +1,4 @@
-# Development Platform Game (Name tbd)
+# Game development Platform Game (Name tbd)
 
 ## Description 
 
@@ -10,13 +10,22 @@ This platform game was developed by the students with the code provided by our p
 
 # Controls
 
+W - Fly up (God mode oxclusive)
+
 A - move left
 
 D - move right
 
 SPACEBAR - jump
 
-## Developera
+F3 Respawn
+
+F9 Toggle colliders
+
+F10 Toggle god mode
+
+
+## Developers
 
 ### Joan Marques
 Programmer

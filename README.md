@@ -7,6 +7,7 @@ This platform game was developed by the students with the code provided by our p
 # Key features
 
 - Double jump
+- Wall jump
 
 # Controls
 

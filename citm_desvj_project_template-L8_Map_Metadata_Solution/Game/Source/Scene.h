@@ -34,6 +34,10 @@ public:
 	bool CleanUp();
 	uint windowW, windowH;
 
+	Player* GetPlayer() {
+		return player;
+	}
+
 private:
 	SDL_Texture* img;
 	float textPosX, textPosY = 0;

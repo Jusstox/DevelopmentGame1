@@ -9,6 +9,7 @@
 #include "Point.h"
 #include "Physics.h"
 #include "Window.h"
+#include "Map.h"
 
 Player::Player() : Entity(EntityType::PLAYER)
 {
@@ -319,4 +320,14 @@ void Player::respawn()
 	if (app->render->camera.y >= 0) {
 		app->render->camera.y = 0;
 	}
+}
+
+int Player::getPlayerTileX()
+{
+	return (position.x + (currentAnimation->GetCurrentFrame().w / 2)) /app->map->getTileWidth();
+}
+
+int Player::getPlayerTileY()
+{
+	return (position.y + (currentAnimation->GetCurrentFrame().h / 2)) / app->map->getTileHieght();
 }

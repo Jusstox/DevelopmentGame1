@@ -4,6 +4,9 @@
 #include "Textures.h"
 #include "Map.h"
 #include "Physics.h"
+#include "Scene.h"
+#include "Player.h"
+#include "EntityManager.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -52,6 +55,8 @@ bool Map::Update(float dt)
     ListItem<MapLayer*>* mapLayer; 
     mapLayer = mapData.layers.start;
 
+    int X = app->scene->GetPlayer()->getPlayerTileX();
+    int Y = app->scene->GetPlayer()->getPlayerTileY();
     // L06: DONE 5: Prepare the loop to draw all tiles in a layer + DrawTexture()
 
     // iterates the layers in the map
@@ -59,8 +64,8 @@ bool Map::Update(float dt)
         //Check if the property Draw exist get the value, if it's true draw the lawyer
         if (mapLayer->data->properties.GetProperty("Draw") != NULL && mapLayer->data->properties.GetProperty("Draw")->value) {
             //iterate all tiles in a layer
-            for (int i = 0; i < mapData.width; i++) {
-                for (int j = 0; j < mapData.height; j++) {
+            for (int i = X-5; i < X+5; i++) {
+                for (int j = Y-5; j < Y+5; j++) {
                     //Get the gid from tile
                     int gid = mapLayer->data->Get(i, j);
 

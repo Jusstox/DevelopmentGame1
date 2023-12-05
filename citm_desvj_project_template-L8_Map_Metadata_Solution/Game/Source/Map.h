@@ -140,6 +140,14 @@ public:
         return mapData.width * mapData.tilewidth;
     }
 
+    int getTileWidth() {
+        return mapData.tilewidth;
+    }
+
+    int getTileHieght() {
+        return mapData.tileheight;
+    }
+
 public: 
     SString name;
     SString path;

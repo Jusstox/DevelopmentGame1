@@ -37,6 +37,11 @@ public:
 
 	void respawn();
 
+	// obtein the current tile which player stays
+	int getPlayerTileX();
+
+	int getPlayerTileY();
+
 public:
 
 	//L02: DONE 2: Declare player parameters

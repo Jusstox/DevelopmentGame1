@@ -43,6 +43,14 @@ public:
 	// Set background color
 	void SetBackgroundColor(SDL_Color color);
 
+	int GetFirstTileX();
+
+	int GetLastTileX();
+
+	int GetFirstTileY();
+
+	int GetLastTileY();
+
 public:
 	SDL_Renderer* renderer;
 	SDL_Rect camera;

@@ -5,6 +5,7 @@
 #include "Point.h"
 #include "SDL/include/SDL.h"
 #include "Animation.h"
+#include "Timer.h"
 
 struct SDL_Texture;
 
@@ -47,6 +48,8 @@ public:
 	//L02: DONE 2: Declare player parameters
 	float speed = 0.2f;
 	SDL_Texture* texture = NULL;
+	SDL_Texture* blendTexture = NULL;
+	int blenditerator = 0;
 	pugi::xml_node config;
 	uint texW, texH;
 
@@ -57,8 +60,10 @@ public:
 	Animation dieAnim;
 	Animation jumpAnim1;
 	Animation jumpAnim2;
+	Animation blendFadeIN;
+	Animation blendFadeOut;
 	bool flip;
-
+	bool dark;
 	//Audio fx
 	int pickCoinFxId;
 	int victory;
@@ -74,6 +79,8 @@ public:
 	sates state;
 	bool death;
 	iPoint initPosition;
+
+	Timer NoDark;
 };
 
 #endif // __PLAYER_H__

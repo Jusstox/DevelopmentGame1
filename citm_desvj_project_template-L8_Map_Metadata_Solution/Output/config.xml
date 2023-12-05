@@ -20,7 +20,7 @@
 
   <scene>
     <player x="150" y="350" texturePath="Assets/Textures/ninja-pixilart.png" coinfxpath="Assets/Audio/Fx/retro-video-game-coin-pickup-38299.ogg" winfxpath="Assets/Audio/Fx/victory_sJDDywi.ogg"
-	musicpath="Assets/Audio/Music/music.ogg"/>
+	musicpath="Assets/Audio/Music/music.ogg" textureblendPath="Assets/Textures/blendanim.png"/>
     <map path="Assets/Maps/" name="Mapa real(porfa).tmx"/>
     <item x="256" y="515" texturepath="Assets/Textures/goldCoin.png"/>
     <item x="416" y="512" texturepath="Assets/Textures/goldCoin.png"/>

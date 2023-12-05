@@ -1,9 +1,11 @@
-#include "App.h"
 #include "Window.h"
 #include "Render.h"
 
 #include "Defs.h"
 #include "Log.h"
+
+#include "App.h"
+#include "Map.h"
 
 #define VSYNC true
 
@@ -94,6 +96,26 @@ bool Render::CleanUp()
 void Render::SetBackgroundColor(SDL_Color color)
 {
 	background = color;
+}
+
+int Render::GetFirstTileX()
+{
+	return (camera.x * -1)/ app->map->getTileWidth();
+}
+
+int Render::GetLastTileX()
+{
+	return ((camera.x * -1) + camera.w + app->map->getTileWidth()) / app->map->getTileWidth();
+}
+
+int Render::GetFirstTileY()
+{
+	return (camera.y * -1) / app->map->getTileHieght();
+}
+
+int Render::GetLastTileY()
+{
+	return ((camera.y * -1) + camera.h + app->map->getTileHieght()) / app->map->getTileHieght();
 }
 
 void Render::SetViewPort(const SDL_Rect& rect)

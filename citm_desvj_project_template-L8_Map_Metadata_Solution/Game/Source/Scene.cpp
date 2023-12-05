@@ -97,7 +97,8 @@ bool Scene::Update(float dt)
 	float camSpeed = 1; 
 	int limitCamX = player->position.x - (windowW / 2);
 	if (limitCamX > 0 && limitCamX < (app->map->getMapWidth() - windowW)) {
-		app->render->camera.x = (player->position.x - windowW / 2) * -1;
+		//preguntar como sacar lo del 13 (es la mitad del width) con el getcurrentrectanim.w varia
+		app->render->camera.x = (player->position.x + 13 - windowW / 2) * -1;
 	}
 
 	int limitCamY = player->position.y - (windowH / 2);

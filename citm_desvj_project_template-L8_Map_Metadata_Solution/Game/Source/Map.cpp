@@ -6,7 +6,6 @@
 #include "Physics.h"
 #include "Scene.h"
 #include "Player.h"
-#include "EntityManager.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -55,8 +54,13 @@ bool Map::Update(float dt)
     ListItem<MapLayer*>* mapLayer; 
     mapLayer = mapData.layers.start;
 
-    int X = app->scene->GetPlayer()->getPlayerTileX();
-    int Y = app->scene->GetPlayer()->getPlayerTileY();
+    int fisrtX = app->render->GetFirstTileX();
+    int lastX = app->render->GetLastTileX();
+
+    int fisrtY = app->render->GetFirstTileY();
+    int lastY = app->render->GetLastTileY();
+
+
     // L06: DONE 5: Prepare the loop to draw all tiles in a layer + DrawTexture()
 
     // iterates the layers in the map
@@ -64,10 +68,10 @@ bool Map::Update(float dt)
         //Check if the property Draw exist get the value, if it's true draw the lawyer
         if (mapLayer->data->properties.GetProperty("Draw") != NULL && mapLayer->data->properties.GetProperty("Draw")->value) {
             //iterate all tiles in a layer
-            for (int i = X-5; i < X+5; i++) {
-                for (int j = Y-5; j < Y+5; j++) {
+            for (int i = fisrtX; i < lastX; i++) {
+                for (int j = fisrtY; j < lastY; j++) {
                     //Get the gid from tile
-                    int gid = mapLayer->data->Get(i, j);
+                      int gid = mapLayer->data->Get(i, j);
 
                     //L08: DONE 3: Obtain the tile set using GetTilesetFromTileId
                     //Get the Rect from the tileSetTexture;

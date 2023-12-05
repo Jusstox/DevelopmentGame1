@@ -53,13 +53,30 @@ bool Player::Awake() {
 	jumpAnim2.loop = false;
 	jumpAnim2.speed = 0.2f;
 
+	blendFadeIN.PushBack({ 2500,1500,2500,1500 });
+	blendFadeIN.PushBack({ 0,1500,2500,1500 });
+	blendFadeIN.PushBack({ 2500,0,2500,1500 });
+	blendFadeIN.PushBack({ 0,0,2500,1500 });
+	blendFadeIN.loop = false;
+	blendFadeIN.speed = 0.5f;
+
+	blendFadeOut.PushBack({ 0,0,2500,1500 });
+	blendFadeOut.PushBack({ 2500,0,2500,1500 });
+	blendFadeOut.PushBack({ 0,1500,2500,1500 });
+	blendFadeOut.PushBack({ 2500,1500,2500,1500 });
+	blendFadeOut.PushBack({ 0,0,0,0 });
+	blendFadeOut.loop = false;
+	blendFadeOut.speed = 0.5f;
+
 	return true;
 }
 
 bool Player::Start() {
 
 	texture = app->tex->Load(config.attribute("texturePath").as_string());
-
+	blendTexture = app->tex->Load(config.attribute("textureblendPath").as_string());
+	blendFadeOut.setCurrentFrame(4);
+	dark = false;
 	state = IDLE;
 	// L07 DONE 5: Add physics to the player - initialize physics body
 	app->tex->GetSize(texture, texW, texH);
@@ -93,20 +110,17 @@ bool Player::Update(float dt)
 
 	if (app->input->GetKey(SDL_SCANCODE_F10) == KEY_DOWN) {
 		if (!godmode) {
-			pbody->body->SetGravityScale(0.0f);
 			godmode = true;
 		}
 		else {
-			pbody->body->SetGravityScale(1.0f);
 			godmode = false;
+			position.x += (26 / 2);
+			position.y += (40 / 2);
+			b2Vec2 pPosition = b2Vec2(PIXEL_TO_METERS(position.x) , PIXEL_TO_METERS(position.y));
+			pbody->body->SetTransform(pPosition, 0);
 		}
 	}
 
-	if (godmode) {
-		if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) {
-			velocity.y = -0.5 * dt;
-		}
-	}
 
 	switch (state)
 	{
@@ -244,23 +258,56 @@ bool Player::Update(float dt)
 		}
 	}
 
-	pbody->body->SetLinearVelocity(velocity);
-	b2Transform pbodyPos = pbody->body->GetTransform();
-	position.x = METERS_TO_PIXELS(pbodyPos.p.x) - currentAnimation->GetCurrentFrame().w / 2;
-	position.y = METERS_TO_PIXELS(pbodyPos.p.y) - currentAnimation->GetCurrentFrame().h / 2;
+	if (app->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN) {
+		if (!dark) {
+			dark = true;
+		}
+		else {
+			dark = false;
+		}
+	}
+
+	// poner sizes de textura no hardcoded
+	if (dark) {
+		app->render->DrawTexturePR(blendTexture, position.x - 1250, position.y - 750, &blendFadeIN.GetCurrentFrame());
+		blendFadeIN.Update();
+		blendFadeOut.Reset();
+	}
+	else {
+		app->render->DrawTexturePR(blendTexture, position.x - 1250, position.y - 750, &blendFadeOut.GetCurrentFrame());
+		blendFadeOut.Update();
+		blendFadeIN.Reset();
+	}
+
+	if (!godmode) {
+		pbody->body->SetLinearVelocity(velocity);
+		b2Transform pbodyPos = pbody->body->GetTransform();
+
+		//preguntar al profe tema camera (el problema es en y) estaba  &blendFadeOut.GetCurrentFrame().h
+		position.x = METERS_TO_PIXELS(pbodyPos.p.x) - (26 / 2);
+		position.y = METERS_TO_PIXELS(pbodyPos.p.y) - (40 / 2);
+	}
+	else {
+		if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) {
+			position.y += -0.5 * dt;
+		}
+		if (app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) {
+			position.y += 0.5 * dt;
+		}
+		if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
+			position.x += -0.5 * dt;
+		}
+		if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
+			position.x += 0.5 * dt;
+		}
+	}
+
+	LOG("%d", pbody->body->GetTransform().p.y);
 
 	if (flip) {
 		app->render->DrawTexturePR(texture, position.x, position.y, &currentAnimation->GetCurrentFrame());
 	}else{
 		app->render->DrawTexture(texture, position.x, position.y, &currentAnimation->GetCurrentFrame());
-	}
-
-	if (app->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN) {
-		pbody->body->SetActive(false);
-		position = initPosition;
-		b2Vec2 pbinitPosition = b2Vec2(initPosition.x, initPosition.y);
-		pbody->body->SetTransform(pbinitPosition, 0);
-		pbody->body->SetActive(true);
 	}
 
 	currentAnimation->Update();

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="240" height="48" tilewidth="32" tileheight="32" infinite="0" nextlayerid="15" nextobjectid="153">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="240" height="48" tilewidth="32" tileheight="32" infinite="0" nextlayerid="16" nextobjectid="154">
  <tileset firstgid="1" name="moon" tilewidth="32" tileheight="32" tilecount="24" columns="8">
   <image source="moon.png" width="256" height="96"/>
  </tileset>
@@ -7941,8 +7941,8 @@
    <tile gid="12"/>
    <tile gid="12"/>
    <tile gid="12"/>
-   <tile gid="12"/>
-   <tile gid="12"/>
+   <tile gid="104"/>
+   <tile gid="96"/>
    <tile gid="12"/>
    <tile gid="12"/>
    <tile gid="12"/>
@@ -8181,16 +8181,16 @@
    <tile gid="12"/>
    <tile gid="12"/>
    <tile gid="104"/>
-   <tile gid="12"/>
-   <tile gid="12"/>
-   <tile gid="12"/>
-   <tile gid="12"/>
-   <tile gid="12"/>
-   <tile gid="12"/>
-   <tile gid="12"/>
-   <tile gid="12"/>
-   <tile gid="12"/>
-   <tile gid="12"/>
+   <tile gid="104"/>
+   <tile gid="104"/>
+   <tile gid="96"/>
+   <tile gid="96"/>
+   <tile gid="96"/>
+   <tile gid="96"/>
+   <tile gid="96"/>
+   <tile gid="96"/>
+   <tile gid="96"/>
+   <tile gid="96"/>
    <tile gid="104"/>
    <tile gid="12"/>
    <tile gid="12"/>
@@ -8421,16 +8421,16 @@
    <tile gid="12"/>
    <tile gid="12"/>
    <tile gid="104"/>
-   <tile gid="12"/>
-   <tile gid="12"/>
-   <tile gid="12"/>
-   <tile gid="12"/>
-   <tile gid="12"/>
-   <tile gid="12"/>
-   <tile gid="12"/>
-   <tile gid="12"/>
-   <tile gid="12"/>
-   <tile gid="12"/>
+   <tile gid="104"/>
+   <tile gid="104"/>
+   <tile gid="104"/>
+   <tile gid="96"/>
+   <tile gid="96"/>
+   <tile gid="96"/>
+   <tile gid="96"/>
+   <tile gid="96"/>
+   <tile gid="96"/>
+   <tile gid="96"/>
    <tile gid="104"/>
    <tile gid="12"/>
    <tile gid="12"/>
@@ -23063,7 +23063,7 @@
    <tile/>
   </data>
  </layer>
- <layer id="8" name="claridad cueva" width="240" height="48" opacity="0.89">
+ <layer id="8" name="claridad cueva" width="240" height="48" opacity="0.69">
   <properties>
    <property name="Draw" type="bool" value="true"/>
   </properties>
@@ -27637,22 +27637,14 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="104"/>
+   <tile gid="104"/>
+   <tile gid="104"/>
+   <tile gid="104"/>
+   <tile gid="104"/>
+   <tile gid="104"/>
+   <tile gid="104"/>
+   <tile gid="104"/>
    <tile/>
    <tile/>
    <tile/>
@@ -27885,6 +27877,14 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="104"/>
+   <tile gid="104"/>
+   <tile gid="104"/>
+   <tile gid="104"/>
+   <tile gid="104"/>
+   <tile gid="104"/>
+   <tile gid="104"/>
+   <tile gid="104"/>
    <tile/>
    <tile/>
    <tile/>
@@ -27946,10 +27946,6 @@
    <tile/>
    <tile gid="20"/>
    <tile gid="20"/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -28121,10 +28117,14 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="104"/>
+   <tile gid="104"/>
+   <tile gid="104"/>
+   <tile gid="104"/>
+   <tile gid="104"/>
+   <tile gid="104"/>
+   <tile gid="104"/>
+   <tile gid="104"/>
    <tile/>
    <tile/>
    <tile/>
@@ -28357,14 +28357,14 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="104"/>
+   <tile gid="104"/>
+   <tile gid="104"/>
+   <tile gid="104"/>
+   <tile gid="104"/>
+   <tile gid="104"/>
+   <tile gid="104"/>
+   <tile gid="104"/>
    <tile/>
    <tile/>
    <tile/>
@@ -32445,8 +32445,6 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="20"/>
-   <tile gid="20"/>
    <tile/>
    <tile/>
    <tile/>
@@ -32603,6 +32601,8 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile/>
+   <tile/>
    <tile gid="20"/>
    <tile gid="20"/>
    <tile gid="20"/>
@@ -32685,8 +32685,8 @@
    <tile/>
    <tile/>
    <tile gid="104"/>
-   <tile gid="20"/>
-   <tile gid="20"/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -32925,8 +32925,7 @@
    <tile/>
    <tile gid="104"/>
    <tile gid="104"/>
-   <tile gid="20"/>
-   <tile gid="20"/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -33083,6 +33082,7 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile/>
    <tile gid="20"/>
    <tile gid="20"/>
    <tile gid="20"/>
@@ -33165,8 +33165,6 @@
    <tile gid="104"/>
    <tile gid="104"/>
    <tile gid="104"/>
-   <tile gid="20"/>
-   <tile gid="20"/>
    <tile/>
    <tile/>
    <tile/>
@@ -33323,6 +33321,8 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile/>
+   <tile/>
    <tile gid="20"/>
    <tile gid="20"/>
    <tile gid="20"/>
@@ -33405,8 +33405,8 @@
    <tile gid="104"/>
    <tile gid="104"/>
    <tile gid="104"/>
-   <tile gid="20"/>
-   <tile gid="20"/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -33645,8 +33645,7 @@
    <tile gid="104"/>
    <tile gid="104"/>
    <tile gid="104"/>
-   <tile gid="20"/>
-   <tile gid="20"/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -33803,6 +33802,7 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile/>
    <tile gid="20"/>
    <tile gid="20"/>
    <tile gid="20"/>
@@ -33885,8 +33885,6 @@
    <tile gid="104"/>
    <tile gid="104"/>
    <tile gid="104"/>
-   <tile gid="20"/>
-   <tile gid="20"/>
    <tile/>
    <tile/>
    <tile/>
@@ -34043,6 +34041,8 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile/>
+   <tile/>
    <tile gid="20"/>
    <tile gid="20"/>
    <tile gid="20"/>
@@ -34125,8 +34125,8 @@
    <tile gid="104"/>
    <tile gid="104"/>
    <tile gid="104"/>
-   <tile gid="20"/>
-   <tile gid="20"/>
+   <tile/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -103752,7 +103752,7 @@
    <tile/>
   </data>
  </layer>
- <objectgroup id="12" name="Capa de Objetos 1">
+ <objectgroup id="12" name="Capa de Objetos 1" visible="0">
   <object id="3" x="0" y="578.667" width="286.151" height="348.666"/>
   <object id="4" x="224" y="928" width="29.2121" height="124.666"/>
   <object id="5" x="545.666" y="448.417" width="92.6667" height="796.916"/>
@@ -103875,5 +103875,8 @@
   <object id="126" x="640" y="1536" width="1824" height="32"/>
   <object id="136" x="7167.18" y="1215.27" width="32.7273" height="10.9091"/>
   <object id="137" x="6879.64" y="1109.27" width="256" height="10.7273"/>
+ </objectgroup>
+ <objectgroup id="15" name="Luz">
+  <object id="153" x="0" y="602.667" width="544" height="902.667"/>
  </objectgroup>
 </map>

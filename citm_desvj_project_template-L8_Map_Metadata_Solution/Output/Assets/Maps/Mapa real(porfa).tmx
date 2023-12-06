@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="240" height="48" tilewidth="32" tileheight="32" infinite="0" nextlayerid="17" nextobjectid="156">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="240" height="48" tilewidth="32" tileheight="32" infinite="0" nextlayerid="17" nextobjectid="167">
  <tileset firstgid="1" name="moon" tilewidth="32" tileheight="32" tilecount="24" columns="8">
   <image source="moon.png" width="256" height="96"/>
  </tileset>
@@ -30693,8 +30693,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="104"/>
-   <tile gid="104"/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -30756,6 +30755,7 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile/>
    <tile gid="104"/>
    <tile gid="104"/>
    <tile gid="104"/>
@@ -30932,9 +30932,8 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="104"/>
    <tile gid="104"/>
-   <tile gid="104"/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -30995,6 +30994,7 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile/>
    <tile gid="104"/>
    <tile gid="104"/>
    <tile gid="104"/>
@@ -31171,10 +31171,9 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="104"/>
    <tile gid="104"/>
    <tile gid="104"/>
-   <tile gid="104"/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -31234,6 +31233,7 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile/>
    <tile gid="104"/>
    <tile gid="104"/>
    <tile gid="104"/>
@@ -31411,10 +31411,9 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="104"/>
    <tile gid="104"/>
    <tile gid="104"/>
-   <tile gid="104"/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -31474,6 +31473,7 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile/>
    <tile gid="104"/>
    <tile gid="104"/>
    <tile gid="104"/>
@@ -32613,7 +32613,7 @@
    <tile gid="20"/>
    <tile gid="20"/>
    <tile gid="20"/>
-   <tile gid="20"/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -32853,7 +32853,7 @@
    <tile gid="20"/>
    <tile gid="20"/>
    <tile gid="20"/>
-   <tile gid="20"/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -33093,7 +33093,7 @@
    <tile gid="20"/>
    <tile gid="20"/>
    <tile gid="20"/>
-   <tile gid="20"/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -33333,7 +33333,7 @@
    <tile gid="20"/>
    <tile gid="20"/>
    <tile gid="20"/>
-   <tile gid="20"/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -33573,7 +33573,7 @@
    <tile gid="20"/>
    <tile gid="20"/>
    <tile gid="20"/>
-   <tile gid="20"/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -33813,7 +33813,7 @@
    <tile gid="20"/>
    <tile gid="20"/>
    <tile gid="20"/>
-   <tile gid="20"/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -34053,7 +34053,7 @@
    <tile gid="20"/>
    <tile gid="20"/>
    <tile gid="20"/>
-   <tile gid="20"/>
+   <tile/>
    <tile/>
    <tile/>
    <tile/>
@@ -103752,7 +103752,7 @@
    <tile/>
   </data>
  </layer>
- <objectgroup id="12" name="Capa de Objetos 1" visible="0">
+ <objectgroup id="12" name="Capa de Objetos 1">
   <object id="3" x="0" y="578.667" width="286.151" height="348.666"/>
   <object id="4" x="224" y="928" width="29.2121" height="124.666"/>
   <object id="5" x="545.666" y="448.417" width="92.6667" height="796.916"/>
@@ -103856,6 +103856,8 @@
   <object id="149" x="7328" y="1504" width="96" height="32"/>
   <object id="150" x="-32" y="0" width="32" height="1536"/>
   <object id="152" x="6528" y="992" width="160" height="32"/>
+  <object id="156" x="7680" y="0" width="32" height="1536"/>
+  <object id="157" x="7924" y="1229.33" height="1.33333"/>
  </objectgroup>
  <objectgroup id="14" name="ganar">
   <object id="134" x="7648" y="512" width="32" height="256"/>
@@ -103878,9 +103880,15 @@
  </objectgroup>
  <objectgroup id="15" name="Luz">
   <object id="153" x="0" y="607.667" width="544" height="897.667"/>
+  <object id="159" x="2465.33" y="96" width="2751.03" height="1440"/>
+  <object id="160" x="5216" y="256" width="703.212" height="1280"/>
  </objectgroup>
  <objectgroup id="16" name="afuera">
   <object id="154" x="544" y="1248" width="32" height="256"/>
   <object id="155" x="288" y="576" width="256" height="32"/>
+  <object id="163" x="3424" y="64" width="768" height="32"/>
+  <object id="164" x="5664" y="224" width="128" height="32"/>
+  <object id="165" x="5920" y="992" width="32" height="480"/>
+  <object id="166" x="2432.58" y="641.333" width="32" height="160"/>
  </objectgroup>
 </map>

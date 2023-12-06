@@ -329,7 +329,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 		if (physB->ctype == ColliderType::ITEM) {
 			app->entityManager->DestroyEntity(physB->listener);
 		}
-		app->audio->PlayFx(pickCoinFxId);
+	//	app->audio->PlayFx(pickCoinFxId);
 		break;
 	case ColliderType::VICTORY:
 		app->audio->PlayFx(victory);

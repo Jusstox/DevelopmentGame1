@@ -73,7 +73,7 @@ bool Map::Update(float dt)
         fisrtY = 0;
     }
     if (lastY > mapData.height) {
-        lastY = mapData.height + 1;
+        lastY = mapData.height;
     }
 
     // L06: DONE 5: Prepare the loop to draw all tiles in a layer + DrawTexture()

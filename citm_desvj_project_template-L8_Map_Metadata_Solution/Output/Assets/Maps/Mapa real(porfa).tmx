@@ -103880,7 +103880,7 @@
  </objectgroup>
  <objectgroup id="15" name="Luz">
   <object id="153" x="0" y="625" width="544" height="880.333"/>
-  <object id="159" x="2465.33" y="101.5" width="2751.03" height="1434.5"/>
+  <object id="159" x="2465.33" y="101.5" width="2733.7" height="1434.5"/>
   <object id="160" x="5216" y="256.5" width="703.212" height="1279.5"/>
  </objectgroup>
  <objectgroup id="16" name="afuera">

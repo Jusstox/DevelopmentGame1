@@ -54,12 +54,27 @@ bool Map::Update(float dt)
     ListItem<MapLayer*>* mapLayer; 
     mapLayer = mapData.layers.start;
 
-    int fisrtX = app->render->GetFirstTileX();
-    int lastX = app->render->GetLastTileX();
+    //limitar el renderizado
+    fisrtX = app->render->GetFirstTileX();
+    lastX = app->render->GetLastTileX();
 
-    int fisrtY = app->render->GetFirstTileY();
-    int lastY = app->render->GetLastTileY();
+    fisrtY = app->render->GetFirstTileY();
+    lastY = app->render->GetLastTileY();
 
+    //mirar de no cojer tiles que no existen
+    if (fisrtX < 0) {
+        fisrtX = 0;
+    }
+    if (lastX > mapData.width) {
+        lastX = mapData.width;
+    }
+
+    if (fisrtY < 0) {
+        fisrtY = 0;
+    }
+    if (lastY > mapData.height) {
+        lastY = mapData.height + 1;
+    }
 
     // L06: DONE 5: Prepare the loop to draw all tiles in a layer + DrawTexture()
 
@@ -264,7 +279,7 @@ bool Map::Load(SString mapFileName)
             int y = layerNode.attribute("y").as_int();
             int w = layerNode.attribute("width").as_int();
             int h = layerNode.attribute("height").as_int();
-            PhysBody* c1 = app->physics->CreateRectangle(x + w / 2, y + h / 2, w, h, STATIC);
+            PhysBody* c1 = app->physics->CreateRectangleSensor(x + w / 2, y + h / 2, w, h, STATIC);
             c1->ctype = ColliderType::VICTORY;
         }
 
@@ -276,6 +291,26 @@ bool Map::Load(SString mapFileName)
             int h = layerNode.attribute("height").as_int();
             PhysBody* c1 = app->physics->CreateRectangle(x + w / 2, y + h / 2, w, h, STATIC);
             c1->ctype = ColliderType::DEATH;
+        }
+
+        for (pugi::xml_node layerNode = mapFileXML.child("map").child("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").child("object"); layerNode != NULL; layerNode = layerNode.next_sibling("object"))
+        {
+            int x = layerNode.attribute("x").as_int();
+            int y = layerNode.attribute("y").as_int();
+            int w = layerNode.attribute("width").as_int();
+            int h = layerNode.attribute("height").as_int();
+            PhysBody* c1 = app->physics->CreateRectangleSensor(x + w / 2, y + h / 2, w, h, STATIC);
+            c1->ctype = ColliderType::DARK;
+        }
+
+        for (pugi::xml_node layerNode = mapFileXML.child("map").child("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").child("object"); layerNode != NULL; layerNode = layerNode.next_sibling("object"))
+        {
+            int x = layerNode.attribute("x").as_int();
+            int y = layerNode.attribute("y").as_int();
+            int w = layerNode.attribute("width").as_int();
+            int h = layerNode.attribute("height").as_int();
+            PhysBody* c1 = app->physics->CreateRectangleSensor(x + w / 2, y + h / 2, w, h, STATIC);
+            c1->ctype = ColliderType::OUTSIDE;
         }
 
           // L05: DONE 5: LOG all the data loaded iterate all tilesetsand LOG everything

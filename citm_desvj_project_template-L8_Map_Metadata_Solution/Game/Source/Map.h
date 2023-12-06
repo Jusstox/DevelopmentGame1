@@ -148,6 +148,12 @@ public:
         return mapData.tileheight;
     }
 
+    //first and last tiles we have to render
+    int fisrtX;
+    int lastX;
+    int fisrtY;
+    int lastY;
+
 public: 
     SString name;
     SString path;

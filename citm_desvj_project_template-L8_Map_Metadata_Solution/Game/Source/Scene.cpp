@@ -56,17 +56,8 @@ bool Scene::Awake(pugi::xml_node config)
 // Called before the first frame
 bool Scene::Start()
 {
-	// NOTE: We have to avoid the use of paths in the code, we will move it later to a config file
-	//img = app->tex->Load("Assets/Textures/test.png");
-	
-	//Music is commented so that you can add your own music
-	//app->audio->PlayMusic("Assets/Audio/Music/music_spy.ogg");
-
 	//Get the size of the window
 	app->win->GetWindowSize(windowW, windowH);
-
-	//Get the size of the texture
-	//app->tex->GetSize(img, texW, texH);
 
 	textPosX = (float)windowW / 2 - (float)texW / 2;
 	textPosY = (float)windowH / 2 - (float)texH / 2;
@@ -96,7 +87,7 @@ bool Scene::Update(float dt)
 	//L02 DONE 3: Make the camera movement independent of framerate
 	float camSpeed = 1; 
 	int limitCamX = player->position.x - (windowW / 2);
-	if (limitCamX > 0 && limitCamX < (app->map->getMapWidth() - windowW)) {
+	if (limitCamX > 0 && limitCamX < (app->map->getMapWidth() - windowW - (app->map->getTileWidth()/2))) {
 		//preguntar como sacar lo del 13 (es la mitad del width) con el getcurrentrectanim.w varia
 		app->render->camera.x = (player->position.x + 13 - windowW / 2) * -1;
 	}
@@ -118,9 +109,6 @@ bool Scene::Update(float dt)
 
 	if(app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
 		app->render->camera.x += (int)ceil(camSpeed * dt);
-
-	// Renders the image in the center of the screen 
-	//app->render->DrawTexture(img, (int)textPosX, (int)textPosY);
 
 	return true;
 }

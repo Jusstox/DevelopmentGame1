@@ -302,8 +302,6 @@ bool Player::Update(float dt)
 		}
 	}
 
-	LOG("%d", pbody->body->GetTransform().p.y);
-
 	if (flip) {
 		app->render->DrawTexturePR(texture, position.x, position.y, &currentAnimation->GetCurrentFrame());
 	}else{
@@ -326,27 +324,28 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 	switch (physB->ctype)
 	{
 	case ColliderType::PLATFORM:
-		LOG("Collision PLATFORM");
 		break;
 	case ColliderType::ITEM:
 		if (physB->ctype == ColliderType::ITEM) {
 			app->entityManager->DestroyEntity(physB->listener);
 		}
-		LOG("Collision ITEM");
 		app->audio->PlayFx(pickCoinFxId);
 		break;
 	case ColliderType::VICTORY:
-		LOG("Collision UNKNOWN");
 		app->audio->PlayFx(victory);
 		break;
 	case ColliderType::DEATH:
 		if (!godmode) {
 			death = true;
 		}
-		LOG("Collision UNKNOWN");
+		break;
+	case ColliderType::DARK:
+		dark = true;
+		break;
+	case ColliderType::OUTSIDE:
+		dark = false;
 		break;
 	case ColliderType::UNKNOWN:
-		LOG("Collision UNKNOWN");
 		break;
 	default:
 		break;

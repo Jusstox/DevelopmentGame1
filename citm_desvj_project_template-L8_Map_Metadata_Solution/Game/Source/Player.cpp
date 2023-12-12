@@ -25,33 +25,45 @@ bool Player::Awake() {
 	//L03: DONE 2: Initialize Player parameters
 	position = iPoint(config.attribute("x").as_int(), config.attribute("y").as_int());
 	initPosition = position;
-	// idle animation - just one sprite
-	idleAnim.PushBack({ 0, 0, 24, 32 });
-	idleAnim.PushBack({ 27, 0, 25, 32 });
-	idleAnim.PushBack({ 55, 0, 25, 32 });
-	idleAnim.PushBack({ 27, 0, 25, 32 });
-	idleAnim.loop = true;
-	idleAnim.speed = 0.1f;
 
-	walkAnim.PushBack({ 0, 37, 26, 29 });
-	walkAnim.PushBack({ 29, 37, 27, 29 });
-	walkAnim.PushBack({ 59, 37, 27, 29 });
-	walkAnim.loop = true;
-	walkAnim.speed = 0.1f;
+	// get the animations
+	// idle animation
+	idleAnim.loop = config.child("animations").child("idleanim").attribute("loop").as_bool();
+	idleAnim.speed = config.child("animations").child("idleanim").attribute("speed").as_float();
 
-	dieAnim.PushBack({ 27, 73, 25, 39 });
-	dieAnim.PushBack({ 55, 81, 23, 31 });
-	dieAnim.PushBack({ 85, 93, 41, 21 });
-	dieAnim.loop = false;
-	dieAnim.speed = 0.05f;
+	for (pugi::xml_node animNode = config.child("animations").child("idleanim").child("idle"); animNode != NULL; animNode = animNode.next_sibling("idle")) {
+		idleAnim.PushBack({ animNode.attribute("x").as_int(), animNode.attribute("y").as_int() ,animNode.attribute("w").as_int() ,animNode.attribute("h").as_int() });
+	}
 
-	jumpAnim1.PushBack({ 0, 115, 26, 31 });
-	jumpAnim1.loop = false;
+	// walk animation
+	walkAnim.loop = config.child("animations").child("walkanim").attribute("loop").as_bool();
+	walkAnim.speed = config.child("animations").child("walkanim").attribute("speed").as_float();
 
-	jumpAnim2.PushBack({ 57, 115, 25, 31 });
-	jumpAnim2.PushBack({ 85, 115, 25, 31 });
-	jumpAnim2.loop = false;
-	jumpAnim2.speed = 0.2f;
+	for (pugi::xml_node animNode = config.child("animations").child("walkanim").child("walk"); animNode != NULL; animNode = animNode.next_sibling("walk")) {
+		walkAnim.PushBack({ animNode.attribute("x").as_int(), animNode.attribute("y").as_int() ,animNode.attribute("w").as_int() ,animNode.attribute("h").as_int() });
+	}
+	
+	// die anim
+	dieAnim.loop = config.child("animations").child("dieanim").attribute("loop").as_bool();
+	dieAnim.speed = config.child("animations").child("dieanim").attribute("speed").as_float();
+
+	for (pugi::xml_node animNode = config.child("animations").child("dieanim").child("die"); animNode != NULL; animNode = animNode.next_sibling("die")) {
+		dieAnim.PushBack({ animNode.attribute("x").as_int(), animNode.attribute("y").as_int() ,animNode.attribute("w").as_int() ,animNode.attribute("h").as_int() });
+	}
+
+	// init jump anim
+	jumpAnim1.loop = config.child("animations").child("jumpanim1").attribute("loop").as_bool();
+
+	for (pugi::xml_node animNode = config.child("animations").child("jumpanim1").child("jump"); animNode != NULL; animNode = animNode.next_sibling("jump")) {
+		jumpAnim1.PushBack({ animNode.attribute("x").as_int(), animNode.attribute("y").as_int() ,animNode.attribute("w").as_int() ,animNode.attribute("h").as_int() });
+	}
+
+	// final jump anim
+	jumpAnim2.loop = config.child("animations").child("jumpanim2").attribute("loop").as_bool();
+
+	for (pugi::xml_node animNode = config.child("animations").child("jumpanim2").child("jump"); animNode != NULL; animNode = animNode.next_sibling("jump")) {
+		jumpAnim2.PushBack({ animNode.attribute("x").as_int(), animNode.attribute("y").as_int() ,animNode.attribute("w").as_int() ,animNode.attribute("h").as_int() });
+	}
 
 	blendFadeIN.PushBack({ 2500,1500,2500,1500 });
 	blendFadeIN.PushBack({ 0,1500,2500,1500 });
@@ -80,7 +92,7 @@ bool Player::Start() {
 	state = IDLE;
 	// L07 DONE 5: Add physics to the player - initialize physics body
 	app->tex->GetSize(texture, texW, texH);
-	currentAnimation = &dieAnim;
+	currentAnimation = &idleAnim;
 	pbody = app->physics->CreateCircle(position.x, position.y, currentAnimation->GetCurrentFrame().w / 2, bodyType::DYNAMIC);
 
 	// L07 DONE 6: Assign player class (using "this") to the listener of the pbody. This makes the Physics module to call the OnCollision method

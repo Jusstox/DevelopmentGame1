@@ -20,7 +20,33 @@
 
   <scene>
     <player x="150" y="350" texturePath="Assets/Textures/ninja-pixilart.png" coinfxpath="Assets/Audio/Fx/retro-video-game-coin-pickup-38299.ogg" winfxpath="Assets/Audio/Fx/victory_sJDDywi.ogg"
-	musicpath="Assets/Audio/Music/music.ogg" textureblendPath="Assets/Textures/blendanim.png"/>
+	musicpath="Assets/Audio/Music/music.ogg" textureblendPath="Assets/Textures/blendanim.png">
+		<animations>
+			<idleanim loop="true" speed="0.1f">
+				<idle x="0" y="0" w="24" h="32"/>
+				<idle x="27" y="0" w="25" h="32"/>
+				<idle x="55" y="0" w="25" h="32"/>
+				<idle x="27" y="0" w="25" h="32"/>
+			</idleanim>
+			<walkanim loop="true" speed="0.1f">
+				<walk x="0" y="37" w="26" h="29"/>
+				<walk x="29" y="37" w="27" h="29"/>
+				<walk x="59" y="37" w="27" h="29"/>
+			</walkanim>
+			<dieanim loop="false" speed="0.05f">
+				<die x="27" y="73" w="25" h="39"/>
+				<die x="55" y="81" w="23" h="31"/>
+				<die x="85" y="81" w="41" h="31"/>
+			</dieanim>
+			<jumpanim1 loop="false">
+				<jump x="0" y="115" w="26" h="31"/>
+			</jumpanim1>
+			<jumpanim2 loop="false" speed="0.2f">
+				<jump x="57" y="115" w="25" h="31"/>
+				<jump x="85" y="115" w="25" h="31"/>
+			</jumpanim2>
+		</animations>
+	</player>
     <map path="Assets/Maps/" name="Mapa real(porfa).tmx"/>
     <item x="256" y="515" texturepath="Assets/Textures/goldCoin.png"/>
     <item x="416" y="512" texturepath="Assets/Textures/goldCoin.png"/>

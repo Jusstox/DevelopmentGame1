@@ -12,7 +12,7 @@
 
   <window>
     <resolution width="1280" height="768" scale="1"/>
-    <fullscreen value="false"/>
+    <fullscreen value="false"/>	
     <borderless value="false"/>
     <resizable value="false"/>
     <fullscreen_window value="false"/>
@@ -20,7 +20,7 @@
 
   <scene>
     <player x="150" y="350" texturePath="Assets/Textures/ninja-pixilart.png" coinfxpath="Assets/Audio/Fx/retro-video-game-coin-pickup-38299.ogg" winfxpath="Assets/Audio/Fx/victory_sJDDywi.ogg"
-	musicpath="Assets/Audio/Music/music.ogg" textureblendPath="Assets/Textures/blendanim.png">
+	musicpath="Assets/Audio/Music/music.ogg" textureblendPath="Assets/Textures/bgroup.png">
 		<animations>
 			<idleanim loop="true" speed="0.1f">
 				<idle x="0" y="0" w="24" h="32"/>

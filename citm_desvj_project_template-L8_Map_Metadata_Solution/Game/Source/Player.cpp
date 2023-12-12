@@ -65,20 +65,13 @@ bool Player::Awake() {
 		jumpAnim2.PushBack({ animNode.attribute("x").as_int(), animNode.attribute("y").as_int() ,animNode.attribute("w").as_int() ,animNode.attribute("h").as_int() });
 	}
 
-	blendFadeIN.PushBack({ 2500,1500,2500,1500 });
-	blendFadeIN.PushBack({ 0,1500,2500,1500 });
-	blendFadeIN.PushBack({ 2500,0,2500,1500 });
-	blendFadeIN.PushBack({ 0,0,2500,1500 });
+	blendFadeIN.PushBack({ 0,0,600,600 });
 	blendFadeIN.loop = false;
-	blendFadeIN.speed = 0.5f;
+	blendFadeIN.speed = 0.3f;
 
-	blendFadeOut.PushBack({ 0,0,2500,1500 });
-	blendFadeOut.PushBack({ 2500,0,2500,1500 });
-	blendFadeOut.PushBack({ 0,1500,2500,1500 });
-	blendFadeOut.PushBack({ 2500,1500,2500,1500 });
-	blendFadeOut.PushBack({ 0,0,0,0 });
+	blendFadeOut.PushBack({ 0,0,600,600 });
 	blendFadeOut.loop = false;
-	blendFadeOut.speed = 0.5f;
+	blendFadeOut.speed = 0.3f;
 
 	return true;
 }
@@ -87,7 +80,6 @@ bool Player::Start() {
 
 	texture = app->tex->Load(config.attribute("texturePath").as_string());
 	blendTexture = app->tex->Load(config.attribute("textureblendPath").as_string());
-	blendFadeOut.setCurrentFrame(4);
 	dark = false;
 	state = IDLE;
 	// L07 DONE 5: Add physics to the player - initialize physics body
@@ -166,6 +158,7 @@ bool Player::Update(float dt)
 			state = IDLE;
 			respawn();
 			death = false;
+			dark = false;
 		}
 	}
 
@@ -281,14 +274,18 @@ bool Player::Update(float dt)
 
 	// poner sizes de textura no hardcoded
 	if (dark) {
-		app->render->DrawTexturePR(blendTexture, position.x - 1250, position.y - 750, &blendFadeIN.GetCurrentFrame());
+		blend = true;
+		app->render->DrawTexturePR(blendTexture, position.x - 300, position.y - 300, &blendFadeIN.GetCurrentFrame());
 		blendFadeIN.Update();
 		blendFadeOut.Reset();
 	}
-	else {
-		app->render->DrawTexturePR(blendTexture, position.x - 1250, position.y - 750, &blendFadeOut.GetCurrentFrame());
+	else if(blend){
+		app->render->DrawTexturePR(blendTexture, position.x - 300, position.y - 300, &blendFadeOut.GetCurrentFrame());
 		blendFadeOut.Update();
 		blendFadeIN.Reset();
+		if (blendFadeOut.HasFinished()) {
+			blend = false;
+		}
 	}
 
 	if (!godmode) {
@@ -378,6 +375,8 @@ void Player::respawn()
 	if (app->render->camera.y >= 0) {
 		app->render->camera.y = 0;
 	}
+
+	dark = false;
 }
 
 int Player::getPlayerTileX()

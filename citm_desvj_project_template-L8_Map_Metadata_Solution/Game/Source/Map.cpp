@@ -55,13 +55,23 @@ bool Map::Update(float dt)
     mapLayer = mapData.layers.start;
 
     //limitar el renderizado
-    fisrtX = app->render->GetFirstTileX();
-    lastX = app->render->GetLastTileX();
+    if (!app->scene->GetPlayer()->blend) {
+        fisrtX = app->render->GetFirstTileX();
+        lastX = app->render->GetLastTileX();
 
-    fisrtY = app->render->GetFirstTileY();
-    lastY = app->render->GetLastTileY();
+        fisrtY = app->render->GetFirstTileY();
+        lastY = app->render->GetLastTileY();
+    }
 
     //mirar de no cojer tiles que no existen
+
+    if (app->scene->GetPlayer()->dark) {
+        fisrtX = app->scene->GetPlayer()->getPlayerTileX() - 7;
+        lastX = app->scene->GetPlayer()->getPlayerTileX() + 8;
+        fisrtY = app->scene->GetPlayer()->getPlayerTileY() - 8;
+        lastY = app->scene->GetPlayer()->getPlayerTileY() + 6;
+    }
+
     if (fisrtX < 0) {
         fisrtX = 0;
     }
@@ -75,7 +85,6 @@ bool Map::Update(float dt)
     if (lastY > mapData.height) {
         lastY = mapData.height;
     }
-
     // L06: DONE 5: Prepare the loop to draw all tiles in a layer + DrawTexture()
 
     // iterates the layers in the map

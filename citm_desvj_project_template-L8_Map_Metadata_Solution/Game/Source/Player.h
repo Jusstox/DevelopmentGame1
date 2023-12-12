@@ -64,6 +64,7 @@ public:
 	Animation blendFadeOut;
 	bool flip;
 	bool dark;
+	bool blend = false;
 	//Audio fx
 	int pickCoinFxId;
 	int victory;

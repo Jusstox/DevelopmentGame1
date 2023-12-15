@@ -4,6 +4,9 @@
 #include "Module.h"
 #include "List.h"
 #include "Point.h"
+#include "PQueue.h"
+#include "DynArray.h"
+#include "Pathfinding.h"
 
 #include "PugiXml\src\pugixml.hpp"
 
@@ -131,6 +134,12 @@ public:
     // L06: DONE 6: Load a group of properties 
     bool LoadProperties(pugi::xml_node& node, Properties& properties);
 
+    // L09: DONE 5: Add method WorldToMap to obtain  map coordinates from screen coordinates 
+    iPoint WorldToMap(int x, int y);
+
+    // L13: Create navigation map for pathfinding
+    void CreateNavigationMap(int& width, int& height, uchar** buffer) const;
+
     //getMapHeight
     int getMapHeght() {
         return mapData.height * mapData.tileheight;
@@ -157,11 +166,14 @@ public:
 public: 
     SString name;
     SString path;
+    PathFinding* pathfinding;
 
 private:
     // L05: DONE 1: Declare a variable data of the struct MapData
     MapData mapData;
     bool mapLoaded;
+    MapLayer* navigationLayer;
+    int blockedGid = 68; //!!!! make sure that you assign blockedGid according to your map
 };
 
 

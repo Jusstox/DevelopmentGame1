@@ -82,8 +82,8 @@ public:
 	// Box2D World
 	b2World* world;
 
+	bool debug;
 private:
 	// Debug mode
-	bool debug;
 
 };

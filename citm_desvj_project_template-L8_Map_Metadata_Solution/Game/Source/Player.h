@@ -5,7 +5,6 @@
 #include "Point.h"
 #include "SDL/include/SDL.h"
 #include "Animation.h"
-#include "Timer.h"
 
 struct SDL_Texture;
 
@@ -81,7 +80,7 @@ public:
 	bool death;
 	iPoint initPosition;
 
-	Timer NoDark;
+	SDL_Texture* mouseTileTex;
 };
 
 #endif // __PLAYER_H__

@@ -102,6 +102,8 @@ bool Player::Start() {
 
 	godmode = false;
 
+	mouseTileTex = app->tex->Load("Assets/Maps/tileSelection.png");
+
 	return true;
 }
 
@@ -315,6 +317,34 @@ bool Player::Update(float dt)
 		app->render->DrawTexturePR(texture, position.x, position.y, &currentAnimation->GetCurrentFrame());
 	}else{
 		app->render->DrawTexture(texture, position.x, position.y, &currentAnimation->GetCurrentFrame());
+	}
+
+	iPoint mousePos;
+	app->input->GetMousePosition(mousePos.x, mousePos.y);
+	iPoint mouseTile = app->map->WorldToMap(mousePos.x - app->render->camera.x,
+		mousePos.y - app->render->camera.y);
+
+	// Render a texture where the mouse is over to highlight the tile, use the texture 'mouseTileTex'
+	iPoint highlightedTileWorld = app->map->MapToWorld(mouseTile.x, mouseTile.y);
+	app->render->DrawTexture(mouseTileTex, highlightedTileWorld.x, highlightedTileWorld.y);
+	int x = getPlayerTileX();
+	int y = getPlayerTileY();
+
+	iPoint origin = iPoint(x, y);
+
+	//If mouse button is pressed modify player position
+	if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN) {
+		app->map->pathfinding->CreatePath(origin, mouseTile);
+	}
+
+	// L13: Get the latest calculated path and draw
+	const DynArray<iPoint>* path = app->map->pathfinding->GetLastPath();
+	if (app->physics->debug) {
+		for (uint i = 0; i < path->Count(); ++i)
+		{
+			iPoint pos = app->map->MapToWorld(path->At(i)->x, path->At(i)->y);
+			app->render->DrawTexture(mouseTileTex, pos.x, pos.y);
+		}
 	}
 
 	currentAnimation->Update();

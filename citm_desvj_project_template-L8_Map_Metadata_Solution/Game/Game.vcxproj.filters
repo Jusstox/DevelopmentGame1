@@ -23,6 +23,8 @@
     <ClCompile Include="Source\Item.cpp" />
     <ClCompile Include="Source\Physics.cpp" />
     <ClCompile Include="Source\Pathfinding.cpp" />
+    <ClCompile Include="Source\Enemy.cpp" />
+    <ClCompile Include="Source\EnemyFly.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Window.h" />
@@ -73,6 +75,8 @@
     <ClInclude Include="Source\PQueue.h">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Enemy.h" />
+    <ClInclude Include="Source\EnemyFly.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="External">

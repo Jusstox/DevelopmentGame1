@@ -383,17 +383,6 @@ bool Map::Load(SString mapFileName)
     return ret;
 }
 
-// L06: DONE 8: Create a method that translates x,y coordinates from map positions to world positions
-iPoint Map::MapToWorld(int x, int y) const
-{
-    iPoint ret;
-
-    ret.x = x * mapData.tilewidth;
-    ret.y = y * mapData.tileheight;
-
-    return ret;
-}
-
 // L08: DONE 6: Load a group of properties from a node and fill a list with it
 bool Map::LoadProperties(pugi::xml_node& node, Properties& properties)
 {
@@ -469,4 +458,15 @@ void Map::CreateNavigationMap(int& width, int& height, uchar** buffer) const
     width = mapData.width;
     height = mapData.height;
 
+}
+
+// L06: DONE 8: Create a method that translates x,y coordinates from map positions to world positions
+iPoint Map::MapToWorld(int x, int y) const
+{
+    iPoint ret;
+
+    ret.x = x * mapData.tilewidth;
+    ret.y = y * mapData.tileheight;
+
+    return ret;
 }

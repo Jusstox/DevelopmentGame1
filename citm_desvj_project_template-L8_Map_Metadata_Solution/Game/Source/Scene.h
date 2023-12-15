@@ -45,7 +45,6 @@ private:
 
 	//L03: DONE 3b: Declare a Player attribute
 	Player* player;
-	SDL_Texture* mouseTileTex;
 
 };
 

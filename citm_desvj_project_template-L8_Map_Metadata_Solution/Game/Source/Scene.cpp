@@ -7,6 +7,7 @@
 #include "Scene.h"
 #include "Map.h"
 #include "Item.h"
+#include "Physics.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -50,6 +51,8 @@ bool Scene::Awake(pugi::xml_node config)
 		item->parameters = itemNode;
 	}
 
+	app->entityManager->CreateEntity(EntityType::ENEMYFLY);
+
 	return ret;
 }
 
@@ -72,7 +75,7 @@ bool Scene::Start()
 		app->render->camera.y = 0;
 	}
 
-	mouseTileTex = app->tex->Load("Assets/Maps/tileSelection.png");
+	
 
 	return true;
 }
@@ -111,30 +114,6 @@ bool Scene::Update(float dt)
 
 	if(app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
 		app->render->camera.x += (int)ceil(camSpeed * dt);
-
-	iPoint mousePos;
-	app->input->GetMousePosition(mousePos.x, mousePos.y);
-	iPoint mouseTile = app->map->WorldToMap(mousePos.x - app->render->camera.x,
-		mousePos.y - app->render->camera.y);
-
-	// Render a texture where the mouse is over to highlight the tile, use the texture 'mouseTileTex'
-	iPoint highlightedTileWorld = app->map->MapToWorld(mouseTile.x, mouseTile.y);
-	app->render->DrawTexture(mouseTileTex, highlightedTileWorld.x, highlightedTileWorld.y);
-
-	iPoint origin = iPoint(player->position.x, player->position.y);
-
-	//If mouse button is pressed modify player position
-	if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN) {
-		app->map->pathfinding->CreatePath(origin, mouseTile);
-	}
-
-	// L13: Get the latest calculated path and draw
-	const DynArray<iPoint>* path = app->map->pathfinding->GetLastPath();
-	for (uint i = 0; i < path->Count(); ++i)
-	{
-		iPoint pos = app->map->MapToWorld(path->At(i)->x, path->At(i)->y);
-		app->render->DrawTexture(mouseTileTex, pos.x, pos.y);
-	}
 
 	return true;
 }

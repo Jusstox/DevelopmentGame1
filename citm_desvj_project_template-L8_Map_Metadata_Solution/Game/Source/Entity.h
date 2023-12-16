@@ -12,6 +12,7 @@ enum class EntityType
 	ITEM,
 	ENEMY,
 	ENEMYFLY,
+	ENEMYSLIME,
 	UNKNOWN
 };
 

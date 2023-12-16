@@ -1,18 +1,14 @@
 #pragma once
 #include "Enemy.h"
-class EnemyFly :  public Enemy
+class EnemySlime : public Enemy
 {
 public:
-	EnemyFly();
+	EnemySlime();
 	bool Awake();
 
 	bool Start();
 
 	bool Update(float dt);
-
-	void moveToPlayer(float dt);
-
-	void OnCollision(PhysBody* physA, PhysBody* physB);
 
 	Animation flyinganim;
 	Animation flyinganimchase;

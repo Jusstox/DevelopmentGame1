@@ -21,32 +21,36 @@ bool Enemy::Awake()
 
 bool Enemy::Start()
 {
+	mouseTileTex = app->tex->Load("Assets/Maps/tileSelection.png");
+	dead = false;
+	hit = false;
 	return true;
 }
 
 bool Enemy::Update(float dt)
 {
-	TileX = getEnemyTileX();
-	TileY = getEnemyTileY();
-
-	PTileX = app->scene->GetPlayer()->getPlayerTileX();
-	PTileY = app->scene->GetPlayer()->getPlayerTileY();
-
-	if (canChase(distChase) && !app->scene->GetPlayer()->godmode) {
-		chasePlayer(dt);
-	}
-	else {
-		velocity.y = 0;
-		velocity.x = 0;
-	}
-
 	pbody->body->SetLinearVelocity(velocity);
 	b2Transform pbodyPos = pbody->body->GetTransform();
 
 	position.x = METERS_TO_PIXELS(pbodyPos.p.x) - (currentAnimation->GetCurrentFrame().w / 2);
 	position.y = METERS_TO_PIXELS(pbodyPos.p.y) - (currentAnimation->GetCurrentFrame().h / 2);
 
-	app->render->DrawTexture(texture, position.x, position.y, &currentAnimation->GetCurrentFrame());
+	if (velocity.x > 0) {
+		right = true;
+	}
+	if (velocity.x < 0) {
+		right = false;
+	}
+
+	if (!dead) {
+		if (right) {
+			app->render->DrawTexturePR(texture, position.x, position.y, &currentAnimation->GetCurrentFrame());
+		}
+		else {
+			app->render->DrawTexture(texture, position.x, position.y, &currentAnimation->GetCurrentFrame());
+		}
+	}
+
 	currentAnimation->Update();
 
 	return true;
@@ -71,11 +75,9 @@ int Enemy::getEnemyTileY()
 	return (position.y + (currentAnimation->GetCurrentFrame().h / 2)) / app->map->getTileHieght();
 }
 
-void Enemy::chasePlayer(float dt)
+const DynArray<iPoint>* Enemy::SearchWay()
 {
 	iPoint origin = iPoint(TileX, TileY);
-
-	iPoint dest = iPoint(PTileX, PTileY);
 
 	app->map->pathfinding->CreatePath(origin, dest);
 
@@ -89,58 +91,36 @@ void Enemy::chasePlayer(float dt)
 		}
 	}
 
-	if (path->Count() > 1) {
-		if (TileX != path->At(1)->x) {
-			if (TileX > path->At(1)->x) {
-				velocity.x = -chaseVelovity * dt;
-			}
-			else {
-				velocity.x = chaseVelovity * dt;
-			}
-			if (path->Count() > 2) {
-				if (path->At(2)->y != TileY) {
-					if (TileY > path->At(2)->y) {
-						velocity.y = -chaseVelovity * dt;
-					}
-					else {
-						velocity.y = chaseVelovity * dt;
-					}
-				}
-				else {
-					velocity.y = 0;
-				}
-			}
-		}
-		else {
-			if (TileY > path->At(1)->y) {
-				velocity.y = -chaseVelovity * dt;
-			}
-			else {
-				velocity.y = chaseVelovity * dt;
-			}
-			if (path->Count() > 2) {
-				if (path->At(2)->x != TileX) {
-					if (TileX > path->At(2)->x) {
-						velocity.x = -chaseVelovity * dt;
-					}
-					else {
-						velocity.x = chaseVelovity * dt;
-					}
-				}
-				else {
-					velocity.x = 0;
-				}
-			}
-		}
-	}
-
+	return path;
 }
 
 bool Enemy::canChase(int dist)
 {
+	bool canChase = false;
+
+	TileX = getEnemyTileX();
+	TileY = getEnemyTileY();
+
+	PTileX = app->scene->GetPlayer()->getPlayerTileX();
+	PTileY = app->scene->GetPlayer()->getPlayerTileY();
+
 	if ((abs(TileX - PTileX) + abs(TileY - PTileY)) < dist) {
-		return true;
+		canChase = true;
 	}
 
-	return false;
+	if (canChase && !app->scene->GetPlayer()->godmode) {
+		canChase =  true;
+	}
+	else {
+		velocity.y = 0;
+		velocity.x = 0;
+		canChase = false;
+	}
+
+	return canChase;
+}
+
+void Enemy::moveToPlayer(float dt)
+{
+
 }

@@ -23,8 +23,15 @@
     <ClCompile Include="Source\Item.cpp" />
     <ClCompile Include="Source\Physics.cpp" />
     <ClCompile Include="Source\Pathfinding.cpp" />
-    <ClCompile Include="Source\Enemy.cpp" />
-    <ClCompile Include="Source\EnemyFly.cpp" />
+    <ClCompile Include="Source\EnemySlime.cpp">
+      <Filter>Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\EnemyFly.cpp">
+      <Filter>Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Enemy.cpp">
+      <Filter>Enemies</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Window.h" />
@@ -75,8 +82,15 @@
     <ClInclude Include="Source\PQueue.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Enemy.h" />
-    <ClInclude Include="Source\EnemyFly.h" />
+    <ClInclude Include="Source\EnemySlime.h">
+      <Filter>Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\EnemyFly.h">
+      <Filter>Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Enemy.h">
+      <Filter>Enemies</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="External">
@@ -87,6 +101,9 @@
     </Filter>
     <Filter Include="External\PugiXml">
       <UniqueIdentifier>{2855ff7f-53a1-413d-a75b-18b4ade921dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Enemies">
+      <UniqueIdentifier>{2dcd1238-b745-47ad-a2e6-ad539469e9f9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -52,6 +52,7 @@ bool Scene::Awake(pugi::xml_node config)
 	}*/
 
 	app->entityManager->CreateEntity(EntityType::ENEMYFLY);
+	app->entityManager->CreateEntity(EntityType::ENEMYSLIME);
 
 	return ret;
 }

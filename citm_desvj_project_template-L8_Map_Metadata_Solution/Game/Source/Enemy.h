@@ -6,6 +6,7 @@
 #include "Animation.h"
 #include "Textures.h"
 #include "Physics.h"
+#include "DynArray.h"
 
 enum class EnemyType
 {
@@ -23,22 +24,26 @@ public:
 
 	virtual bool Awake();
 
-	virtual bool Start();
+	bool Start();
 
 	bool Update(float dt);
 
 	bool CleanUp();
 
 	// L07 DONE 6: Define OnCollision function for the player. 
-	void OnCollision(PhysBody* physA, PhysBody* physB);
+	virtual void OnCollision(PhysBody* physA, PhysBody* physB);
 
 	int getEnemyTileX();
 
 	int getEnemyTileY();
 
-	void chasePlayer(float dt);
+	const DynArray<iPoint>* SearchWay();
 
 	bool canChase(int dist);
+
+	bool pendingToDelete;
+
+	virtual void moveToPlayer(float dt);
 protected:
 	SDL_Texture* texture;
 	int lives;
@@ -47,8 +52,12 @@ protected:
 	iPoint initPosition;
 	SDL_Texture* mouseTileTex;
 	float chaseVelovity;
+	bool right;
+	bool dead;
+	bool hit;
 
 	int distChase;
+	iPoint dest;
 
 	int TileX;
 	int TileY;

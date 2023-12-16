@@ -31,6 +31,7 @@ enum class ColliderType {
 	VICTORY,
 	DARK,
 	OUTSIDE,
+	ENEMY,
 	UNKNOWN
 	// ..
 };

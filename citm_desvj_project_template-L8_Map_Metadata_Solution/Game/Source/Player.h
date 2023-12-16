@@ -79,8 +79,6 @@ public:
 	sates state;
 	bool death;
 	iPoint initPosition;
-
-	SDL_Texture* mouseTileTex;
 };
 
 #endif // __PLAYER_H__

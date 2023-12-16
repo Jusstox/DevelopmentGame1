@@ -4,6 +4,8 @@
 #include "Entity.h"
 #include "App.h"
 #include "Animation.h"
+#include "Textures.h"
+#include "Physics.h"
 
 enum class EnemyType
 {
@@ -29,9 +31,31 @@ public:
 
 	// L07 DONE 6: Define OnCollision function for the player. 
 	void OnCollision(PhysBody* physA, PhysBody* physB);
+
+	int getEnemyTileX();
+
+	int getEnemyTileY();
+
+	void chasePlayer(float dt);
+
+	bool canChase(int dist);
 protected:
-	SDL_Rect* tecture;
+	SDL_Texture* texture;
 	int lives;
+	Animation* currentAnimation = nullptr;
+	PhysBody* pbody;
+	iPoint initPosition;
+	SDL_Texture* mouseTileTex;
+	float chaseVelovity;
+
+	int distChase;
+
+	int TileX;
+	int TileY;
+	int PTileX;
+	int PTileY;
+
+	b2Vec2 velocity;
 };
 
 #endif // __ENEMY_H__

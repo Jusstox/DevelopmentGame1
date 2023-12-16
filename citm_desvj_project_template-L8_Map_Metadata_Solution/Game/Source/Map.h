@@ -173,7 +173,7 @@ private:
     MapData mapData;
     bool mapLoaded;
     MapLayer* navigationLayer;
-    int blockedGid = 68; //!!!! make sure that you assign blockedGid according to your map
+    int blockedGid = 149; //!!!! make sure that you assign blockedGid according to your map
 };
 
 

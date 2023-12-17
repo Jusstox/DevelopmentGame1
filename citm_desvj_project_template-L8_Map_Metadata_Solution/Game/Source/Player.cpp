@@ -158,7 +158,6 @@ bool Player::Update(float dt)
 			state = IDLE;
 			respawn();
 			death = false;
-			dark = false;
 		}
 	}
 
@@ -287,17 +286,17 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 	switch (physB->ctype)
 	{
 	case ColliderType::PLATFORM:
+		if (contactPonts.y == 1) {
+			force = 0;
+			remainingJumpSteps = 0;
+			jumpForceReduce = 0;
+		}
 		if (contactPonts.y == -1) {
 			if (state == JUMP2) {
 				jumpAnim2.Reset();
 				state = IDLE;
 			}
 			jumps = 2;
-		}
-		if (contactPonts.y == 1) {
-			force = 0;
-			remainingJumpSteps = 0;
-			jumpForceReduce = 0;
 		}
 		break;
 	case ColliderType::ITEM:
@@ -321,17 +320,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 		dark = false;
 		break;
 	case ColliderType::ENEMY:
-		/*LOG("%f", contactPonts.y);
-		if (contactPonts.y <= 0) {
-			if (state == JUMP2) {
-				jumpAnim2.Reset();
-				state = IDLE;
-			}
-			jumps = 2;
-		}
-		else if(!godmode){
-			death = true;
-		} */
+		
 		break;
 	default:
 		break;

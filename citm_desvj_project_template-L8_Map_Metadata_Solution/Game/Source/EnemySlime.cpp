@@ -36,7 +36,7 @@ bool EnemySlime::Awake()
 	dieanim.PushBack({ 266, 99, 23, 15 });
 	dieanim.PushBack({ 294, 100, 9, 15 });
 	dieanim.PushBack({ 0, 0, 0, 0 });
-	dieanim.loop = true;
+	dieanim.loop = false;
 	dieanim.speed = 0.0918;
 
 	return true;
@@ -45,7 +45,8 @@ bool EnemySlime::Awake()
 bool EnemySlime::Start()
 {
 	position = iPoint(250, 350);
-	velocity = b2Vec2(0, +10);
+	velocity = b2Vec2(0, 0);
+	distChase = 10;
 	initPosition = position;
 	texture = app->tex->Load("Assets/Textures/Slime.png");
 	currentAnimation = &flyinganimchase;
@@ -70,6 +71,101 @@ bool EnemySlime::Start()
 
 bool EnemySlime::Update(float dt)
 {
+	velocity = b2Vec2(0, 0);
+
+	if (!hit) {
+		if (canChase(distChase)) {
+			dest = iPoint(PTileX, PTileY);
+			moveToPlayer(dt);
+			currentAnimation = &flyinganimchase;
+		}
+		else {
+			currentAnimation = &flyinganim;
+		}
+	}
+	else {
+		if (dieanim.HasFinished()) {
+			dead = true;
+		}
+	}
 	Enemy::Update(dt);
+
+	if (velocity.x < 0) {
+		right = true;
+	}
+	if (velocity.x > 0) {
+		right = false;
+	}
+
 	return true;
 }
+
+void EnemySlime::moveToPlayer(float dt)
+{
+	const DynArray<iPoint>* path = SearchWay();
+	//check if t has arrivied
+	if (path->Count() > 1) {
+		//check if it shall move to x
+		if (TileX != path->At(1)->x) {
+			if (TileX > path->At(1)->x) {
+				velocity.x = -chaseVelovity * dt;
+			}
+			else {
+				velocity.x = chaseVelovity * dt;
+			}
+			if (path->Count() > 2) {
+				//if next step move y, go diagonal
+				if (path->At(2)->y != TileY) {
+					if (TileY > path->At(2)->y) {
+						velocity.y = -chaseVelovity / 1.3 * dt;
+					}
+					else {
+						velocity.y = chaseVelovity / 1.3 * dt;
+					}
+					velocity.x /= 1.3;
+				}
+				else {
+					velocity.y = 0;
+				}
+			}
+		}
+		else { //check if it shall move to y
+			if (TileY > path->At(1)->y) {
+				velocity.y = -chaseVelovity * dt;
+			}
+			else {
+				velocity.y = chaseVelovity * dt;
+			}
+			if (path->Count() > 2) {
+				//if next step move x, go diagonal
+				if (path->At(2)->x != TileX) {
+					if (TileX > path->At(2)->x) {
+						velocity.x = -chaseVelovity / 1.3 * dt;
+					}
+					else {
+						velocity.x = chaseVelovity / 1.3 * dt;
+					}
+					velocity.y /= 1.3;
+				}
+				else {
+					velocity.x = 0;
+				}
+			}
+		}
+	}
+}
+
+void EnemySlime::OnCollision(PhysBody* physA, PhysBody* physB)
+{
+	switch (physB->ctype)
+	{
+	case ColliderType::PLAYER:
+		hit = true;
+		currentAnimation = &dieanim;
+		break;
+	default:
+		break;
+	}
+}
+
+

@@ -35,13 +35,6 @@ bool Enemy::Update(float dt)
 	position.x = METERS_TO_PIXELS(pbodyPos.p.x) - (currentAnimation->GetCurrentFrame().w / 2);
 	position.y = METERS_TO_PIXELS(pbodyPos.p.y) - (currentAnimation->GetCurrentFrame().h / 2);
 
-	if (velocity.x > 0) {
-		right = true;
-	}
-	if (velocity.x < 0) {
-		right = false;
-	}
-
 	if (!dead) {
 		if (right) {
 			app->render->DrawTexturePR(texture, position.x, position.y, &currentAnimation->GetCurrentFrame());
@@ -52,6 +45,12 @@ bool Enemy::Update(float dt)
 	}
 
 	currentAnimation->Update();
+	
+	if (dead)
+	{
+		pendingToDelete = true;
+		app->entityManager->DestroyEntity(this);
+	}
 
 	return true;
 }

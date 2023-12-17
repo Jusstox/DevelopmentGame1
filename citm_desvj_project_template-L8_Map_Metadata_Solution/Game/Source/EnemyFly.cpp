@@ -68,7 +68,7 @@ bool EnemyFly::Start()
 
 bool EnemyFly::Update(float dt)
 {
-	velocity = b2Vec2(0, 0);
+	velocity = b2Vec2(0, 0);	
 
 	if (!hit) {
 		if (canChase(distChase)) {
@@ -87,6 +87,13 @@ bool EnemyFly::Update(float dt)
 	}
 
 	Enemy::Update(dt);
+
+	if (velocity.x > 0) {
+		right = true;
+	}
+	if (velocity.x < 0) {
+		right = false;
+	}
 
 	return true;
 }

@@ -10,6 +10,10 @@ public:
 
 	bool Update(float dt);
 
+	void moveToPlayer(float dt);
+
+	void OnCollision(PhysBody* physA, PhysBody* physB);
+
 	Animation flyinganim;
 	Animation flyinganimchase;
 	Animation dieanim;

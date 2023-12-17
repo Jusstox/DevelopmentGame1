@@ -6,6 +6,7 @@
 #include "Animation.h"
 #include "Textures.h"
 #include "Physics.h"
+#include "List.h"
 #include "DynArray.h"
 
 enum class EnemyType
@@ -22,7 +23,7 @@ public:
 
 	virtual ~Enemy();
 
-	virtual bool Awake();
+	bool Awake();
 
 	bool Start();
 
@@ -41,17 +42,21 @@ public:
 
 	bool canChase(int dist);
 
-	bool pendingToDelete;
-
 	virtual void moveToPlayer(float dt);
+
+	void Patrol();
+
 protected:
+	const char* texturePath;
 	SDL_Texture* texture;
 	int lives;
 	Animation* currentAnimation = nullptr;
 	PhysBody* pbody;
 	iPoint initPosition;
 	SDL_Texture* mouseTileTex;
+	float ActualVelocity;
 	float chaseVelovity;
+	float patrolVelocity;
 	bool right;
 	bool dead;
 	bool hit;
@@ -65,6 +70,11 @@ protected:
 	int PTileY;
 
 	b2Vec2 velocity;
+	
+	iPoint Patrol1;
+	iPoint Patrol2;
+	bool patrol;
+	
 };
 
 #endif // __ENEMY_H__

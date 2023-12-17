@@ -1,13 +1,14 @@
 #include "EnemyFly.h"
-#include "Log.h"
+#include "Scene.h"
 
 EnemyFly::EnemyFly() :Enemy()
 {
-
+	name.Create("EnemyFly");
 }
 
 bool EnemyFly::Awake()
 {
+	Enemy::Awake();
 	flyinganim.PushBack({ 0, 0, 39, 35 });
 	flyinganim.PushBack({ 40, 0, 38, 34 });
 	flyinganim.PushBack({ 83, 0, 38, 33 });
@@ -40,9 +41,8 @@ bool EnemyFly::Awake()
 
 bool EnemyFly::Start()
 {
-	position = iPoint(250, 350);
 	initPosition = position;
-	texture = app->tex->Load("Assets/Textures/Bat.png");
+	texture = app->tex->Load(texturePath);
 	currentAnimation = &flyinganim;
 	// L07 DONE 5: Add physics to the player - initialize physics body
 	pbody = app->physics->CreateCircle(position.x, position.y, currentAnimation->GetCurrentFrame().w / 3, bodyType::DYNAMIC);
@@ -53,13 +53,14 @@ bool EnemyFly::Start()
 	// L07 DONE 7: Assign collider type
 	pbody->ctype = ColliderType::ENEMY;
 
-	distChase = 10;
+	distChase = 12;
 
 	right = true;
 
 	pbody->body->SetGravityScale(0);
 
-	chaseVelovity = 0.1;
+	chaseVelovity = 0.15;
+	patrolVelocity = 0.1;
 
 	Enemy::Start();
 
@@ -68,15 +69,25 @@ bool EnemyFly::Start()
 
 bool EnemyFly::Update(float dt)
 {
+	if (abs(app->scene->GetPlayer()->getPlayerTileX() - getEnemyTileX()) > 50) {
+		velocity.x = 0;
+		velocity.y = 0;
+		pbody->body->SetLinearVelocity(velocity);
+		return true;
+	}
 	velocity = b2Vec2(0, 0);	
 
 	if (!hit) {
 		if (canChase(distChase)) {
+			ActualVelocity = chaseVelovity;
 			dest = iPoint(PTileX, PTileY);
 			moveToPlayer(dt);
 			currentAnimation = &flyinganimchase;
 		}
 		else {
+			ActualVelocity = patrolVelocity;
+			Enemy::Patrol();
+			moveToPlayer(dt);
 			currentAnimation = &flyinganim;
 		}
 	}
@@ -106,19 +117,19 @@ void EnemyFly::moveToPlayer(float dt)
 		//check if it shall move to x
 		if (TileX != path->At(1)->x) {
 			if (TileX > path->At(1)->x) {
-				velocity.x = -chaseVelovity * dt;
+				velocity.x = -ActualVelocity * dt;
 			}
 			else {
-				velocity.x = chaseVelovity * dt;
+				velocity.x = ActualVelocity * dt;
 			}
 			if (path->Count() > 2) {
 				//if next step move y, go diagonal
 				if (path->At(2)->y != TileY) {
 					if (TileY > path->At(2)->y) {
-						velocity.y = -chaseVelovity / 1.3 * dt;
+						velocity.y = -ActualVelocity / 1.3 * dt;
 					}
 					else {
-						velocity.y = chaseVelovity / 1.3 * dt;
+						velocity.y = ActualVelocity / 1.3 * dt;
 					}
 					velocity.x /= 1.3;
 				}
@@ -129,19 +140,19 @@ void EnemyFly::moveToPlayer(float dt)
 		}
 		else { //check if it shall move to y
 			if (TileY > path->At(1)->y) {
-				velocity.y = -chaseVelovity * dt;
+				velocity.y = -ActualVelocity * dt;
 			}
 			else {
-				velocity.y = chaseVelovity * dt;
+				velocity.y = ActualVelocity * dt;
 			}
 			if (path->Count() > 2) {
 				//if next step move x, go diagonal
 				if (path->At(2)->x != TileX) {
 					if (TileX > path->At(2)->x) {
-						velocity.x = -chaseVelovity / 1.3 * dt;
+						velocity.x = -ActualVelocity / 1.3 * dt;
 					}
 					else {
-						velocity.x = chaseVelovity / 1.3 * dt;
+						velocity.x = ActualVelocity / 1.3 * dt;
 					}
 					velocity.y /= 1.3;
 				}
@@ -149,6 +160,20 @@ void EnemyFly::moveToPlayer(float dt)
 					velocity.x = 0;
 				}
 			}
+		}
+	}
+	else if (path->Count() == 1) {
+		if (app->scene->GetPlayer()->position.x < position.x) {
+			velocity.x = -ActualVelocity * dt;
+		}
+		else {
+			velocity.x = ActualVelocity * dt;
+		}
+		if (app->scene->GetPlayer()->position.y < position.y) {
+			velocity.y = -ActualVelocity * dt;
+		}
+		else {
+			velocity.y = ActualVelocity * dt;
 		}
 	}
 }

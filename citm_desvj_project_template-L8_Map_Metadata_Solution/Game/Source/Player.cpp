@@ -164,29 +164,11 @@ bool Player::Update(float dt)
 
 	if (!death) {
 
-		b2ContactEdge* contact = pbody->body->GetContactList();
-		if (contact != nullptr) {
-			b2Vec2 contactPonts = contact->contact->GetManifold()->localNormal;
-			if (contactPonts.y == -1) {
-				if (state == JUMP2) {
-					jumpAnim2.Reset();
-					state = IDLE;
-				}
-				jumps = 2;
-			}
-		}
-
 		if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
 			velocity.x = -0.5 * dt;
 			flip = true;
 			if (state == IDLE) {
 				state = WALIKING;
-			}
-			if (contact != nullptr) {
-				b2Vec2 contactPonts = contact->contact->GetManifold()->localNormal;
-				if (contactPonts.y != -1) {
-					state = JUMP2;
-				}
 			}
 		}
 
@@ -195,12 +177,6 @@ bool Player::Update(float dt)
 			flip = false;
 			if (state == IDLE) {
 				state = WALIKING;
-			}
-			if (contact != nullptr) {
-				b2Vec2 contactPonts = contact->contact->GetManifold()->localNormal;
-				if (contactPonts.y != -1) {
-					state = JUMP2;
-				}
 			}
 		}
 
@@ -213,29 +189,14 @@ bool Player::Update(float dt)
 		if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
 			if (jumps > 0) {
 				state = JUMP1;
-				if (contact != nullptr) {
-					b2Vec2 contactPonts = contact->contact->GetManifold()->localNormal;
-					if (contactPonts.y == 0 && (contactPonts.x == 1 || contactPonts.x == -1)) {
-						jumps = 0;
-						remainingJumpSteps = maxremainingJumpSteps;
-						jumpForceReduce = 0;
-					}
-					else {
-						jumps--;
-						remainingJumpSteps = maxremainingJumpSteps;
-						jumpForceReduce = 0;
-					}
-				}
-				else {
-					jumps = 0;
-					remainingJumpSteps = maxremainingJumpSteps;
-					jumpForceReduce = 0;
-				}
+				jumps--;
+				remainingJumpSteps = maxremainingJumpSteps;
+				jumpForceReduce = 0;
 			}
 		}
 
 		if (remainingJumpSteps > 0) {
-			float force = pbody->body->GetMass() * 10 / (1 / 30.0);
+			force = pbody->body->GetMass() * 10 / (1 / 30.0);
 			force /= 2.7f;
 			force -= jumpForceReduce;
 			jumpForceReduce = maxremainingJumpSteps - remainingJumpSteps;
@@ -244,14 +205,6 @@ bool Player::Update(float dt)
 			if (jumpForceReduce > force) {
 				remainingJumpSteps = 0;
 				jumpForceReduce = 0;
-			}
-			if (contact != nullptr) {
-				b2Vec2 contactPonts = contact->contact->GetManifold()->localNormal;
-				if (contactPonts.y == 1) {
-					force = 0;
-					remainingJumpSteps = 0;
-					jumpForceReduce = 0;
-				}
 			}
 		}
 
@@ -329,10 +282,23 @@ bool Player::CleanUp()
 
 // L07 DONE 6: Define OnCollision function for the player. 
 void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
-
+	b2ContactEdge* contact = pbody->body->GetContactList();
+	b2Vec2 contactPonts = contact->contact->GetManifold()->localNormal;
 	switch (physB->ctype)
 	{
 	case ColliderType::PLATFORM:
+		if (contactPonts.y == -1) {
+			if (state == JUMP2) {
+				jumpAnim2.Reset();
+				state = IDLE;
+			}
+			jumps = 2;
+		}
+		if (contactPonts.y == 1) {
+			force = 0;
+			remainingJumpSteps = 0;
+			jumpForceReduce = 0;
+		}
 		break;
 	case ColliderType::ITEM:
 		if (physB->ctype == ColliderType::ITEM) {
@@ -354,7 +320,18 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 	case ColliderType::OUTSIDE:
 		dark = false;
 		break;
-	case ColliderType::UNKNOWN:
+	case ColliderType::ENEMY:
+		/*LOG("%f", contactPonts.y);
+		if (contactPonts.y <= 0) {
+			if (state == JUMP2) {
+				jumpAnim2.Reset();
+				state = IDLE;
+			}
+			jumps = 2;
+		}
+		else if(!godmode){
+			death = true;
+		} */
 		break;
 	default:
 		break;

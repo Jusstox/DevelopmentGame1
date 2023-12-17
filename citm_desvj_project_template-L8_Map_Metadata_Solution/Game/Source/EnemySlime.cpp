@@ -1,4 +1,6 @@
 #include "EnemySlime.h"
+#include "Scene.h"
+#include "Log.h"
 
 EnemySlime::EnemySlime() :Enemy()
 {
@@ -7,22 +9,23 @@ EnemySlime::EnemySlime() :Enemy()
 
 bool EnemySlime::Awake()
 {
-	flyinganim.PushBack({ 0, 0, 16, 14 });
-	flyinganim.PushBack({ 23, 0, 17, 14 });
-	flyinganim.PushBack({ 45, 0, 17, 14 });
-	flyinganim.PushBack({ 23, 0, 17, 14 });
-	flyinganim.loop = true;
-	flyinganim.speed = 0.1;
+	Enemy::Awake();
+	idleanim.PushBack({ 0, 0, 16, 14 });
+	idleanim.PushBack({ 23, 0, 17, 14 });
+	idleanim.PushBack({ 45, 0, 17, 14 });
+	idleanim.PushBack({ 23, 0, 17, 14 });
+	idleanim.loop = true;
+	idleanim.speed = 0.1;
 
-	flyinganimchase.PushBack({ 0, 34, 17, 15 });
-	flyinganimchase.PushBack({ 22, 34, 17, 15 });
-	flyinganimchase.PushBack({ 44, 34, 19, 15 });
-	flyinganimchase.PushBack({ 68, 34, 18, 16 });
-	flyinganimchase.PushBack({ 44, 34, 19, 15 });
-	flyinganimchase.PushBack({ 91, 34, 17, 15 });
-	flyinganimchase.PushBack({ 113, 34, 17, 15 });
-	flyinganimchase.loop = true;
-	flyinganimchase.speed = 0.05;
+	walkinganimchase.PushBack({ 0, 34, 17, 15 });
+	walkinganimchase.PushBack({ 22, 34, 17, 15 });
+	walkinganimchase.PushBack({ 44, 34, 19, 15 });
+	walkinganimchase.PushBack({ 68, 34, 18, 16 });
+	walkinganimchase.PushBack({ 44, 34, 19, 15 });
+	walkinganimchase.PushBack({ 91, 34, 17, 15 });
+	walkinganimchase.PushBack({ 113, 34, 17, 15 });
+	walkinganimchase.loop = true;
+	walkinganimchase.speed = 0.1;
 
 	dieanim.PushBack({ 0, 99, 17, 15 });
 	dieanim.PushBack({ 22, 99, 19, 15 });
@@ -44,15 +47,13 @@ bool EnemySlime::Awake()
 
 bool EnemySlime::Start()
 {
-	position = iPoint(250, 350);
-	velocity = b2Vec2(0, 0);
 	distChase = 10;
 	initPosition = position;
-	texture = app->tex->Load("Assets/Textures/Slime.png");
-	currentAnimation = &flyinganimchase;
+	texture = app->tex->Load(texturePath);
+	currentAnimation = &walkinganimchase;
 
 	// L07 DONE 5: Add physics to the player - initialize physics body
-	pbody = app->physics->CreateCircle(position.x, position.y, currentAnimation->GetCurrentFrame().w / 2, bodyType::DYNAMIC);
+	pbody = app->physics->CreateCircle(position.x, position.y, currentAnimation->GetCurrentFrame().w/2, bodyType::DYNAMIC);
 
 	// L07 DONE 6: Assign player class (using "this") to the listener of the pbody. This makes the Physics module to call the OnCollision method
 	pbody->listener = this;
@@ -62,7 +63,8 @@ bool EnemySlime::Start()
 
 	pbody->body->SetGravityScale(0);
 
-	chaseVelovity = 0.1;
+	chaseVelovity = 0.12;
+	patrolVelocity = 0.1;
 
 	Enemy::Start();
 
@@ -71,16 +73,23 @@ bool EnemySlime::Start()
 
 bool EnemySlime::Update(float dt)
 {
-	velocity = b2Vec2(0, 0);
-
+	if (abs(app->scene->GetPlayer()->getPlayerTileX() - getEnemyTileX()) > 50) {
+		velocity.x = 0;
+		velocity.y = 0;
+		pbody->body->SetLinearVelocity(velocity);
+		return true;
+	}
+	velocity = b2Vec2(0, 10);
 	if (!hit) {
-		if (canChase(distChase)) {
+		if (canChase(distChase) && PTileX >= Patrol1.x && PTileX <= Patrol2.x && PTileY <= Patrol1.y) {
+			ActualVelocity = chaseVelovity;
 			dest = iPoint(PTileX, PTileY);
 			moveToPlayer(dt);
-			currentAnimation = &flyinganimchase;
+			currentAnimation = &walkinganimchase;
 		}
 		else {
-			currentAnimation = &flyinganim;
+			ActualVelocity = patrolVelocity;
+			moveToPoint(dt);
 		}
 	}
 	else {
@@ -106,51 +115,19 @@ void EnemySlime::moveToPlayer(float dt)
 	//check if t has arrivied
 	if (path->Count() > 1) {
 		//check if it shall move to x
-		if (TileX != path->At(1)->x) {
-			if (TileX > path->At(1)->x) {
-				velocity.x = -chaseVelovity * dt;
-			}
-			else {
-				velocity.x = chaseVelovity * dt;
-			}
-			if (path->Count() > 2) {
-				//if next step move y, go diagonal
-				if (path->At(2)->y != TileY) {
-					if (TileY > path->At(2)->y) {
-						velocity.y = -chaseVelovity / 1.3 * dt;
-					}
-					else {
-						velocity.y = chaseVelovity / 1.3 * dt;
-					}
-					velocity.x /= 1.3;
-				}
-				else {
-					velocity.y = 0;
-				}
-			}
+		if (TileX > path->At(1)->x) {
+			velocity.x = -ActualVelocity * dt;
 		}
-		else { //check if it shall move to y
-			if (TileY > path->At(1)->y) {
-				velocity.y = -chaseVelovity * dt;
-			}
-			else {
-				velocity.y = chaseVelovity * dt;
-			}
-			if (path->Count() > 2) {
-				//if next step move x, go diagonal
-				if (path->At(2)->x != TileX) {
-					if (TileX > path->At(2)->x) {
-						velocity.x = -chaseVelovity / 1.3 * dt;
-					}
-					else {
-						velocity.x = chaseVelovity / 1.3 * dt;
-					}
-					velocity.y /= 1.3;
-				}
-				else {
-					velocity.x = 0;
-				}
-			}
+		else {
+			velocity.x = ActualVelocity * dt;
+		}
+	}
+	else if (path->Count() == 1) {
+		if (app->scene->GetPlayer()->position.x < position.x) {
+			velocity.x = -ActualVelocity * dt;
+		}
+		else {
+			velocity.x = ActualVelocity * dt;
 		}
 	}
 }
@@ -161,10 +138,42 @@ void EnemySlime::OnCollision(PhysBody* physA, PhysBody* physB)
 	{
 	case ColliderType::PLAYER:
 		hit = true;
+		velocity.x = 0;
 		currentAnimation = &dieanim;
+		break;
+	case ColliderType::DEATH:
+		hit = true;
+		velocity.x = 0;
+		currentAnimation = &dieanim;
+		break;
+	case ColliderType::PLATFORM:
 		break;
 	default:
 		break;
+	}
+}
+
+void EnemySlime::moveToPoint(float dt)
+{
+	Enemy::Patrol();
+	const DynArray<iPoint>* path = SearchWay();
+	//check if t has arrivied
+	if (path->Count() > 1) {
+		//check if it shall move to x
+		if (TileX > path->At(1)->x) {
+			velocity.x = -ActualVelocity * dt;
+		}
+		else {
+			velocity.x = ActualVelocity * dt;
+		}
+	}
+	else if (path->Count() == 1) {
+		if (app->scene->GetPlayer()->position.x < position.x) {
+			velocity.x = -ActualVelocity * dt;
+		}
+		else {
+			velocity.x = ActualVelocity * dt;
+		}
 	}
 }
 

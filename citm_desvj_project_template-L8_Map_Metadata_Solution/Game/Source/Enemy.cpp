@@ -16,6 +16,11 @@ Enemy::~Enemy()
 
 bool Enemy::Awake()
 {
+	position.x = parameters.attribute("x").as_int();
+	position.y = parameters.attribute("y").as_int();
+	texturePath = parameters.attribute("texturepath").as_string();
+	Patrol1 = { parameters.attribute("dest1X").as_int() ,parameters.attribute("dest1Y").as_int() };
+	Patrol2 = { parameters.attribute("dest2X").as_int() , parameters.attribute("dest2Y").as_int() };
 	return true;
 }
 
@@ -24,6 +29,7 @@ bool Enemy::Start()
 	mouseTileTex = app->tex->Load("Assets/Maps/tileSelection.png");
 	dead = false;
 	hit = false;
+	patrol = true;
 	return true;
 }
 
@@ -32,8 +38,14 @@ bool Enemy::Update(float dt)
 	pbody->body->SetLinearVelocity(velocity);
 	b2Transform pbodyPos = pbody->body->GetTransform();
 
-	position.x = METERS_TO_PIXELS(pbodyPos.p.x) - (currentAnimation->GetCurrentFrame().w / 2);
-	position.y = METERS_TO_PIXELS(pbodyPos.p.y) - (currentAnimation->GetCurrentFrame().h / 2);
+	if (hit) {
+		b2Vec2 diePos = b2Vec2(PIXEL_TO_METERS(0), PIXEL_TO_METERS(0));
+		pbody->body->SetTransform(diePos, 0);
+	}
+	else {
+		position.x = METERS_TO_PIXELS(pbodyPos.p.x) - (currentAnimation->GetCurrentFrame().w / 2);
+		position.y = METERS_TO_PIXELS(pbodyPos.p.y) - (currentAnimation->GetCurrentFrame().h / 2);
+	}
 
 	if (!dead) {
 		if (right) {
@@ -49,7 +61,8 @@ bool Enemy::Update(float dt)
 	if (dead)
 	{
 		pendingToDelete = true;
-		app->entityManager->DestroyEntity(this);
+		// mirar de borrar texture i memory leaks
+		//app->entityManager->DestroyEntity(this);
 	}
 
 	return true;
@@ -111,8 +124,6 @@ bool Enemy::canChase(int dist)
 		canChase =  true;
 	}
 	else {
-		velocity.y = 0;
-		velocity.x = 0;
 		canChase = false;
 	}
 
@@ -122,4 +133,22 @@ bool Enemy::canChase(int dist)
 void Enemy::moveToPlayer(float dt)
 {
 
+}
+
+void Enemy::Patrol()
+{
+	if (patrol) {
+		dest.x = Patrol1.x;
+		dest.y = Patrol1.y;
+		if (getEnemyTileX() == dest.x) {
+			patrol = false;
+		}
+	}
+	else {
+		dest.x = Patrol2.x;
+		dest.y = Patrol2.y;
+		if (getEnemyTileX() == dest.x) {
+			patrol = true;
+		}
+	}
 }

@@ -79,6 +79,7 @@ public:
 	sates state;
 	bool death;
 	iPoint initPosition;
+	float force;
 };
 
 #endif // __PLAYER_H__

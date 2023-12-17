@@ -14,8 +14,10 @@ public:
 
 	void OnCollision(PhysBody* physA, PhysBody* physB);
 
-	Animation flyinganim;
-	Animation flyinganimchase;
+	void moveToPoint(float dt);
+
+	Animation idleanim;
+	Animation walkinganimchase;
 	Animation dieanim;
 };
 

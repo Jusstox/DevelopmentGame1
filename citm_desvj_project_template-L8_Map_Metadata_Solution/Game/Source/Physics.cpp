@@ -10,6 +10,7 @@
 #include "Player.h"
 #include "Window.h"
 #include "Box2D/Box2D/Box2D.h"
+#include "Enemy.h"
 
 // Tell the compiler to reference the compiled Box2D libraries
 #ifdef _DEBUG
@@ -216,7 +217,6 @@ PhysBody* Physics::CreateChain(int x, int y, int* points, int size, bodyType typ
 	// Return our PhysBody class
 	return pbody;
 }
-
 // 
 bool Physics::PostUpdate()
 {

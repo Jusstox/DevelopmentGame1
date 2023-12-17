@@ -8,6 +8,7 @@
 #include "Map.h"
 #include "Item.h"
 #include "Physics.h"
+#include "Enemy.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -51,8 +52,21 @@ bool Scene::Awake(pugi::xml_node config)
 		item->parameters = itemNode;
 	}*/
 
-	app->entityManager->CreateEntity(EntityType::ENEMYFLY);
-	app->entityManager->CreateEntity(EntityType::ENEMYSLIME);
+	//Load enemies
+	pugi::xml_node enemieNode = config.child("enemies");
+	//FlyEnemy
+	for (pugi::xml_node flyenemieNode = enemieNode.child("flyenemy"); flyenemieNode; flyenemieNode = flyenemieNode.next_sibling("flyenemy"))
+	{
+		Enemy* EnemyFly = (Enemy*)app->entityManager->CreateEntity(EntityType::ENEMYFLY);
+		EnemyFly->parameters = flyenemieNode;
+	}
+
+	//WalkerEnemy
+	for (pugi::xml_node walkenemieNode = enemieNode.child("walkenemy"); walkenemieNode; walkenemieNode = walkenemieNode.next_sibling("walkenemy"))
+	{
+		Enemy* EnemyFly = (Enemy*)app->entityManager->CreateEntity(EntityType::ENEMYSLIME);
+		EnemyFly->parameters = walkenemieNode;
+	}
 
 	return ret;
 }

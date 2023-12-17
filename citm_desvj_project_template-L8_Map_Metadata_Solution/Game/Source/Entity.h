@@ -76,8 +76,6 @@ public:
 
 	};
 
-
-
 public:
 
 	SString name;
@@ -89,6 +87,7 @@ public:
 	// want our Entity class, maybe it's not renderable...
 	iPoint position;       
 	bool renderable = true;
+	bool pendingToDelete = false;
 };
 
 #endif // __ENTITY_H__

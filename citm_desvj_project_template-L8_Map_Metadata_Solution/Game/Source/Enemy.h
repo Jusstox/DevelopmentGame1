@@ -46,6 +46,8 @@ public:
 
 	void Patrol();
 
+	bool dark;
+
 protected:
 	const char* texturePath;
 	SDL_Texture* texture;
@@ -59,7 +61,7 @@ protected:
 	float patrolVelocity;
 	bool right;
 	bool dead;
-	bool hit;
+	bool hit;	
 
 	int distChase;
 	iPoint dest;

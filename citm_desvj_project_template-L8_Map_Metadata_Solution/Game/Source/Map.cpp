@@ -6,6 +6,7 @@
 #include "Physics.h"
 #include "Scene.h"
 #include "Player.h"
+#include "Enemy.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -63,6 +64,7 @@ bool Map::Update(float dt)
     ListItem<MapLayer*>* mapLayer; 
     mapLayer = mapData.layers.start;
 
+    // L06: DONE 5: Prepare the loop to draw all tiles in a layer + DrawTexture()
     //limitar el renderizado
     if (!app->scene->GetPlayer()->blend) {
         fisrtX = app->render->GetFirstTileX();
@@ -94,10 +96,17 @@ bool Map::Update(float dt)
     if (lastY > mapData.height) {
         lastY = mapData.height;
     }
-    // L06: DONE 5: Prepare the loop to draw all tiles in a layer + DrawTexture()
 
     // iterates the layers in the map
     while (mapLayer != NULL) {
+        if (mapLayer->data->name == "dark") {
+            if (app->scene->GetPlayer()->dark) {
+                mapLayer->data->properties.GetProperty("Draw")->value = false;
+            }
+            else {
+                mapLayer->data->properties.GetProperty("Draw")->value = true;
+            }
+        }
         //Check if the property Draw exist get the value, if it's true draw the lawyer
         if (mapLayer->data->properties.GetProperty("Draw") != NULL && mapLayer->data->properties.GetProperty("Draw")->value) {
             //iterate all tiles in a layer
@@ -125,6 +134,7 @@ bool Map::Update(float dt)
 
         mapLayer = mapLayer->next;
     }
+
     return ret;
 }
 

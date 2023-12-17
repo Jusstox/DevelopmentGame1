@@ -58,11 +58,11 @@
     <item x="500" y="672" texturepath="Assets/Textures/goldCoin.png"/>
 	
 	<enemies>
-		<flyenemy x="250" y="350" texturepath="Assets/Textures/Bat.png" dest1X="11" dest1Y="12" dest2X="17" dest2Y="8"/>
-		<flyenemy x="1184" y="1280" texturepath="Assets/Textures/Bat.png" dest1X="31" dest1Y="40" dest2X="43" dest2Y="41"/>
+		<flyenemy x="250" y="350" texturepath="Assets/Textures/Bat.png" dark="false" dest1X="11" dest1Y="12" dest2X="17" dest2Y="8"/>
+		<flyenemy x="1184" y="1280" texturepath="Assets/Textures/Bat.png" dark="false" dest1X="31" dest1Y="40" dest2X="43" dest2Y="41"/>
 		
-		<walkenemy x="250" y="350" texturepath="Assets/Textures/Slime.png" dest1X="0" dest1Y="17" dest2X="8" dest2Y="17"/>
-		<walkenemy x="500" y="1120" texturepath="Assets/Textures/Slime.png" dest1X="7" dest1Y="35" dest2X="16" dest2Y="35"/>
+		<walkenemy x="250" y="350" texturepath="Assets/Textures/Slime.png" dark="false" dest1X="0" dest1Y="17" dest2X="8" dest2Y="17"/>
+		<walkenemy x="500" y="1120" texturepath="Assets/Textures/Slime.png" dark="true" dest1X="7" dest1Y="35" dest2X="16" dest2Y="35"/>
 	<enemies/>
 	
   </scene>

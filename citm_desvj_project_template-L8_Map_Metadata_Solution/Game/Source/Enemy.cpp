@@ -21,6 +21,7 @@ bool Enemy::Awake()
 	texturePath = parameters.attribute("texturepath").as_string();
 	Patrol1 = { parameters.attribute("dest1X").as_int() ,parameters.attribute("dest1Y").as_int() };
 	Patrol2 = { parameters.attribute("dest2X").as_int() , parameters.attribute("dest2Y").as_int() };
+	dark = parameters.attribute("dark").as_bool();
 	return true;
 }
 
@@ -48,11 +49,25 @@ bool Enemy::Update(float dt)
 	}
 
 	if (!dead) {
-		if (right) {
-			app->render->DrawTexturePR(texture, position.x, position.y, &currentAnimation->GetCurrentFrame());
+		if (app->scene->GetPlayer()->dark) {
+			if (dark) {
+				if (right) {
+					app->render->DrawTexturePR(texture, position.x, position.y, &currentAnimation->GetCurrentFrame());
+				}
+				else {
+					app->render->DrawTexture(texture, position.x, position.y, &currentAnimation->GetCurrentFrame());
+				}
+			}
 		}
 		else {
-			app->render->DrawTexture(texture, position.x, position.y, &currentAnimation->GetCurrentFrame());
+			if (!dark) {
+				if (right) {
+					app->render->DrawTexturePR(texture, position.x, position.y, &currentAnimation->GetCurrentFrame());
+				}
+				else {
+					app->render->DrawTexture(texture, position.x, position.y, &currentAnimation->GetCurrentFrame());
+				}
+			}
 		}
 	}
 

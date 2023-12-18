@@ -16,6 +16,10 @@ public:
 
 	void moveToPoint(float dt);
 
+	bool LoadState(pugi::xml_node& node);
+
+	bool SaveState(pugi::xml_node& node);
+
 	Animation idleanim;
 	Animation walkinganimchase;
 	Animation dieanim;

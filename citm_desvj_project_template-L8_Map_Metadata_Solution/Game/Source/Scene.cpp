@@ -64,8 +64,8 @@ bool Scene::Awake(pugi::xml_node config)
 	//WalkerEnemy
 	for (pugi::xml_node walkenemieNode = enemieNode.child("walkenemy"); walkenemieNode; walkenemieNode = walkenemieNode.next_sibling("walkenemy"))
 	{
-		Enemy* EnemyFly = (Enemy*)app->entityManager->CreateEntity(EntityType::ENEMYSLIME);
-		EnemyFly->parameters = walkenemieNode;
+		Enemy* EnemySlime = (Enemy*)app->entityManager->CreateEntity(EntityType::ENEMYSLIME);
+		EnemySlime->parameters = walkenemieNode;
 	}
 
 	return ret;
@@ -80,8 +80,8 @@ bool Scene::Start()
 	textPosX = (float)windowW / 2 - (float)texW / 2;
 	textPosY = (float)windowH / 2 - (float)texH / 2;
 
-	app->render->camera.y = ((player->position.y - player->texH/2) - windowH / 2) * -1;
-	app->render->camera.x = ((player->position.x- player->texW/2) - (windowW / 2)) * -1;
+	app->render->camera.y = ((player->position.y - 26 / 2) - windowH / 2) * -1;
+	app->render->camera.x = ((player->position.x - 40 / 2) - (windowW / 2)) * -1;
 
 	if (app->render->camera.x >= 0) {
 		app->render->camera.x = 0;
@@ -89,8 +89,6 @@ bool Scene::Start()
 	if (app->render->camera.y >= 0) {
 		app->render->camera.y = 0;
 	}
-
-	
 
 	return true;
 }
@@ -104,31 +102,36 @@ bool Scene::PreUpdate()
 // Called each loop iteration
 bool Scene::Update(float dt)
 {
-	//L02 DONE 3: Make the camera movement independent of framerate
-	float camSpeed = 1; 
-	int limitCamX = player->position.x - (windowW / 2);
-	if (limitCamX > 0 && limitCamX < (app->map->getMapWidth() - windowW - (app->map->getTileWidth()/2))) {
-		//preguntar como sacar lo del 13 (es la mitad del width) con el getcurrentrectanim.w varia
-		app->render->camera.x = (player->position.x + 13 - windowW / 2) * -1;
+	if (lockCamera) {
+		cameraLimit();
+	}
+	else {
+		//L02 DONE 3: Make the camera movement independent of framerate
+		float camSpeed = 1;
+
+		if (app->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT) {
+			app->render->camera.y -= (int)ceil(camSpeed * dt);
+		}
+
+		if (app->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT) {
+			app->render->camera.y += (int)ceil(camSpeed * dt);
+		}
+
+		if (app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT) {
+			app->render->camera.x -= (int)ceil(camSpeed * dt);
+		}
+
+		if (app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT) {
+			app->render->camera.x += (int)ceil(camSpeed * dt);
+		}
 	}
 
-	int limitCamY = player->position.y - (windowH / 2);
-	if (limitCamY > 0 && limitCamY < (app->map->getMapHeght() - windowH)) {
-		app->render->camera.y = (player->position.y - windowH / 2) * -1;
+	if (app->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN) {
+		lockCamera = !lockCamera;
 	}
-	
-
-	if(app->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
-		app->render->camera.y -= (int)ceil(camSpeed * dt);
-
-	if(app->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
-		app->render->camera.y += (int)ceil(camSpeed * dt);
-
-	if(app->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
-		app->render->camera.x -= (int)ceil(camSpeed * dt);
-
-	if(app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
-		app->render->camera.x += (int)ceil(camSpeed * dt);
+	// L14: TODO 3: Request App to Load / Save when pressing the keys F5 (save) / F6 (load)
+	if (app->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN) app->SaveRequest();
+	if (app->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN) app->LoadRequest();
 
 	return true;
 }
@@ -150,4 +153,30 @@ bool Scene::CleanUp()
 	LOG("Freeing scene");
 
 	return true;
+}
+
+void Scene::cameraLimit()
+{
+	int limitCamXend = (app->map->getMapWidth() - windowW) * -1;
+	int limitCamXbeg = 0;
+
+	app->render->camera.y = ((player->position.y - 26 / 2) - windowH / 2) * -1;
+	app->render->camera.x = ((player->position.x - 40 / 2) - (windowW / 2)) * -1;
+
+	if (app->render->camera.x > limitCamXbeg) {
+		app->render->camera.x = limitCamXbeg;
+	}
+	else if (app->render->camera.x < limitCamXend) {
+		app->render->camera.x = limitCamXend;
+	}
+
+	int limitCamYend = (app->map->getMapHeght() - windowH) * -1;
+	int limitCamYbeg = 0;
+
+	if (app->render->camera.y > limitCamYbeg) {
+		app->render->camera.y = limitCamYbeg;
+	}
+	else if (app->render->camera.y < limitCamYend) {
+		app->render->camera.y = limitCamYend;
+	}
 }

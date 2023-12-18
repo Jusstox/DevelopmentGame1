@@ -1,6 +1,6 @@
 #include "EnemySlime.h"
 #include "Scene.h"
-#include "Log.h"
+#include "Audio.h"
 
 EnemySlime::EnemySlime() :Enemy()
 {
@@ -81,15 +81,20 @@ bool EnemySlime::Update(float dt)
 	}
 	velocity = b2Vec2(0, 10);
 	if (!hit) {
-		if (canChase(distChase) && PTileX >= Patrol1.x && PTileX <= Patrol2.x && PTileY <= Patrol1.y) {
-			ActualVelocity = chaseVelovity;
-			dest = iPoint(PTileX, PTileY);
-			moveToPlayer(dt);
-			currentAnimation = &walkinganimchase;
+		if (canChase(distChase)) {
+			if ((dark && app->scene->GetPlayer()->dark) || (!dark && !app->scene->GetPlayer()->dark)) {
+				ActualVelocity = chaseVelovity;
+				dest = iPoint(PTileX, PTileY);
+				moveToPlayer(dt);
+				currentAnimation = &walkinganimchase;
+			}
 		}
-		else {
+		else if(Patrol1.y == getEnemyTileY()){
 			ActualVelocity = patrolVelocity;
 			moveToPoint(dt);
+		}
+		else {
+			currentAnimation = &idleanim;
 		}
 	}
 	else {
@@ -137,9 +142,6 @@ void EnemySlime::OnCollision(PhysBody* physA, PhysBody* physB)
 	switch (physB->ctype)
 	{
 	case ColliderType::PLAYER:
-		hit = true;
-		velocity.x = 0;
-		currentAnimation = &dieanim;
 		break;
 	case ColliderType::DEATH:
 		hit = true;
@@ -147,6 +149,15 @@ void EnemySlime::OnCollision(PhysBody* physA, PhysBody* physB)
 		currentAnimation = &dieanim;
 		break;
 	case ColliderType::PLATFORM:
+		break;
+	case ColliderType::SHURIKEN:
+		hit = true;
+		velocity.x = 0;
+		currentAnimation = &dieanim;
+		app->audio->PlayFx(dieFX);
+		break;
+	case ColliderType::DARK:
+		dark = true;
 		break;
 	default:
 		break;
@@ -175,6 +186,42 @@ void EnemySlime::moveToPoint(float dt)
 			velocity.x = ActualVelocity * dt;
 		}
 	}
+}
+
+bool EnemySlime::LoadState(pugi::xml_node& node)
+{
+	pugi::xml_node EnemyNode = node;
+	dead = EnemyNode.attribute("dead").as_bool();
+	if (dead) {
+		position.x = 0;
+		position.y = 0;
+		b2Vec2 diePos = b2Vec2(PIXEL_TO_METERS(0), PIXEL_TO_METERS(0));
+		pbody->body->SetTransform(diePos, 0);
+		hit = true;
+	}
+	else {
+		position.x = EnemyNode.attribute("x").as_int();
+		position.y = EnemyNode.attribute("y").as_int();
+		dark = EnemyNode.attribute("dark").as_bool();
+		b2Vec2 pPosition = b2Vec2(PIXEL_TO_METERS(position.x), PIXEL_TO_METERS(position.y));
+		pbody->body->SetTransform(pPosition, 0);
+		currentAnimation = &walkinganimchase;
+		hit = false;
+		dieanim.Reset();
+	}
+	node = EnemyNode.next_sibling("Enemy");
+
+	return true;
+}
+
+bool EnemySlime::SaveState(pugi::xml_node& node)
+{
+	pugi::xml_node EnemyNode = node.append_child(name.GetString());
+	EnemyNode.append_attribute("x").set_value(position.x);
+	EnemyNode.append_attribute("y").set_value(position.y);
+	EnemyNode.append_attribute("dead").set_value(dead);
+	EnemyNode.append_attribute("dark").set_value(dark);
+	return true;
 }
 
 

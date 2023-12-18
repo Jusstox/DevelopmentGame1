@@ -4,6 +4,7 @@
 #include "Map.h"
 #include "Player.h"
 #include "Scene.h"
+#include "Audio.h"
 
 Enemy::Enemy() : Entity(EntityType::ENEMY)
 {
@@ -22,6 +23,7 @@ bool Enemy::Awake()
 	Patrol1 = { parameters.attribute("dest1X").as_int() ,parameters.attribute("dest1Y").as_int() };
 	Patrol2 = { parameters.attribute("dest2X").as_int() , parameters.attribute("dest2Y").as_int() };
 	dark = parameters.attribute("dark").as_bool();
+	dieFX = app->audio->LoadFx(parameters.attribute("fxpath").as_string());
 	return true;
 }
 
@@ -155,14 +157,14 @@ void Enemy::Patrol()
 	if (patrol) {
 		dest.x = Patrol1.x;
 		dest.y = Patrol1.y;
-		if (getEnemyTileX() == dest.x) {
+		if (getEnemyTileX() == dest.x && getEnemyTileY() == dest.y) {
 			patrol = false;
 		}
 	}
 	else {
 		dest.x = Patrol2.x;
 		dest.y = Patrol2.y;
-		if (getEnemyTileX() == dest.x) {
+		if (getEnemyTileX() == dest.x && getEnemyTileY() == dest.y) {
 			patrol = true;
 		}
 	}

@@ -38,6 +38,10 @@ public:
 		return player;
 	}
 
+	void cameraLimit();
+	
+	bool lockCamera = true;
+
 private:
 	SDL_Texture* img;
 	float textPosX, textPosY = 0;

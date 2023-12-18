@@ -73,6 +73,11 @@ bool Player::Awake() {
 	blendFadeOut.loop = false;
 	blendFadeOut.speed = 0.3f;
 
+	shurikenanim.loop = true;
+	shurikenanim.PushBack({ 84,0, 15,15 });
+	shurikenanim.PushBack({ 102,0,15,15 });
+	shurikenanim.speed = 0.1f;
+
 	return true;
 }
 
@@ -84,14 +89,17 @@ bool Player::Start() {
 	state = IDLE;
 	// L07 DONE 5: Add physics to the player - initialize physics body
 	app->tex->GetSize(texture, texW, texH);
+	currentSAnimation = &shurikenanim;
 	currentAnimation = &idleAnim;
 	pbody = app->physics->CreateCircle(position.x, position.y, currentAnimation->GetCurrentFrame().w / 2, bodyType::DYNAMIC);
-
+	pbodyshuriken = app->physics->CreateCircle(0, 0, 6, bodyType::DYNAMIC);
+	pbodyshuriken->body->SetGravityScale(0);
 	// L07 DONE 6: Assign player class (using "this") to the listener of the pbody. This makes the Physics module to call the OnCollision method
 	pbody->listener = this;
-
+	pbodyshuriken->listener = this;
 	// L07 DONE 7: Assign collider type
 	pbody->ctype = ColliderType::PLAYER;
+	pbodyshuriken->ctype = ColliderType::SHURIKEN;
 
 	//initialize audio effect
 	pickCoinFxId = app->audio->LoadFx(config.attribute("coinfxpath").as_string());
@@ -149,6 +157,19 @@ bool Player::Update(float dt)
 
 	if (app->input->GetKey(SDL_SCANCODE_F3) == KEY_REPEAT) {
 		respawn();
+	}
+
+	if (!shuriken) {
+		b2Vec2 diePos = b2Vec2(PIXEL_TO_METERS(-100), PIXEL_TO_METERS(-100));
+		pbodyshuriken->body->SetTransform(diePos, 0);
+	}
+	else {
+		b2Transform pbodyPos = pbodyshuriken->body->GetTransform();
+		Sposition.x = METERS_TO_PIXELS(pbodyPos.p.x) - 15;
+		Sposition.y = METERS_TO_PIXELS(pbodyPos.p.y) - 15;
+		app->render->DrawTexture(texture, Sposition.x + currentSAnimation->GetCurrentFrame().w/2,
+			Sposition.y + currentSAnimation->GetCurrentFrame().h/2, &shurikenanim.GetCurrentFrame());
+		currentSAnimation->Update();
 	}
 
 	if (death) {
@@ -212,6 +233,40 @@ bool Player::Update(float dt)
 				jumpAnim1.Reset();
 				state = JUMP2;
 			}
+		}
+
+		//shuriken
+		if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN && !shuriken) {
+			shuriken = true;
+			iPoint mousePos;
+			app->input->GetMousePosition(mousePos.x, mousePos.y);
+			mousePos.x -= app->render->camera.x;
+			mousePos.y -= app->render->camera.y;
+
+			iPoint spawnPos;
+			spawnPos.x = position.x + currentAnimation->GetCurrentFrame().w / 2;
+			spawnPos.y = position.y + currentAnimation->GetCurrentFrame().h / 2;
+			if (app->physics->debug) {
+				app->render->DrawLine(spawnPos.x,
+					spawnPos.y, mousePos.x, mousePos.y, 255, 0, 0, 255, true);
+			}
+
+			fPoint direction;
+			direction.x = mousePos.x - spawnPos.x;
+			direction.y = mousePos.y - spawnPos.y;
+			float Module = sqrt(pow(direction.x, 2) + pow(direction.y, 2));
+			direction.x /= Module;
+			direction.y /= Module;
+			spawnPos.x += direction.x * 12;
+			spawnPos.y += direction.y * 12;
+			LOG("x %f", direction.x);
+			LOG("y %f", direction.y);
+			b2Vec2 pPosition = b2Vec2(PIXEL_TO_METERS(spawnPos.x), PIXEL_TO_METERS(spawnPos.y));
+			b2Vec2 vec = b2Vec2(position.x + currentAnimation->GetCurrentFrame().w / 2, 10);
+			pbodyshuriken->body->SetTransform(pPosition, 0);
+
+			b2Vec2 shirukenvel = b2Vec2(direction.x * 8, direction.y * 8);
+			pbodyshuriken->body->SetLinearVelocity(shirukenvel);
 		}
 	}
 
@@ -282,21 +337,29 @@ bool Player::CleanUp()
 // L07 DONE 6: Define OnCollision function for the player. 
 void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 	b2ContactEdge* contact = pbody->body->GetContactList();
-	b2Vec2 contactPonts = contact->contact->GetManifold()->localNormal;
+	b2Vec2 contactPonts;
+	if (contact != nullptr) {
+		contactPonts = contact->contact->GetManifold()->localNormal;
+	}
 	switch (physB->ctype)
 	{
 	case ColliderType::PLATFORM:
-		if (contactPonts.y == 1) {
-			force = 0;
-			remainingJumpSteps = 0;
-			jumpForceReduce = 0;
-		}
-		if (contactPonts.y == -1) {
-			if (state == JUMP2) {
-				jumpAnim2.Reset();
-				state = IDLE;
+		if (physA == pbody) {
+			if (contactPonts.y == 1) {
+				force = 0;
+				remainingJumpSteps = 0;
+				jumpForceReduce = 0;
 			}
-			jumps = 2;
+			if (contactPonts.y == -1) {
+				if (state == JUMP2) {
+					jumpAnim2.Reset();
+					state = IDLE;
+				}
+				jumps = 2;
+			}
+		}
+		if (physA == pbodyshuriken) {
+			shuriken = false;
 		}
 		break;
 	case ColliderType::ITEM:
@@ -306,21 +369,37 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 	//	app->audio->PlayFx(pickCoinFxId);
 		break;
 	case ColliderType::VICTORY:
-		app->audio->PlayFx(victory);
+		if (physA == pbody) {
+			app->audio->PlayFx(victory);
+		}
 		break;
 	case ColliderType::DEATH:
-		if (!godmode) {
-			death = true;
+		if (physA == pbody) {
+			if (!godmode) {
+				death = true;
+			}
+		}
+		if (physA == pbodyshuriken) {
+			shuriken = false;
 		}
 		break;
 	case ColliderType::DARK:
-		dark = true;
+		if (physA == pbody) {
+			dark = true;
+		}
 		break;
 	case ColliderType::OUTSIDE:
-		dark = false;
+		if (physA == pbody) {
+			dark = false;
+		}
 		break;
 	case ColliderType::ENEMY:
-		
+		if (physA == pbody) {
+			death = true;
+		}
+		if (physA == pbodyshuriken) {
+			shuriken = false;
+		}
 		break;
 	default:
 		break;
@@ -353,4 +432,27 @@ int Player::getPlayerTileX()
 int Player::getPlayerTileY()
 {
 	return (position.y + (currentAnimation->GetCurrentFrame().h / 2)) / app->map->getTileHieght();
+}
+
+bool Player::LoadState(pugi::xml_node& node)
+{
+	pugi::xml_node PlayerNode = node.child(name.GetString());
+	position.x = PlayerNode.attribute("x").as_int();
+	position.y = PlayerNode.attribute("y").as_int();
+	dark = PlayerNode.attribute("dark").as_bool();
+	position.x += (26 / 2);
+	position.y += (40 / 2);
+	b2Vec2 pPosition = b2Vec2(PIXEL_TO_METERS(position.x), PIXEL_TO_METERS(position.y));
+	pbody->body->SetTransform(pPosition, 0);
+
+	return true;
+}
+
+bool Player::SaveState(pugi::xml_node& node)
+{
+	pugi::xml_node PlayerNode = node.append_child(name.GetString());
+	PlayerNode.append_attribute("x").set_value(position.x);
+	PlayerNode.append_attribute("y").set_value(position.y);
+	PlayerNode.append_attribute("dark").set_value(dark);
+	return true;
 }

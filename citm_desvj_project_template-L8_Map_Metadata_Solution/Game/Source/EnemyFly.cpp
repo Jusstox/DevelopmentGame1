@@ -1,14 +1,16 @@
 #include "EnemyFly.h"
 #include "Scene.h"
+#include "Audio.h"
 
 EnemyFly::EnemyFly() :Enemy()
 {
-	name.Create("EnemyFly");
+
 }
 
 bool EnemyFly::Awake()
 {
 	Enemy::Awake();
+
 	flyinganim.PushBack({ 0, 0, 39, 35 });
 	flyinganim.PushBack({ 40, 0, 38, 34 });
 	flyinganim.PushBack({ 83, 0, 38, 33 });
@@ -79,10 +81,18 @@ bool EnemyFly::Update(float dt)
 
 	if (!hit) {
 		if (canChase(distChase)) {
-			ActualVelocity = chaseVelovity;
-			dest = iPoint(PTileX, PTileY);
-			moveToPlayer(dt);
-			currentAnimation = &flyinganimchase;
+			if ((dark && app->scene->GetPlayer()->dark) || (!dark && !app->scene->GetPlayer()->dark)) {
+				ActualVelocity = chaseVelovity;
+				dest = iPoint(PTileX, PTileY);
+				moveToPlayer(dt);
+				currentAnimation = &flyinganimchase;
+			}
+			else {
+				ActualVelocity = patrolVelocity;
+				Enemy::Patrol();
+				moveToPlayer(dt);
+				currentAnimation = &flyinganim;
+			}
 		}
 		else {
 			ActualVelocity = patrolVelocity;
@@ -183,10 +193,48 @@ void EnemyFly::OnCollision(PhysBody* physA, PhysBody* physB)
 	switch (physB->ctype)
 	{
 	case ColliderType::PLAYER:
+		break;
+	case ColliderType::SHURIKEN:
 		hit = true;
+		velocity.x = 0;
+		velocity.y = 0;
 		currentAnimation = &dieanim;
+		app->audio->PlayFx(dieFX);
 		break;
 	default:
 		break;
 	}
+}
+
+bool EnemyFly::LoadState(pugi::xml_node& node)
+{
+	pugi::xml_node EnemyNode = node;
+	dead = EnemyNode.attribute("dead").as_bool();
+	if (dead) {
+		position.x = 0;
+		position.y = 0;
+		b2Vec2 diePos = b2Vec2(PIXEL_TO_METERS(0), PIXEL_TO_METERS(0));
+		pbody->body->SetTransform(diePos, 0);
+		hit = true;
+	}
+	else {
+		position.x = EnemyNode.attribute("x").as_int();
+		position.y = EnemyNode.attribute("y").as_int();
+		b2Vec2 pPosition = b2Vec2(PIXEL_TO_METERS(position.x), PIXEL_TO_METERS(position.y));
+		pbody->body->SetTransform(pPosition, 0);
+		currentAnimation = &flyinganim;
+		hit = false;
+		dieanim.Reset();
+	}
+	node = EnemyNode.next_sibling("Enemy");
+	return true;
+}
+
+bool EnemyFly::SaveState(pugi::xml_node& node)
+{
+	pugi::xml_node EnemyNode = node.append_child(name.GetString());
+	EnemyNode.append_attribute("x").set_value(position.x);
+	EnemyNode.append_attribute("y").set_value(position.y);
+	EnemyNode.append_attribute("dead").set_value(dead);
+	return true;
 }

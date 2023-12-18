@@ -76,6 +76,8 @@ protected:
 	iPoint Patrol1;
 	iPoint Patrol2;
 	bool patrol;
+
+	int dieFX;
 	
 };
 

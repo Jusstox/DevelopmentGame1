@@ -44,12 +44,12 @@ public:
 		return true;
 	}
 
-	virtual bool LoadState(pugi::xml_node&)
+	virtual bool LoadState(pugi::xml_node& node)
 	{
 		return true;
 	}
 
-	virtual bool SaveState(pugi::xml_node&)
+	virtual bool SaveState(pugi::xml_node& node)
 	{
 		return true;
 	}

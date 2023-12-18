@@ -42,6 +42,10 @@ public:
 
 	int getPlayerTileY();
 
+	bool LoadState(pugi::xml_node& node);
+
+	bool SaveState(pugi::xml_node& node);
+
 public:
 
 	//L02: DONE 2: Declare player parameters
@@ -51,7 +55,9 @@ public:
 	int blenditerator = 0;
 	pugi::xml_node config;
 	uint texW, texH;
+	iPoint Sposition;
 
+	Animation* currentSAnimation = nullptr;
 	Animation* currentAnimation = nullptr;
 	// A set of animations
 	Animation idleAnim;
@@ -61,6 +67,7 @@ public:
 	Animation jumpAnim2;
 	Animation blendFadeIN;
 	Animation blendFadeOut;
+	Animation shurikenanim;
 	bool flip;
 	bool dark;
 	bool blend = false;
@@ -70,6 +77,8 @@ public:
 
 	// L07 DONE 5: Add physics to the player - declare a Physics body
 	PhysBody* pbody;
+	PhysBody* pbodyshuriken;
+	bool shuriken = false;
 	int maxremainingJumpSteps = 30;
 	int remainingJumpSteps = 0;
 	float jumpForceReduce = 0;

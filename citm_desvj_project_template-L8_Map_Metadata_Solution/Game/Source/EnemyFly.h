@@ -14,6 +14,10 @@ public:
 
 	void OnCollision(PhysBody* physA, PhysBody* physB);
 
+	bool LoadState(pugi::xml_node& node);
+
+	bool SaveState(pugi::xml_node& node);
+
 	Animation flyinganim;
 	Animation flyinganimchase;
 	Animation dieanim;

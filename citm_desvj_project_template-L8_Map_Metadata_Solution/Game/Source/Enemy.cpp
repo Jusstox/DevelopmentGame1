@@ -51,7 +51,7 @@ bool Enemy::Update(float dt)
 	}
 
 	if (!dead) {
-		if (app->scene->GetPlayer()->dark) {
+		if (app->scene->GetPlayer()->dark || app->scene->GetPlayer()->godmode) {
 			if (dark) {
 				if (right) {
 					app->render->DrawTexturePR(texture, position.x, position.y, &currentAnimation->GetCurrentFrame());
@@ -61,7 +61,7 @@ bool Enemy::Update(float dt)
 				}
 			}
 		}
-		else {
+		if(!app->scene->GetPlayer()->dark || app->scene->GetPlayer()->godmode){
 			if (!dark) {
 				if (right) {
 					app->render->DrawTexturePR(texture, position.x, position.y, &currentAnimation->GetCurrentFrame());

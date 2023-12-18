@@ -62,12 +62,13 @@
 		<flyenemy x="1184" y="1280" texturepath="Assets/Textures/Bat.png" dark="false" dest1X="31" dest1Y="40" dest2X="43" dest2Y="41" fxpath="Assets/Audio/Fx/Murcielado_death.ogg"/>
 		<flyenemy x="3456" y="576" texturepath="Assets/Textures/Bat.png" dark="true" dest1X="108" dest1Y="26" dest2X="108" dest2Y="10" fxpath="Assets/Audio/Fx/Murcielado_death.ogg"/>
 		<flyenemy x="4544" y="512" texturepath="Assets/Textures/Bat.png" dark="true" dest1X="139" dest1Y="19" dest2X="150" dest2Y="9" fxpath="Assets/Audio/Fx/Murcielado_death.ogg"/>
-		<flyenemy x="7264" y="1312" texturepath="Assets/Textures/Bat.png" dark="true" dest1X="226" dest1Y="43" dest2X="229" dest2Y="40" fxpath="Assets/Audio/Fx/Murcielado_death.ogg"/>
-		<flyenemy x="6848" y="224" texturepath="Assets/Textures/Bat.png" dark="true" dest1X="211" dest1Y="8" dest2X="220" dest2Y="4" fxpath="Assets/Audio/Fx/Murcielado_death.ogg"/>
+		<flyenemy x="7264" y="1312" texturepath="Assets/Textures/Bat.png" dark="false" dest1X="226" dest1Y="43" dest2X="229" dest2Y="40" fxpath="Assets/Audio/Fx/Murcielado_death.ogg"/>
+		<flyenemy x="6848" y="224" texturepath="Assets/Textures/Bat.png" dark="false" dest1X="211" dest1Y="8" dest2X="220" dest2Y="4" fxpath="Assets/Audio/Fx/Murcielado_death.ogg"/>
 		
 		<walkenemy x="2016" y="832" texturepath="Assets/Textures/Slime.png" dark="false" dest1X="59" dest1Y="26" dest2X="67" dest2Y="26" fxpath="Assets/Audio/Fx/slimedie.ogg"/>
 		<walkenemy x="500" y="1120" texturepath="Assets/Textures/Slime.png" dark="true" dest1X="7" dest1Y="35" dest2X="16" dest2Y="35" fxpath="Assets/Audio/Fx/slimedie.ogg"/>
 		<walkenemy x="3808" y="32" texturepath="Assets/Textures/Slime.png" dark="false" dest1X="126" dest1Y="1" dest2X="112" dest2Y="1" fxpath="Assets/Audio/Fx/slimedie.ogg"/>
+		<walkenemy x="5760" y="32" texturepath="Assets/Textures/Slime.png" dark="false" dest1X="172" dest1Y="1" dest2X="192" dest2Y="1" fxpath="Assets/Audio/Fx/slimedie.ogg"/>
 	<enemies/>
 	
   </scene>

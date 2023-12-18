@@ -123,6 +123,12 @@ bool Player::Update(float dt)
 	if (app->input->GetKey(SDL_SCANCODE_F10) == KEY_DOWN) {
 		if (!godmode) {
 			godmode = true;
+			if (dark)
+				dark = false;
+			b2Vec2 vel = b2Vec2(0, 0);
+			pbody->body->SetLinearVelocity(vel);
+			vel = b2Vec2(-100, -100);
+			pbody->body->SetTransform(vel,0);
 		}
 		else {
 			godmode = false;

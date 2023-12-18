@@ -100,7 +100,7 @@ bool Map::Update(float dt)
     // iterates the layers in the map
     while (mapLayer != NULL) {
         if (mapLayer->data->name == "dark") {
-            if (app->scene->GetPlayer()->dark) {
+            if (app->scene->GetPlayer()->dark || app->scene->GetPlayer()->godmode) {
                 mapLayer->data->properties.GetProperty("Draw")->value = false;
             }
             else {

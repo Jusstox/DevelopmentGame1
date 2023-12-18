@@ -8,15 +8,19 @@
 	<scene />
 	<:anonymous />
 	<entitymanager>
-		<Player x="137" y="545" dark="false" />
+		<Player x="6415" y="1439" dark="false" />
+		<Enemy x="3301" y="1277" dead="false" />
+		<Enemy x="1078" y="1291" dead="false" />
+		<Enemy x="3435" y="497" dead="false" />
+		<Enemy x="4589" y="430" dead="false" />
+		<Enemy x="6957" y="1368" dead="true" />
 		<Enemy x="0" y="0" dead="true" />
-		<Enemy x="0" y="0" dead="true" />
-		<Enemy x="0" y="0" dead="true" />
-		<Enemy x="0" y="0" dead="true" dark="false" />
-		<Enemy x="0" y="0" dead="true" dark="true" />
-		<Enemy x="0" y="0" dead="true" dark="false" />
+		<Enemy x="1910" y="851" dead="false" dark="false" />
+		<Enemy x="289" y="1136" dead="false" dark="true" />
+		<Enemy x="3696" y="51" dead="false" dark="false" />
+		<Enemy x="6306" y="770" dead="true" dark="false" />
 	</entitymanager>
 	<renderer>
-		<camera x="0" y="-148" />
+		<camera x="-5755" y="-768" />
 	</renderer>
 </game_state>

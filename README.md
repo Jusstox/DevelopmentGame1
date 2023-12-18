@@ -18,11 +18,11 @@ In this version of our game we have included some interesting features,
 
 ### Optimization changes:
 
-  When you draw the map has been changed to what you can see to prevent fps drops
-  When you enter in caves the draw changes adapt to your vision
-  Entities outside the cave dont render went outside and viceversa
-  The enemies dont keep updating if you are very far
-  Player is now loaded from the config.xml
+-  When you draw the map has been changed to what you can see to prevent fps drops
+-  When you enter in caves the draw changes adapt to your vision
+-  Entities outside the cave dont render went outside and viceversa
+-  The enemies dont keep updating if you are very far
+-  Player is now loaded from the config.xml
   
 
 

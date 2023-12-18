@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="240" height="48" tilewidth="32" tileheight="32" infinite="0" nextlayerid="21" nextobjectid="179">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="240" height="48" tilewidth="32" tileheight="32" infinite="0" nextlayerid="21" nextobjectid="184">
  <tileset firstgid="1" name="moon" tilewidth="32" tileheight="32" tilecount="24" columns="8">
   <image source="moon.png" width="256" height="96"/>
  </tileset>
@@ -103857,11 +103857,15 @@
   <object id="147" x="640" y="1056" width="160" height="64"/>
   <object id="148" x="1024" y="896" width="128" height="64"/>
   <object id="149" x="7328" y="1504" width="96" height="32"/>
-  <object id="150" x="-32" y="0" width="32" height="1536"/>
+  <object id="150" x="-32" y="-64" width="32" height="1599.5"/>
   <object id="152" x="6528" y="992" width="160" height="32"/>
   <object id="156" x="7680" y="0" width="32" height="1536"/>
   <object id="157" x="7924" y="1229.33" height="1.33333"/>
   <object id="176" x="1408" y="1248" width="224" height="64"/>
+  <object id="179" x="0" y="-96" width="7488" height="32"/>
+  <object id="180" x="7488" y="-96" width="32" height="96"/>
+  <object id="182" x="4192" y="-64" width="1024" height="64"/>
+  <object id="183" x="2400" y="-64" width="640" height="64"/>
  </objectgroup>
  <objectgroup id="14" name="ganar">
   <object id="134" x="7648" y="512" width="32" height="256"/>
@@ -115428,7 +115432,7 @@
    <tile/>
   </data>
  </layer>
- <layer id="20" name="dark" width="240" height="48">
+ <layer id="20" name="dark" width="240" height="48" visible="0">
   <properties>
    <property name="Draw" type="bool" value="true"/>
   </properties>

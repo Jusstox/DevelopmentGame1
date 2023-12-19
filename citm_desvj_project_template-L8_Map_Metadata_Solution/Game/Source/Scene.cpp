@@ -59,6 +59,7 @@ bool Scene::Awake(pugi::xml_node config)
 	{
 		Enemy* EnemyFly = (Enemy*)app->entityManager->CreateEntity(EntityType::ENEMYFLY);
 		EnemyFly->parameters = flyenemieNode;
+		EnemyFly->animconfig = enemieNode;
 	}
 
 	//WalkerEnemy

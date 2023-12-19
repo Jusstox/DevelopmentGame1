@@ -9,34 +9,34 @@ EnemyFly::EnemyFly() :Enemy()
 
 bool EnemyFly::Awake()
 {
+	pugi::xml_node anim = animconfig.child("flyenemyanimations").child("flyanim");
+
+	flyinganim.loop = anim.attribute("loop").as_bool();
+	flyinganim.speed = anim.attribute("speed").as_float();
+
+	for (pugi::xml_node animNode = anim.child("fly"); animNode != NULL; animNode = animNode.next_sibling("fly")) {
+		flyinganim.PushBack({ animNode.attribute("x").as_int(), animNode.attribute("y").as_int() ,animNode.attribute("w").as_int() ,animNode.attribute("h").as_int() });
+	}
+
+	anim = animconfig.child("flyenemyanimations").child("flyanimchase");
+
+	flyinganimchase.loop = anim.attribute("loop").as_bool();
+	flyinganimchase.speed = anim.attribute("speed").as_float();
+
+	for (pugi::xml_node animNode = anim.child("chase"); animNode != NULL; animNode = animNode.next_sibling("chase")) {
+		flyinganimchase.PushBack({ animNode.attribute("x").as_int(), animNode.attribute("y").as_int() ,animNode.attribute("w").as_int() ,animNode.attribute("h").as_int() });
+	}
+
+	anim = animconfig.child("flyenemyanimations").child("dieanim");
+
+	dieanim.loop = anim.attribute("loop").as_bool();
+	dieanim.speed = anim.attribute("speed").as_float();
+
+	for (pugi::xml_node animNode = anim.child("die"); animNode != NULL; animNode = animNode.next_sibling("die")) {
+		dieanim.PushBack({ animNode.attribute("x").as_int(), animNode.attribute("y").as_int() ,animNode.attribute("w").as_int() ,animNode.attribute("h").as_int() });
+	}
+
 	Enemy::Awake();
-
-	flyinganim.PushBack({ 0, 0, 39, 35 });
-	flyinganim.PushBack({ 40, 0, 38, 34 });
-	flyinganim.PushBack({ 83, 0, 38, 33 });
-	flyinganim.PushBack({ 122, 0, 39, 32 });
-	flyinganim.PushBack({ 161, 0, 39, 35 });
-	flyinganim.PushBack({ 0, 46, 42, 33 });
-	flyinganim.loop = true;
-	flyinganim.speed = 0.15;
-
-	flyinganimchase.PushBack({ 0, 127, 39, 35 });
-	flyinganimchase.PushBack({ 40, 127, 38, 34 });
-	flyinganimchase.PushBack({ 83, 127, 38, 33 });
-	flyinganimchase.PushBack({ 122, 127, 39, 32 });
-	flyinganimchase.PushBack({ 161, 127, 39, 35 });
-	flyinganimchase.PushBack({ 0, 173, 42, 33 });
-	flyinganimchase.loop = true;
-	flyinganimchase.speed = 0.15;
-
-	dieanim.PushBack({ 0, 215, 43, 24 });
-	dieanim.PushBack({ 47, 92, 40, 21 });
-	dieanim.PushBack({ 98, 91, 28, 21 });
-	dieanim.PushBack({ 138, 100, 23, 8 });
-	dieanim.PushBack({ 171, 101, 6, 5 });
-	dieanim.PushBack({ 188, 101, 6, 3 });
-	dieanim.loop = false;
-	dieanim.speed = 0.1;
 
 	return true;
 }

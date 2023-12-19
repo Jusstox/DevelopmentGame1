@@ -61,7 +61,7 @@ protected:
 	float patrolVelocity;
 	bool right;
 	bool dead;
-	bool hit;	
+	bool hit;
 
 	int distChase;
 	iPoint dest;

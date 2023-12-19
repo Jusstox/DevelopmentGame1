@@ -7,6 +7,7 @@
 #include "Scene.h"
 #include "Map.h"
 #include "Physics.h"
+#include "Optick/include/optick.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -139,6 +140,8 @@ bool App::Start()
 // Called each loop iteration
 bool App::Update()
 {
+	OPTICK_FRAME("Main Loop")
+
 	bool ret = true;
 	PrepareUpdate();
 

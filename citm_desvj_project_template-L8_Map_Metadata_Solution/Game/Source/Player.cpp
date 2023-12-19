@@ -265,8 +265,7 @@ bool Player::Update(float dt)
 			direction.y /= Module;
 			spawnPos.x += direction.x * 12;
 			spawnPos.y += direction.y * 12;
-			LOG("x %f", direction.x);
-			LOG("y %f", direction.y);
+
 			b2Vec2 pPosition = b2Vec2(PIXEL_TO_METERS(spawnPos.x), PIXEL_TO_METERS(spawnPos.y));
 			b2Vec2 vec = b2Vec2(position.x + currentAnimation->GetCurrentFrame().w / 2, 10);
 			pbodyshuriken->body->SetTransform(pPosition, 0);

@@ -67,6 +67,7 @@ bool Scene::Awake(pugi::xml_node config)
 	{
 		Enemy* EnemySlime = (Enemy*)app->entityManager->CreateEntity(EntityType::ENEMYSLIME);
 		EnemySlime->parameters = walkenemieNode;
+		EnemySlime->animconfig = enemieNode;
 	}
 
 	return ret;

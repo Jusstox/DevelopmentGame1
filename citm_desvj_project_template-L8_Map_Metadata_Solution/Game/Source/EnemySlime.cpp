@@ -9,38 +9,34 @@ EnemySlime::EnemySlime() :Enemy()
 
 bool EnemySlime::Awake()
 {
+	pugi::xml_node anim = animconfig.child("walkenemyanimations").child("idleanim");
+
+	idleanim.loop = anim.attribute("loop").as_bool();
+	idleanim.speed = anim.attribute("speed").as_float();
+
+	for (pugi::xml_node animNode = anim.child("idle"); animNode != NULL; animNode = animNode.next_sibling("idle")) {
+		idleanim.PushBack({ animNode.attribute("x").as_int(), animNode.attribute("y").as_int() ,animNode.attribute("w").as_int() ,animNode.attribute("h").as_int() });
+	}
+
+	anim = animconfig.child("walkenemyanimations").child("walkanimchase");
+
+	walkinganimchase.loop = anim.attribute("loop").as_bool();
+	walkinganimchase.speed = anim.attribute("speed").as_float();
+
+	for (pugi::xml_node animNode = anim.child("walk"); animNode != NULL; animNode = animNode.next_sibling("walk")) {
+		walkinganimchase.PushBack({ animNode.attribute("x").as_int(), animNode.attribute("y").as_int() ,animNode.attribute("w").as_int() ,animNode.attribute("h").as_int() });
+	}
+
+	anim = animconfig.child("walkenemyanimations").child("dieanim");
+
+	dieanim.loop = anim.attribute("loop").as_bool();
+	dieanim.speed = anim.attribute("speed").as_float();
+
+	for (pugi::xml_node animNode = anim.child("die"); animNode != NULL; animNode = animNode.next_sibling("die")) {
+		dieanim.PushBack({ animNode.attribute("x").as_int(), animNode.attribute("y").as_int() ,animNode.attribute("w").as_int() ,animNode.attribute("h").as_int() });
+	}
+
 	Enemy::Awake();
-	idleanim.PushBack({ 0, 0, 16, 14 });
-	idleanim.PushBack({ 23, 0, 17, 14 });
-	idleanim.PushBack({ 45, 0, 17, 14 });
-	idleanim.PushBack({ 23, 0, 17, 14 });
-	idleanim.loop = true;
-	idleanim.speed = 0.1;
-
-	walkinganimchase.PushBack({ 0, 34, 17, 15 });
-	walkinganimchase.PushBack({ 22, 34, 17, 15 });
-	walkinganimchase.PushBack({ 44, 34, 19, 15 });
-	walkinganimchase.PushBack({ 68, 34, 18, 16 });
-	walkinganimchase.PushBack({ 44, 34, 19, 15 });
-	walkinganimchase.PushBack({ 91, 34, 17, 15 });
-	walkinganimchase.PushBack({ 113, 34, 17, 15 });
-	walkinganimchase.loop = true;
-	walkinganimchase.speed = 0.1;
-
-	dieanim.PushBack({ 0, 99, 17, 15 });
-	dieanim.PushBack({ 22, 99, 19, 15 });
-	dieanim.PushBack({ 46, 99, 22, 15 });
-	dieanim.PushBack({ 73, 99, 26, 15 });
-	dieanim.PushBack({ 104, 99, 28, 15 });
-	dieanim.PushBack({ 137, 99, 30, 15 });
-	dieanim.PushBack({ 171, 99, 32, 15 });
-	dieanim.PushBack({ 208, 99, 25, 15 });
-	dieanim.PushBack({ 238, 99, 23, 15 });
-	dieanim.PushBack({ 266, 99, 23, 15 });
-	dieanim.PushBack({ 294, 100, 9, 15 });
-	dieanim.PushBack({ 0, 0, 0, 0 });
-	dieanim.loop = false;
-	dieanim.speed = 0.0918;
 
 	return true;
 }

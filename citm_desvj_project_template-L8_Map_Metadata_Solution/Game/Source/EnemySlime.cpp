@@ -78,14 +78,14 @@ bool EnemySlime::Update(float dt)
 	velocity = b2Vec2(0, 10);
 	if (!hit) {
 		if (canChase(distChase)) {
-			if ((dark && app->scene->GetPlayer()->dark) || (!dark && !app->scene->GetPlayer()->dark)) {
+			if ((dark && app->scene->GetPlayer()->dark) || (!dark && !app->scene->GetPlayer()->dark) && canmove) {
 				ActualVelocity = chaseVelovity;
 				dest = iPoint(PTileX, PTileY);
-				moveToPlayer(dt);
 				currentAnimation = &walkinganimchase;
+				moveToPlayer(dt);
 			}
 		}
-		else if(Patrol1.y == getEnemyTileY()){
+		else if(Patrol1.y == getEnemyTileY() && canmove){
 			ActualVelocity = patrolVelocity;
 			moveToPoint(dt);
 		}
@@ -118,9 +118,16 @@ void EnemySlime::moveToPlayer(float dt)
 		//check if it shall move to x
 		if (TileX > path->At(1)->x) {
 			velocity.x = -ActualVelocity * dt;
+			canmove = true;
+		}
+		else if(TileX < path->At(1)->x) {
+			velocity.x = ActualVelocity * dt;
+			canmove = true;
 		}
 		else {
-			velocity.x = ActualVelocity * dt;
+			canmove = false;
+			currentAnimation = &idleanim;
+			velocity.x = 0;
 		}
 	}
 	else if (path->Count() == 1) {

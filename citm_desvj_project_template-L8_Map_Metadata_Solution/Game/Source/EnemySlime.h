@@ -23,5 +23,7 @@ public:
 	Animation idleanim;
 	Animation walkinganimchase;
 	Animation dieanim;
+
+	bool canmove;
 };
 

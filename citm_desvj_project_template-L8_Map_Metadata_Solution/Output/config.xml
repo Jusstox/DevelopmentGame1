@@ -104,7 +104,7 @@
 				<idle x="45" y="0" w="17" h="14"/>
 				<idle x="23" y="0" w="17" h="14"/>
 			</idleanim>
-			<walkanimchase loop="true" speed="0.1f">
+			<walkanimchase loop="true" speed="0.12f">
 				<walk x="0" y="34" w="17" h="15"/>
 				<walk x="22" y="34" w="17" h="15"/>
 				<walk x="44" y="34" w="19" h="15"/>

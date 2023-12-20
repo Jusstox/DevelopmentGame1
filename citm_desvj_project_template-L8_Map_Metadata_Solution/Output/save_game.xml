@@ -8,19 +8,19 @@
 	<scene />
 	<:anonymous />
 	<entitymanager>
-		<Player x="5568" y="32" dark="false" />
-		<Enemy x="3360" y="1273" dead="true" />
-		<Enemy x="1184" y="1298" dead="true" />
-		<Enemy x="3441" y="744" dead="false" />
-		<Enemy x="4682" y="398" dead="false" />
+		<Player x="5242" y="95" dark="false" />
+		<Enemy x="3300" y="1279" dead="false" />
+		<Enemy x="1034" y="1292" dead="false" />
+		<Enemy x="3435" y="490" dead="false" />
+		<Enemy x="4628" y="400" dead="false" />
 		<Enemy x="7264" y="1312" dead="false" />
-		<Enemy x="6803" y="199" dead="false" />
-		<Enemy x="2018" y="851" dead="true" dark="false" />
-		<Enemy x="289" y="1135" dead="true" dark="true" />
-		<Enemy x="3941" y="51" dead="false" dark="false" />
-		<Enemy x="6132" y="48" dead="true" dark="false" />
+		<Enemy x="6925" y="238" dead="false" />
+		<Enemy x="1910" y="851" dead="false" dark="false" />
+		<Enemy x="361" y="1136" dead="false" dark="true" />
+		<Enemy x="3685" y="51" dead="false" dark="false" />
+		<Enemy x="5522" y="49" dead="true" dark="false" />
 	</entitymanager>
 	<renderer>
-		<camera x="-4908" y="0" />
+		<camera x="-4582" y="0" />
 	</renderer>
 </game_state>

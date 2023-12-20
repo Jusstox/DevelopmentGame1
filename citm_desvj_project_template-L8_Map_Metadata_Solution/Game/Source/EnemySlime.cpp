@@ -85,7 +85,7 @@ bool EnemySlime::Update(float dt)
 				moveToPlayer(dt);
 			}
 		}
-		else if(Patrol1.y == getEnemyTileY() && canmove){
+		else if(Patrol1.y == getEnemyTileY() && (canmove || app->scene->GetPlayer()->godmode)){
 			ActualVelocity = patrolVelocity;
 			moveToPoint(dt);
 		}

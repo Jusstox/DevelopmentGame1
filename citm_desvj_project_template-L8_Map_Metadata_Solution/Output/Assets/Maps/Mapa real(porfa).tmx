@@ -103889,7 +103889,7 @@
   <object id="185" x="3111.45" y="159.636" width="16.3636" height="10"/>
  </objectgroup>
  <objectgroup id="15" name="Luz">
-  <object id="153" x="5.68434e-14" y="640" width="545.03" height="603.818"/>
+  <object id="153" x="5.68434e-14" y="586" width="545.03" height="657.818"/>
   <object id="159" x="2508.94" y="627.284" width="523.7" height="908.75"/>
   <object id="168" x="3033.33" y="140.333" width="1950" height="1390.67"/>
   <object id="173" x="4984" y="265" width="891.598" height="1269.09"/>
@@ -103897,7 +103897,7 @@
  </objectgroup>
  <objectgroup id="16" name="afuera">
   <object id="154" x="582.42" y="1247.25" width="4.5" height="256"/>
-  <object id="155" x="288" y="562" width="256" height="14"/>
+  <object id="155" x="288" y="529" width="256" height="12"/>
   <object id="163" x="3423.5" y="29.5" width="768" height="32"/>
   <object id="164" x="5662.5" y="213.333" width="128" height="10.6667"/>
   <object id="165" x="5926" y="992" width="7.5" height="480"/>
@@ -115431,7 +115431,7 @@
    <tile/>
   </data>
  </layer>
- <layer id="20" name="dark" width="240" height="48" visible="0">
+ <layer id="20" name="dark" width="240" height="48">
   <properties>
    <property name="Draw" type="bool" value="true"/>
   </properties>

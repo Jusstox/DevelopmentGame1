@@ -103,6 +103,11 @@ bool Player::Start() {
 	pbodyshuriken->listener = this;
 	pbodyshuriken->ctype = ColliderType::SHURIKEN;
 
+	pfeet = app->physics->CreateRectangleSensor(position.x + currentAnimation->GetCurrentFrame().w / 2,
+		position.y + currentAnimation->GetCurrentFrame().h / 2, 17,
+		5,bodyType::DYNAMIC);
+	pfeet->listener = this;
+
 	//initialize audio effect
 	pickCoinFxId = app->audio->LoadFx(config.attribute("coinfxpath").as_string());
 	victory = app->audio->LoadFx(config.attribute("winfxpath").as_string());
@@ -217,7 +222,7 @@ bool Player::Update(float dt)
 			}
 		}
 
-		if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
+		if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && !godmode) {
 			if (jumps > 0) {
 				state = JUMP1;
 				jumps--;
@@ -280,19 +285,12 @@ bool Player::Update(float dt)
 		}
 	}
 
-	if (app->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN) {
-		if (!dark) {
-			dark = true;
-		}
-		else {
-			dark = false;
-		}
-	}
-
 	// poner sizes de textura no hardcoded
 	if (dark) {
-		blend = true;
 		app->render->DrawTexturePR(blendTexture, position.x - 300, position.y - 300, &blendFadeIN.GetCurrentFrame());
+		if (blendFadeIN.HasFinished()) {
+			blend = true;
+		}
 		blendFadeIN.Update(dt);
 		blendFadeOut.Reset();
 	}
@@ -312,6 +310,10 @@ bool Player::Update(float dt)
 		//preguntar al profe tema camera (el problema es en y) estaba  &blendFadeOut.GetCurrentFrame().h
 		position.x = METERS_TO_PIXELS(pbodyPos.p.x) - (26 / 2);
 		position.y = METERS_TO_PIXELS(pbodyPos.p.y) - (40 / 2);
+
+		//jump sensor
+		b2Vec2 fpos = b2Vec2(pbodyPos.p.x, pbodyPos.p.y + 0.2);
+		pfeet->body->SetTransform(fpos,0);
 	}
 	else {
 		if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) {
@@ -355,11 +357,6 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 	{
 	case ColliderType::PLATFORM:
 		if (physA == pbody) {
-			if (contactPonts.y == 1) {
-				force = 0;
-				remainingJumpSteps = 0;
-				jumpForceReduce = 0;
-			}
 			if (contactPonts.y == -1) {
 				if (state == JUMP2) {
 					jumpAnim2.Reset();

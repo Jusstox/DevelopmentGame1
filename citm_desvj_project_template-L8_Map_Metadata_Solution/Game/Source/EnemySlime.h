@@ -24,6 +24,6 @@ public:
 	Animation walkinganimchase;
 	Animation dieanim;
 
-	bool canmove;
+	bool canmove = true;
 };
 

@@ -196,7 +196,7 @@ bool Player::Update(float dt)
 	if (!death) {
 
 		if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
-			velocity.x = -0.5 * dt;
+			velocity.x = -speed * dt;
 			flip = true;
 			if (state == IDLE) {
 				state = WALIKING;
@@ -204,7 +204,7 @@ bool Player::Update(float dt)
 		}
 
 		if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
-			velocity.x = 0.5 * dt;
+			velocity.x = speed * dt;
 			flip = false;
 			if (state == IDLE) {
 				state = WALIKING;
@@ -227,7 +227,7 @@ bool Player::Update(float dt)
 		}
 
 		if (remainingJumpSteps > 0) {
-			force = pbody->body->GetMass() * 10 / (1 / 30.0);
+			force = (pbody->body->GetMass() * 10 / (1 / 30.0));
 			force /= 2.7f;
 			force -= jumpForceReduce;
 			jumpForceReduce = maxremainingJumpSteps - remainingJumpSteps;
@@ -315,16 +315,16 @@ bool Player::Update(float dt)
 	}
 	else {
 		if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) {
-			position.y += -0.5 * dt;
+			position.y += -speed * dt;
 		}
 		if (app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) {
-			position.y += 0.5 * dt;
+			position.y += speed * dt;
 		}
 		if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
-			position.x += -0.5 * dt;
+			position.x += -speed * dt;
 		}
 		if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
-			position.x += 0.5 * dt;
+			position.x += speed * dt;
 		}
 	}
 

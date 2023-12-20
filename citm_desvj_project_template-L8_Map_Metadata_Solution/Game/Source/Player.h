@@ -49,7 +49,7 @@ public:
 public:
 
 	//L02: DONE 2: Declare player parameters
-	float speed = 0.2f;
+	float speed;
 	SDL_Texture* texture = NULL;
 	SDL_Texture* blendTexture = NULL;
 	int blenditerator = 0;

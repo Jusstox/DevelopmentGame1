@@ -85,29 +85,33 @@ bool Player::Start() {
 
 	texture = app->tex->Load(config.attribute("texturePath").as_string());
 	blendTexture = app->tex->Load(config.attribute("textureblendPath").as_string());
-	dark = false;
-	state = IDLE;
-	// L07 DONE 5: Add physics to the player - initialize physics body
 	app->tex->GetSize(texture, texW, texH);
+
 	currentSAnimation = &shurikenanim;
 	currentAnimation = &idleAnim;
+	state = IDLE;
+
+	// L07 DONE 5: Add physics to the player - initialize physics body
 	pbody = app->physics->CreateCircle(position.x, position.y, currentAnimation->GetCurrentFrame().w / 2, bodyType::DYNAMIC);
-	pbodyshuriken = app->physics->CreateCircle(0, 0, 6, bodyType::DYNAMIC);
-	pbodyshuriken->body->SetGravityScale(0);
 	// L07 DONE 6: Assign player class (using "this") to the listener of the pbody. This makes the Physics module to call the OnCollision method
 	pbody->listener = this;
-	pbodyshuriken->listener = this;
 	// L07 DONE 7: Assign collider type
 	pbody->ctype = ColliderType::PLAYER;
+	
+	pbodyshuriken = app->physics->CreateCircle(0, 0, 6, bodyType::DYNAMIC);
+	pbodyshuriken->body->SetGravityScale(0);
+	pbodyshuriken->listener = this;
 	pbodyshuriken->ctype = ColliderType::SHURIKEN;
 
 	//initialize audio effect
 	pickCoinFxId = app->audio->LoadFx(config.attribute("coinfxpath").as_string());
 	victory = app->audio->LoadFx(config.attribute("winfxpath").as_string());
 	app->audio->PlayMusic(config.attribute("musicpath").as_string());
+	
+	speed = config.attribute("speed").as_float();
 	death = false;
 	flip = false;
-
+	dark = false;
 	godmode = false;
 
 	return true;
@@ -115,6 +119,7 @@ bool Player::Start() {
 
 bool Player::Update(float dt)
 {
+	//dt = dt / 2;
 	// L07 DONE 5: Add physics to the player - updated player position using physics
 
 	//L03: DONE 4: render the player texture and modify the position of the player using WSAD keys and render the texture
@@ -175,7 +180,7 @@ bool Player::Update(float dt)
 		Sposition.y = METERS_TO_PIXELS(pbodyPos.p.y) - 15;
 		app->render->DrawTexture(texture, Sposition.x + currentSAnimation->GetCurrentFrame().w/2,
 			Sposition.y + currentSAnimation->GetCurrentFrame().h/2, &shurikenanim.GetCurrentFrame());
-		currentSAnimation->Update();
+		currentSAnimation->Update(dt);
 	}
 
 	if (death) {
@@ -288,12 +293,12 @@ bool Player::Update(float dt)
 	if (dark) {
 		blend = true;
 		app->render->DrawTexturePR(blendTexture, position.x - 300, position.y - 300, &blendFadeIN.GetCurrentFrame());
-		blendFadeIN.Update();
+		blendFadeIN.Update(dt);
 		blendFadeOut.Reset();
 	}
 	else if(blend){
 		app->render->DrawTexturePR(blendTexture, position.x - 300, position.y - 300, &blendFadeOut.GetCurrentFrame());
-		blendFadeOut.Update();
+		blendFadeOut.Update(dt);
 		blendFadeIN.Reset();
 		if (blendFadeOut.HasFinished()) {
 			blend = false;
@@ -329,7 +334,7 @@ bool Player::Update(float dt)
 		app->render->DrawTexture(texture, position.x, position.y, &currentAnimation->GetCurrentFrame());
 	}
 
-	currentAnimation->Update();
+	currentAnimation->Update(dt);
 
 	return true;
 }

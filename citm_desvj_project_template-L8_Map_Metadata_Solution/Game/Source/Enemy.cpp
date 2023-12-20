@@ -73,7 +73,7 @@ bool Enemy::Update(float dt)
 		}
 	}
 
-	currentAnimation->Update();
+	currentAnimation->Update(dt);
 	
 	if (dead)
 	{

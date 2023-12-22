@@ -38,15 +38,9 @@ bool Enemy::Start()
 
 bool Enemy::Update(float dt)
 {
-	pbody->body->SetLinearVelocity(velocity);
-	b2Transform pbodyPos = pbody->body->GetTransform();
-
-	if (hit) {
-		BodyPendingToDelete = true;
-		/*b2Vec2 diePos = b2Vec2(PIXEL_TO_METERS(0), PIXEL_TO_METERS(0));
-		pbody->body->SetTransform(diePos, 0);*/
-	}
-	else {
+	if(!hit) {
+		pbody->body->SetLinearVelocity(velocity);
+		b2Transform pbodyPos = pbody->body->GetTransform();
 		position.x = METERS_TO_PIXELS(pbodyPos.p.x) - (currentAnimation->GetCurrentFrame().w / 2);
 		position.y = METERS_TO_PIXELS(pbodyPos.p.y) - (currentAnimation->GetCurrentFrame().h / 2);
 	}

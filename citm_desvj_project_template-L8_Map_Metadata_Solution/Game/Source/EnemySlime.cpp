@@ -1,6 +1,7 @@
 #include "EnemySlime.h"
 #include "Scene.h"
 #include "Audio.h"
+#include "Log.h"
 
 EnemySlime::EnemySlime() :Enemy()
 {
@@ -78,19 +79,21 @@ bool EnemySlime::Update(float dt)
 	velocity = b2Vec2(0, 10);
 	if (!hit) {
 		if (canChase(distChase)) {
-			if ((dark && app->scene->GetPlayer()->dark) || (!dark && !app->scene->GetPlayer()->dark) && canmove) {
-				ActualVelocity = chaseVelovity;
+			if ((dark && app->scene->GetPlayer()->dark) || (!dark && !app->scene->GetPlayer()->dark)) {
 				dest = iPoint(PTileX, PTileY);
-				currentAnimation = &walkinganimchase;
 				moveToPlayer(dt);
+				if (canmove) {
+					currentAnimation = &walkinganimchase;
+					ActualVelocity = chaseVelovity;
+				}
+				else {
+					currentAnimation = &idleanim;
+				}
 			}
 		}
 		else if(Patrol1.y == getEnemyTileY() && (canmove || app->scene->GetPlayer()->godmode)){
 			ActualVelocity = patrolVelocity;
 			moveToPoint(dt);
-		}
-		else {
-			currentAnimation = &idleanim;
 		}
 	}
 	else {
@@ -148,6 +151,7 @@ void EnemySlime::OnCollision(PhysBody* physA, PhysBody* physB)
 		break;
 	case ColliderType::DEATH:
 		hit = true;
+		BodyPendingToDelete = true;
 		velocity.x = 0;
 		currentAnimation = &dieanim;
 		break;
@@ -155,6 +159,7 @@ void EnemySlime::OnCollision(PhysBody* physA, PhysBody* physB)
 		break;
 	case ColliderType::SHURIKEN:
 		hit = true;
+		BodyPendingToDelete = true;
 		velocity.x = 0;
 		currentAnimation = &dieanim;
 		app->audio->PlayFx(dieFX);

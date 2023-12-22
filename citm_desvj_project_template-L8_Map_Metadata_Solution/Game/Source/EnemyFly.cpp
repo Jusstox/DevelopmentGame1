@@ -195,6 +195,7 @@ void EnemyFly::OnCollision(PhysBody* physA, PhysBody* physB)
 	case ColliderType::PLAYER:
 		break;
 	case ColliderType::SHURIKEN:
+		BodyPendingToDelete = true;
 		hit = true;
 		velocity.x = 0;
 		velocity.y = 0;

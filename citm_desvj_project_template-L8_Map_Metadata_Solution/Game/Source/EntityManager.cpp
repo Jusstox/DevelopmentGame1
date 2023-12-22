@@ -166,8 +166,21 @@ bool EntityManager::Update(float dt)
 	{
 		pEntity = item->data;
 
-		if (pEntity->active == false) continue;
+		if (pEntity->active == false) {
+			continue;
+		}
+
+		if (pEntity->BodyPendingToDelete) {
+			app->physics->world->DestroyBody(item->data->pbody->body);
+			pEntity->BodyPendingToDelete = false;
+			DestroyEntity(pEntity);
+		}
+		
 		ret = item->data->Update(dt);
+
+		/*if (pEntity->pendingToDelete) {
+			
+		}*/
 	}
 
 	return ret;

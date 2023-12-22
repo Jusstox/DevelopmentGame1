@@ -84,6 +84,8 @@ public:
 	// Box2D World
 	b2World* world;
 
+	void DestroyBody(b2Body * body);
+
 	bool debug;
 private:
 	// Debug mode

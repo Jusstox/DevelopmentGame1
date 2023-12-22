@@ -53,7 +53,6 @@ protected:
 	SDL_Texture* texture;
 	int lives;
 	Animation* currentAnimation = nullptr;
-	PhysBody* pbody;
 	iPoint initPosition;
 	SDL_Texture* mouseTileTex;
 	float ActualVelocity;

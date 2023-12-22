@@ -83,11 +83,13 @@ public:
 	bool active = true;
 	pugi::xml_node parameters; 
 	pugi::xml_node animconfig;
+	PhysBody* pbody;
 
 	// Possible properties, it depends on how generic we
 	// want our Entity class, maybe it's not renderable...
 	iPoint position;       
 	bool renderable = true;
+	bool BodyPendingToDelete = false;
 	bool pendingToDelete = false;
 };
 

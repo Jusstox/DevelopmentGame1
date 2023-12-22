@@ -42,8 +42,9 @@ bool Enemy::Update(float dt)
 	b2Transform pbodyPos = pbody->body->GetTransform();
 
 	if (hit) {
-		b2Vec2 diePos = b2Vec2(PIXEL_TO_METERS(0), PIXEL_TO_METERS(0));
-		pbody->body->SetTransform(diePos, 0);
+		BodyPendingToDelete = true;
+		/*b2Vec2 diePos = b2Vec2(PIXEL_TO_METERS(0), PIXEL_TO_METERS(0));
+		pbody->body->SetTransform(diePos, 0);*/
 	}
 	else {
 		position.x = METERS_TO_PIXELS(pbodyPos.p.x) - (currentAnimation->GetCurrentFrame().w / 2);

@@ -137,8 +137,10 @@ bool Player::Update(float dt)
 				dark = false;
 			b2Vec2 vel = b2Vec2(0, 0);
 			pbody->body->SetLinearVelocity(vel);
+			pfeet->body->SetLinearVelocity(vel);
 			vel = b2Vec2(-100, -100);
 			pbody->body->SetTransform(vel,0);
+			pfeet->body->SetTransform(vel, 0);
 		}
 		else {
 			godmode = false;
@@ -317,16 +319,16 @@ bool Player::Update(float dt)
 	}
 	else {
 		if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) {
-			position.y += -speed * dt;
+			position.y += -speed * 1.5 * dt;
 		}
 		if (app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) {
-			position.y += speed * dt;
+			position.y += speed * 1.5 * dt;
 		}
 		if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
-			position.x += -speed * dt;
+			position.x += -speed * 1.5 * dt;
 		}
 		if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
-			position.x += speed * dt;
+			position.x += speed * 1.5 * dt;
 		}
 	}
 
@@ -356,14 +358,12 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 	switch (physB->ctype)
 	{
 	case ColliderType::PLATFORM:
-		if (physA == pbody) {
-			if (contactPonts.y == -1) {
-				if (state == JUMP2) {
-					jumpAnim2.Reset();
-					state = IDLE;
-				}
-				jumps = 2;
+		if (physA == pfeet) {
+			if (state == JUMP2) {
+				jumpAnim2.Reset();
+				state = IDLE;
 			}
+			jumps = 2;
 		}
 		if (physA == pbodyshuriken) {
 			shuriken = false;

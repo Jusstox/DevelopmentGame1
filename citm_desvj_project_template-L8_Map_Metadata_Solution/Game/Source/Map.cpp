@@ -164,6 +164,7 @@ bool Map::CleanUp()
     tileset = mapData.tilesets.start;
     
     while (tileset != NULL) {
+        app->tex->UnLoad(tileset->data->texture);
         RELEASE(tileset->data);
         tileset = tileset->next;
     }
@@ -179,6 +180,19 @@ bool Map::CleanUp()
         RELEASE(layerItem->data);
         layerItem = layerItem->next;
     }
+
+    mapData.layers.Clear();
+
+    ListItem<PhysBody*>* collisions;
+    collisions = mapData.colliders.start;
+
+    while (collisions != NULL) {
+        app->physics->DestroyBody(collisions->data->body);
+        RELEASE(collisions->data);
+        collisions = collisions->next;
+    }
+
+    //pathfinding->CleanUp();
 
     return true;
 }
@@ -294,10 +308,12 @@ bool Map::Load(SString mapFileName)
 
                 PhysBody* c1 = app->physics->CreateChain(x, y, intArray, intVector.size(), STATIC);
                 c1->ctype = ColliderType::PLATFORM;
+                mapData.colliders.Add(c1);
             }
             else{
                 PhysBody * c1 = app->physics->CreateRectangle(x + w / 2, y + h / 2, w, h, STATIC);
                 c1->ctype = ColliderType::PLATFORM;
+                mapData.colliders.Add(c1);
             }
         }
 
@@ -309,6 +325,7 @@ bool Map::Load(SString mapFileName)
             int h = layerNode.attribute("height").as_int();
             PhysBody* c1 = app->physics->CreateRectangleSensor(x + w / 2, y + h / 2, w, h, STATIC);
             c1->ctype = ColliderType::VICTORY;
+            mapData.colliders.Add(c1);
         }
 
         for (pugi::xml_node layerNode = mapFileXML.child("map").child("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").child("object"); layerNode != NULL; layerNode = layerNode.next_sibling("object"))
@@ -319,6 +336,7 @@ bool Map::Load(SString mapFileName)
             int h = layerNode.attribute("height").as_int();
             PhysBody* c1 = app->physics->CreateRectangle(x + w / 2, y + h / 2, w, h, STATIC);
             c1->ctype = ColliderType::DEATH;
+            mapData.colliders.Add(c1);
         }
 
         for (pugi::xml_node layerNode = mapFileXML.child("map").child("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").child("object"); layerNode != NULL; layerNode = layerNode.next_sibling("object"))
@@ -329,6 +347,7 @@ bool Map::Load(SString mapFileName)
             int h = layerNode.attribute("height").as_int();
             PhysBody* c1 = app->physics->CreateRectangleSensor(x + w / 2, y + h / 2, w, h, STATIC);
             c1->ctype = ColliderType::DARK;
+            mapData.colliders.Add(c1);
         }
 
         for (pugi::xml_node layerNode = mapFileXML.child("map").child("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").child("object"); layerNode != NULL; layerNode = layerNode.next_sibling("object"))
@@ -339,6 +358,7 @@ bool Map::Load(SString mapFileName)
             int h = layerNode.attribute("height").as_int();
             PhysBody* c1 = app->physics->CreateRectangleSensor(x + w / 2, y + h / 2, w, h, STATIC);
             c1->ctype = ColliderType::OUTSIDE;
+            mapData.colliders.Add(c1);
         }
 
           // L05: DONE 5: LOG all the data loaded iterate all tilesetsand LOG everything

@@ -99,6 +99,8 @@ struct MapData
 
     // L06: DONE 2: Add a list/array of layers to the map
     List<MapLayer*> layers;
+
+    List<PhysBody*> colliders;
 };
 
 class Map : public Module

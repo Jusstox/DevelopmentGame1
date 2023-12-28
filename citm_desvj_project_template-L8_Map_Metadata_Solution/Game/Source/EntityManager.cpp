@@ -177,9 +177,10 @@ bool EntityManager::Update(float dt)
 		
 		ret = item->data->Update(dt);
 
-		if (pEntity->pendingToDelete) {
+		//mirar tema borra pk al carregar si he guardat 9 entities començo amb 10 i es lia
+		/*if (pEntity->pendingToDelete) {
 			DestroyEntity(pEntity);
-		}
+		}*/
 	}
 
 	return ret;

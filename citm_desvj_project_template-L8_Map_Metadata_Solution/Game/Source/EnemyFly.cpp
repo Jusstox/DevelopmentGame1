@@ -221,6 +221,7 @@ bool EnemyFly::LoadState(pugi::xml_node& node)
 	else {
 		position.x = EnemyNode.attribute("x").as_int();
 		position.y = EnemyNode.attribute("y").as_int();
+		dark = EnemyNode.attribute("dark").as_bool();
 		b2Vec2 pPosition = b2Vec2(PIXEL_TO_METERS(position.x), PIXEL_TO_METERS(position.y));
 		pbody->body->SetTransform(pPosition, 0);
 		currentAnimation = &flyinganim;
@@ -237,5 +238,6 @@ bool EnemyFly::SaveState(pugi::xml_node& node)
 	EnemyNode.append_attribute("x").set_value(position.x);
 	EnemyNode.append_attribute("y").set_value(position.y);
 	EnemyNode.append_attribute("dead").set_value(dead);
+	EnemyNode.append_attribute("dark").set_value(dark);
 	return true;
 }

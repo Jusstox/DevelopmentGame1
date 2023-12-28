@@ -73,6 +73,8 @@ bool Enemy::Update(float dt)
 	if (dead)
 	{
 		pendingToDelete = true;
+		position.x = 0;
+		position.y = 0;
 		// mirar de borrar texture i memory leaks
 		//app->entityManager->DestroyEntity(this);
 	}

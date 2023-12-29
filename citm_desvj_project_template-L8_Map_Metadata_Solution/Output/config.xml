@@ -17,8 +17,10 @@
     <resizable value="false"/>
     <fullscreen_window value="false"/>
   </window>
+  
+  <scenemanager>
 
-  <scene>
+  <level1>
   
     <player x="150" y="350" speed="0.5" texturePath="Assets/Textures/ninja-pixilart.png" coinfxpath="Assets/Audio/Fx/retro-video-game-coin-pickup-38299.ogg"
 	winfxpath="Assets/Audio/Fx/victory_sJDDywi.ogg"	musicpath="Assets/Audio/Music/music.ogg" textureblendPath="Assets/Textures/bgroup.png">
@@ -131,6 +133,8 @@
 		
 	<enemies/>
 	
-  </scene>
+  </level1>
+  
+  </scenemanager>
   
 </config>

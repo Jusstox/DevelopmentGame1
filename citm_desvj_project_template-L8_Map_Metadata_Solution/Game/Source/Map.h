@@ -159,6 +159,8 @@ public:
         return mapData.tileheight;
     }
 
+    void InitMap();
+
     //first and last tiles we have to render
     int fisrtX;
     int lastX;

@@ -1,5 +1,6 @@
 #include "EnemyFly.h"
-#include "Scene.h"
+#include "SceneManager.h"
+#include "Player.h"
 #include "Audio.h"
 
 EnemyFly::EnemyFly() :Enemy()
@@ -71,7 +72,7 @@ bool EnemyFly::Start()
 
 bool EnemyFly::Update(float dt)
 {
-	if (abs(app->scene->GetPlayer()->getPlayerTileX() - getEnemyTileX()) > 50) {
+	if (abs(app->sceneManager->currentScene->GetPlayer()->getPlayerTileX() - getEnemyTileX()) > 50) {
 		velocity.x = 0;
 		velocity.y = 0;
 		pbody->body->SetLinearVelocity(velocity);
@@ -81,7 +82,7 @@ bool EnemyFly::Update(float dt)
 
 	if (!hit) {
 		if (canChase(distChase)) {
-			if ((dark && app->scene->GetPlayer()->dark) || (!dark && !app->scene->GetPlayer()->dark)) {
+			if ((dark && app->sceneManager->currentScene->GetPlayer()->dark) || (!dark && !app->sceneManager->currentScene->GetPlayer()->dark)) {
 				ActualVelocity = chaseVelovity;
 				dest = iPoint(PTileX, PTileY);
 				moveToPlayer(dt);
@@ -173,13 +174,13 @@ void EnemyFly::moveToPlayer(float dt)
 		}
 	}
 	else if (path->Count() == 1) {
-		if (app->scene->GetPlayer()->position.x < position.x) {
+		if (app->sceneManager->currentScene->GetPlayer()->position.x < position.x) {
 			velocity.x = -ActualVelocity * dt;
 		}
 		else {
 			velocity.x = ActualVelocity * dt;
 		}
-		if (app->scene->GetPlayer()->position.y < position.y) {
+		if (app->sceneManager->currentScene->GetPlayer()->position.y < position.y) {
 			velocity.y = -ActualVelocity * dt;
 		}
 		else {

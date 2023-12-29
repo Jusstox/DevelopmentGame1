@@ -4,7 +4,7 @@
 #include "Textures.h"
 #include "Map.h"
 #include "Physics.h"
-#include "Scene.h"
+#include "SceneManager.h"
 #include "Player.h"
 #include "Enemy.h"
 
@@ -36,8 +36,6 @@ bool Map::Awake(pugi::xml_node config)
 }
 
 bool Map::Start() {
-
-    //Calls the functon to load the map, make sure that the filename is assigned
     SString mapPath = path;
     mapPath += name;
     Load(mapPath);
@@ -66,7 +64,7 @@ bool Map::Update(float dt)
 
     // L06: DONE 5: Prepare the loop to draw all tiles in a layer + DrawTexture()
     //limitar el renderizado
-    if (!app->scene->GetPlayer()->blend) {
+    if (!app->sceneManager->currentScene->GetPlayer()->blend) {
         fisrtX = app->render->GetFirstTileX();
         lastX = app->render->GetLastTileX();
 
@@ -76,11 +74,11 @@ bool Map::Update(float dt)
 
     //mirar de no cojer tiles que no existen
 
-    if (app->scene->GetPlayer()->dark) {
-        fisrtX = app->scene->GetPlayer()->getPlayerTileX() - 7;
-        lastX = app->scene->GetPlayer()->getPlayerTileX() + 8;
-        fisrtY = app->scene->GetPlayer()->getPlayerTileY() - 8;
-        lastY = app->scene->GetPlayer()->getPlayerTileY() + 6;
+    if (app->sceneManager->currentScene->GetPlayer()->dark) {
+        fisrtX = app->sceneManager->currentScene->GetPlayer()->getPlayerTileX() - 7;
+        lastX = app->sceneManager->currentScene->GetPlayer()->getPlayerTileX() + 8;
+        fisrtY = app->sceneManager->currentScene->GetPlayer()->getPlayerTileY() - 8;
+        lastY = app->sceneManager->currentScene->GetPlayer()->getPlayerTileY() + 6;
     }
 
     if (fisrtX < 0) {
@@ -100,7 +98,7 @@ bool Map::Update(float dt)
     // iterates the layers in the map
     while (mapLayer != NULL) {
         if (mapLayer->data->name == "dark") {
-            if (app->scene->GetPlayer()->dark || app->scene->GetPlayer()->godmode) {
+            if (app->sceneManager->currentScene->GetPlayer()->dark || app->sceneManager->currentScene->GetPlayer()->godmode) {
                 mapLayer->data->properties.GetProperty("Draw")->value = false;
             }
             else {
@@ -488,6 +486,20 @@ void Map::CreateNavigationMap(int& width, int& height, uchar** buffer) const
     width = mapData.width;
     height = mapData.height;
 
+}
+
+void Map::InitMap()
+{
+    //Calls the functon to load the map, make sure that the filename is assigned
+    SString mapPath = path;
+    mapPath += name;
+    Load(mapPath);
+
+    //Initialize the navigation map
+    uchar* navigationMap = NULL;
+    CreateNavigationMap(mapData.width, mapData.height, &navigationMap);
+    pathfinding->SetNavigationMap((uint)mapData.width, (uint)mapData.height, navigationMap);
+    RELEASE_ARRAY(navigationMap);
 }
 
 // L06: DONE 8: Create a method that translates x,y coordinates from map positions to world positions

@@ -4,7 +4,7 @@
 #include "Render.h"
 #include "Textures.h"
 #include "Audio.h"
-#include "Scene.h"
+#include "SceneManager.h"
 #include "Map.h"
 #include "Physics.h"
 #include "Optick/include/optick.h"
@@ -35,7 +35,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	audio = new Audio();
 	//L07 DONE 2: Add Physics module
 	physics = new Physics();
-	scene = new Scene();
+	sceneManager = new SceneManager();
 	map = new Map();
 	entityManager = new EntityManager();
 
@@ -48,7 +48,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(audio);
 	//L07 DONE 2: Add Physics module
 	AddModule(physics);
-	AddModule(scene);
+	AddModule(sceneManager);
 	AddModule(map);
 	AddModule(entityManager);
 

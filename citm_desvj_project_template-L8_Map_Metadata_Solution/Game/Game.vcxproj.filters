@@ -3,7 +3,6 @@
   <ItemGroup>
     <ClCompile Include="Source\Window.cpp" />
     <ClCompile Include="Source\Textures.cpp" />
-    <ClCompile Include="Source\Scene.cpp" />
     <ClCompile Include="Source\Render.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\Input.cpp" />
@@ -33,11 +32,16 @@
       <Filter>Enemies</Filter>
     </ClCompile>
     <ClCompile Include="Source\Entity.cpp" />
+    <ClCompile Include="Source\SceneManager.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Level1.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Window.h" />
     <ClInclude Include="Source\Textures.h" />
-    <ClInclude Include="Source\Scene.h" />
     <ClInclude Include="Source\Render.h" />
     <ClInclude Include="Source\Module.h" />
     <ClInclude Include="Source\Input.h" />
@@ -92,6 +96,15 @@
     <ClInclude Include="Source\Enemy.h">
       <Filter>Enemies</Filter>
     </ClInclude>
+    <ClInclude Include="Source\SceneManager.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Level1.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="External">
@@ -105,6 +118,9 @@
     </Filter>
     <Filter Include="Enemies">
       <UniqueIdentifier>{2dcd1238-b745-47ad-a2e6-ad539469e9f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scenes">
+      <UniqueIdentifier>{78842cc3-ab81-4d07-b8c2-9859105ddee0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -5,7 +5,6 @@
 #include "Item.h"
 #include "App.h"
 #include "Textures.h"
-#include "Scene.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -171,7 +170,9 @@ bool EntityManager::Update(float dt)
 		}
 
 		if (pEntity->BodyPendingToDelete) {
-			app->physics->world->DestroyBody(item->data->pbody->body);
+			//mirar pk si borro al fer loadsate, si aquest estava viu hauria de crearli un nou pbody
+			/*app->physics->world->DestroyBody(item->data->pbody->body);
+			delete item->data->pbody;*/
 			pEntity->BodyPendingToDelete = false;
 		}
 		

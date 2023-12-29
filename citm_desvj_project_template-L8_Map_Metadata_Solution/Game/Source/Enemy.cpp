@@ -3,7 +3,7 @@
 #include "Render.h"
 #include "Map.h"
 #include "Player.h"
-#include "Scene.h"
+#include "SceneManager.h"
 #include "Audio.h"
 
 Enemy::Enemy() : Entity(EntityType::ENEMY)
@@ -44,9 +44,13 @@ bool Enemy::Update(float dt)
 		position.x = METERS_TO_PIXELS(pbodyPos.p.x) - (currentAnimation->GetCurrentFrame().w / 2);
 		position.y = METERS_TO_PIXELS(pbodyPos.p.y) - (currentAnimation->GetCurrentFrame().h / 2);
 	}
+	else {
+		pbody->body->SetLinearVelocity(b2Vec2(0,0));
+		pbody->body->SetTransform(b2Vec2(-10, 0),0);
+	}
 
 	if (!dead) {
-		if (app->scene->GetPlayer()->dark || app->scene->GetPlayer()->godmode) {
+		if (app->sceneManager->currentScene->GetPlayer()->dark || app->sceneManager->currentScene->GetPlayer()->godmode) {
 			if (dark) {
 				if (right) {
 					app->render->DrawTexturePR(texture, position.x, position.y, &currentAnimation->GetCurrentFrame());
@@ -56,7 +60,7 @@ bool Enemy::Update(float dt)
 				}
 			}
 		}
-		if(!app->scene->GetPlayer()->dark || app->scene->GetPlayer()->godmode){
+		if(!app->sceneManager->currentScene->GetPlayer()->dark || app->sceneManager->currentScene->GetPlayer()->godmode){
 			if (!dark) {
 				if (right) {
 					app->render->DrawTexturePR(texture, position.x, position.y, &currentAnimation->GetCurrentFrame());
@@ -127,14 +131,14 @@ bool Enemy::canChase(int dist)
 	TileX = getEnemyTileX();
 	TileY = getEnemyTileY();
 
-	PTileX = app->scene->GetPlayer()->getPlayerTileX();
-	PTileY = app->scene->GetPlayer()->getPlayerTileY();
+	PTileX = app->sceneManager->currentScene->GetPlayer()->getPlayerTileX();
+	PTileY = app->sceneManager->currentScene->GetPlayer()->getPlayerTileY();
 
 	if ((abs(TileX - PTileX) + abs(TileY - PTileY)) < dist) {
 		canChase = true;
 	}
 
-	if (canChase && !app->scene->GetPlayer()->godmode) {
+	if (canChase && !app->sceneManager->currentScene->GetPlayer()->godmode) {
 		canChase =  true;
 	}
 	else {

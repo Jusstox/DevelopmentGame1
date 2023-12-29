@@ -1,5 +1,6 @@
 #include "EnemySlime.h"
-#include "Scene.h"
+#include "SceneManager.h"
+#include "Player.h"
 #include "Audio.h"
 #include "Log.h"
 
@@ -70,7 +71,7 @@ bool EnemySlime::Start()
 
 bool EnemySlime::Update(float dt)
 {
-	if (abs(app->scene->GetPlayer()->getPlayerTileX() - getEnemyTileX()) > 50) {
+	if (abs(app->sceneManager->currentScene->GetPlayer()->getPlayerTileX() - getEnemyTileX()) > 50) {
 		velocity.x = 0;
 		velocity.y = 0;
 		pbody->body->SetLinearVelocity(velocity);
@@ -79,7 +80,7 @@ bool EnemySlime::Update(float dt)
 	velocity = b2Vec2(0, 10);
 	if (!hit) {
 		if (canChase(distChase)) {
-			if ((dark && app->scene->GetPlayer()->dark) || (!dark && !app->scene->GetPlayer()->dark)) {
+			if ((dark && app->sceneManager->currentScene->GetPlayer()->dark) || (!dark && !app->sceneManager->currentScene->GetPlayer()->dark)) {
 				dest = iPoint(PTileX, PTileY);
 				moveToPlayer(dt);
 				if (canmove) {
@@ -91,7 +92,7 @@ bool EnemySlime::Update(float dt)
 				}
 			}
 		}
-		else if(Patrol1.y == getEnemyTileY() && (canmove || app->scene->GetPlayer()->godmode)){
+		else if(Patrol1.y == getEnemyTileY() && (canmove || app->sceneManager->currentScene->GetPlayer()->godmode)){
 			ActualVelocity = patrolVelocity;
 			moveToPoint(dt);
 		}
@@ -134,7 +135,7 @@ void EnemySlime::moveToPlayer(float dt)
 		}
 	}
 	else if (path->Count() == 1) {
-		if (app->scene->GetPlayer()->position.x < position.x) {
+		if (app->sceneManager->currentScene->GetPlayer()->position.x < position.x) {
 			velocity.x = -ActualVelocity * dt;
 		}
 		else {
@@ -187,7 +188,7 @@ void EnemySlime::moveToPoint(float dt)
 		}
 	}
 	else if (path->Count() == 1) {
-		if (app->scene->GetPlayer()->position.x < position.x) {
+		if (app->sceneManager->currentScene->GetPlayer()->position.x < position.x) {
 			velocity.x = -ActualVelocity * dt;
 		}
 		else {

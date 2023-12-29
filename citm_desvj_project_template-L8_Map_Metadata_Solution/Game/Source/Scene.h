@@ -1,55 +1,72 @@
 #ifndef __SCENE_H__
 #define __SCENE_H__
 
-#include "Module.h"
-#include "Player.h"
+#include "SString.h"
 
-struct SDL_Texture;
+#include "PugiXml/src/pugixml.hpp"
 
-class Scene : public Module
+class Player;
+
+class Scene
 {
 public:
 
-	Scene();
+	Scene() : active(false)
+	{}
 
-	// Destructor
-	virtual ~Scene();
+	void Init()
+	{
+		active = true;
+	}
 
 	// Called before render is available
-	bool Awake(pugi::xml_node config);
+	virtual bool Awake(pugi::xml_node config)
+	{
+		return true;
+	}
 
 	// Called before the first frame
-	bool Start();
-
-	// Called before all Updates
-	bool PreUpdate();
+	virtual bool Start()
+	{
+		return true;
+	}
 
 	// Called each loop iteration
-	bool Update(float dt);
+	virtual bool PreUpdate()
+	{
+		return true;
+	}
 
-	// Called before all Updates
-	bool PostUpdate();
+	// Called each loop iteration
+	virtual bool Update(float dt)
+	{
+		return true;
+	}
+
+	// Called each loop iteration
+	virtual bool PostUpdate()
+	{
+		return true;
+	}
 
 	// Called before quitting
-	bool CleanUp();
-	uint windowW, windowH;
+	virtual bool CleanUp()
+	{
+		return true;
+	}
 
-	Player* GetPlayer() {
+	virtual Player* GetPlayer() {
 		return player;
 	}
 
-	void cameraLimit();
-	
-	bool lockCamera = true;
+	uint windowW, windowH;
 
-private:
-	SDL_Texture* img;
-	float textPosX, textPosY = 0;
-	uint texW, texH;
+public:
 
-	//L03: DONE 3b: Declare a Player attribute
-	Player* player;
+	SString name;
+	bool active;
 
+	Player* player = nullptr;
 };
 
 #endif // __SCENE_H__

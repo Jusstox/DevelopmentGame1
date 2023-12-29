@@ -4,7 +4,7 @@
 #include "Audio.h"
 #include "Input.h"
 #include "Render.h"
-#include "Scene.h"
+#include "SceneManager.h"
 #include "Log.h"
 #include "Point.h"
 #include "Physics.h"
@@ -418,8 +418,8 @@ void Player::respawn()
 	b2Vec2 initPos = b2Vec2(PIXEL_TO_METERS(initPosition.x), PIXEL_TO_METERS(initPosition.y));
 	pbody->body->SetTransform(initPos, 0);
 	position = initPosition;
-	app->render->camera.y = ((position.y - currentAnimation->GetCurrentFrame().h / 2) - (app->scene->windowH / 2)) * -1;
-	app->render->camera.x = ((position.x - currentAnimation->GetCurrentFrame().w / 2) - (app->scene->windowW / 2)) * -1;
+	app->render->camera.y = ((position.y - currentAnimation->GetCurrentFrame().h / 2) - (app->sceneManager->currentScene->windowH / 2)) * -1;
+	app->render->camera.x = ((position.x - currentAnimation->GetCurrentFrame().w / 2) - (app->sceneManager->currentScene->windowW / 2)) * -1;
 
 	if (app->render->camera.x >= 0) {
 		app->render->camera.x = 0;

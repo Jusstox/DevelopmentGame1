@@ -92,27 +92,38 @@ bool Player::Start() {
 	state = IDLE;
 
 	// L07 DONE 5: Add physics to the player - initialize physics body
-	pbody = app->physics->CreateCircle(position.x, position.y, currentAnimation->GetCurrentFrame().w / 2, bodyType::DYNAMIC);
-	// L07 DONE 6: Assign player class (using "this") to the listener of the pbody. This makes the Physics module to call the OnCollision method
-	pbody->listener = this;
-	// L07 DONE 7: Assign collider type
-	pbody->ctype = ColliderType::PLAYER;
+	if (pbody == NULL) {
+		pbody = app->physics->CreateCircle(position.x, position.y, currentAnimation->GetCurrentFrame().w / 2, bodyType::DYNAMIC);
+		// L07 DONE 6: Assign player class (using "this") to the listener of the pbody. This makes the Physics module to call the OnCollision method
+		pbody->listener = this;
+		// L07 DONE 7: Assign collider type
+		pbody->ctype = ColliderType::PLAYER;
+	}
+	else {
+		respawn();
+	}
 	
-	pbodyshuriken = app->physics->CreateCircle(0, 0, 6, bodyType::DYNAMIC);
-	pbodyshuriken->body->SetGravityScale(0);
-	pbodyshuriken->listener = this;
-	pbodyshuriken->ctype = ColliderType::SHURIKEN;
+	if (pbodyshuriken == NULL) {
+		pbodyshuriken = app->physics->CreateCircle(0, 0, 6, bodyType::DYNAMIC);
+		pbodyshuriken->body->SetGravityScale(0);
+		pbodyshuriken->listener = this;
+		pbodyshuriken->ctype = ColliderType::SHURIKEN;
+	}
 
-	pfeet = app->physics->CreateRectangleSensor(position.x + currentAnimation->GetCurrentFrame().w / 2,
-		position.y + currentAnimation->GetCurrentFrame().h / 2, 17,
-		5,bodyType::DYNAMIC);
-	pfeet->listener = this;
+	if (pfeet == NULL) {
+		pfeet = app->physics->CreateRectangleSensor(position.x + currentAnimation->GetCurrentFrame().w / 2,
+			position.y + currentAnimation->GetCurrentFrame().h / 2, 17,
+			5, bodyType::DYNAMIC);
+		pfeet->listener = this;
+	}
 
 	//initialize audio effect
-	pickCoinFxId = app->audio->LoadFx(config.attribute("coinfxpath").as_string());
-	victory = app->audio->LoadFx(config.attribute("winfxpath").as_string());
-	app->audio->PlayMusic(config.attribute("musicpath").as_string());
-	
+	if (pickCoinFxId == -1) {
+		pickCoinFxId = app->audio->LoadFx(config.attribute("coinfxpath").as_string());
+		victory = app->audio->LoadFx(config.attribute("winfxpath").as_string());
+	}
+	app->audio->PlayMusic(config.attribute("musicpath").as_string(),0);
+
 	speed = config.attribute("speed").as_float();
 	death = false;
 	flip = false;
@@ -173,7 +184,7 @@ bool Player::Update(float dt)
 		break;
 	}
 
-	if (app->input->GetKey(SDL_SCANCODE_F3) == KEY_REPEAT) {
+	if (app->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN) {
 		respawn();
 	}
 
@@ -345,6 +356,8 @@ bool Player::Update(float dt)
 
 bool Player::CleanUp()
 {
+	app->tex->UnLoad(texture);
+	app->tex->UnLoad(blendTexture);
 	return true;
 }
 
@@ -418,15 +431,7 @@ void Player::respawn()
 	b2Vec2 initPos = b2Vec2(PIXEL_TO_METERS(initPosition.x), PIXEL_TO_METERS(initPosition.y));
 	pbody->body->SetTransform(initPos, 0);
 	position = initPosition;
-	app->render->camera.y = ((position.y - currentAnimation->GetCurrentFrame().h / 2) - (app->sceneManager->currentScene->windowH / 2)) * -1;
-	app->render->camera.x = ((position.x - currentAnimation->GetCurrentFrame().w / 2) - (app->sceneManager->currentScene->windowW / 2)) * -1;
-
-	if (app->render->camera.x >= 0) {
-		app->render->camera.x = 0;
-	}
-	if (app->render->camera.y >= 0) {
-		app->render->camera.y = 0;
-	}
+	
 
 	dark = false;
 }

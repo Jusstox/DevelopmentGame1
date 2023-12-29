@@ -6,6 +6,7 @@
 #include "List.h"
 
 class Level1;
+class SceneIntro;
 
 enum SceneType
 {
@@ -47,11 +48,14 @@ public:
 
 	Scene* currentScene;
 
+	void ChangeScane();
+
+	Level1* level1;
+	SceneIntro* sceneIntro;
+
 private:
 
 	List<Scene*> scenes;
-
-	Level1* level1;
 
 	SceneType sceneType;
 

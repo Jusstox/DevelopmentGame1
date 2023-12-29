@@ -91,6 +91,8 @@ public:
 	bool renderable = true;
 	bool BodyPendingToDelete = false;
 	bool pendingToDelete = false;
+
+	int lvl;
 };
 
 #endif // __ENTITY_H__

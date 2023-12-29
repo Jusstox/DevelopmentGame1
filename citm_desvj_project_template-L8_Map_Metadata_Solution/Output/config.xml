@@ -19,6 +19,8 @@
   </window>
   
   <scenemanager>
+  
+  <sceneintro texturePath="Assets/Textures/ninja-pixilart.png" />
 
   <level1>
   

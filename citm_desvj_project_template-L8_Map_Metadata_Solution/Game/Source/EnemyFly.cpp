@@ -45,22 +45,20 @@ bool EnemyFly::Awake()
 bool EnemyFly::Start()
 {
 	initPosition = position;
-	texture = app->tex->Load(texturePath);
 	currentAnimation = &flyinganim;
 	// L07 DONE 5: Add physics to the player - initialize physics body
-	pbody = app->physics->CreateCircle(position.x, position.y, currentAnimation->GetCurrentFrame().w / 3, bodyType::DYNAMIC);
-
-	// L07 DONE 6: Assign player class (using "this") to the listener of the pbody. This makes the Physics module to call the OnCollision method
-	pbody->listener = this;
-
-	// L07 DONE 7: Assign collider type
-	pbody->ctype = ColliderType::ENEMY;
+	if (pbody == NULL) {
+		pbody = app->physics->CreateCircle(position.x, position.y, currentAnimation->GetCurrentFrame().w / 3, bodyType::DYNAMIC);
+		// L07 DONE 6: Assign player class (using "this") to the listener of the pbody. This makes the Physics module to call the OnCollision method
+		pbody->listener = this;
+		// L07 DONE 7: Assign collider type
+		pbody->ctype = ColliderType::ENEMY;
+		pbody->body->SetGravityScale(0);
+	}
 
 	distChase = 12;
 
 	right = true;
-
-	pbody->body->SetGravityScale(0);
 
 	chaseVelovity = 0.15;
 	patrolVelocity = 0.1;

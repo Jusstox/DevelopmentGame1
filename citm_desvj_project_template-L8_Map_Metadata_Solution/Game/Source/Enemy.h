@@ -50,11 +50,11 @@ public:
 
 protected:
 	const char* texturePath;
-	SDL_Texture* texture;
+	SDL_Texture* texture = nullptr;
 	int lives;
 	Animation* currentAnimation = nullptr;
 	iPoint initPosition;
-	SDL_Texture* mouseTileTex;
+	SDL_Texture* mouseTileTex = nullptr;
 	float ActualVelocity;
 	float chaseVelovity;
 	float patrolVelocity;
@@ -76,7 +76,7 @@ protected:
 	iPoint Patrol2;
 	bool patrol;
 
-	int dieFX;
+	int dieFX = -1;
 	
 };
 

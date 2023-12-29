@@ -34,6 +34,7 @@ bool EntityManager::Awake(pugi::xml_node config)
 
 		if (pEntity->active == false) continue;
 		ret = item->data->Awake();
+		item->data->active = false;
 	}
 
 	return ret;
@@ -153,6 +154,35 @@ bool EntityManager::SaveState(pugi::xml_node node)
 	}
 
 	return ret;
+}
+
+void EntityManager::ActiveNone()
+{
+	//Iterates over the entities and calls Start
+	ListItem<Entity*>* item;
+
+	for (item = entities.start; item != NULL; item = item->next)
+	{
+		item->data->active = false;
+		item->data->CleanUp();
+	}
+}
+
+void EntityManager::Lvl1EntitiesActive()
+{
+	//Iterates over the entities and calls Start
+	ListItem<Entity*>* item;
+
+	for (item = entities.start; item != NULL; item = item->next)
+	{
+		if (item->data->lvl == 1 && !item->data->pendingToDelete) {
+			item->data->active = true;
+		}
+		else {
+			item->data->active = false;
+			item->data->CleanUp();
+		}
+	}
 }
 
 bool EntityManager::Update(float dt)

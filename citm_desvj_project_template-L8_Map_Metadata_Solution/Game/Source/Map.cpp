@@ -36,28 +36,15 @@ bool Map::Awake(pugi::xml_node config)
 }
 
 bool Map::Start() {
-    SString mapPath = path;
-    mapPath += name;
-    Load(mapPath);
-
     //Initialize pathfinding 
     pathfinding = new PathFinding();
-
-    //Initialize the navigation map
-    uchar* navigationMap = NULL;
-    CreateNavigationMap(mapData.width, mapData.height, &navigationMap);
-    pathfinding->SetNavigationMap((uint)mapData.width, (uint)mapData.height, navigationMap);
-    RELEASE_ARRAY(navigationMap);
-
+    active = false;
     return true;
 }
 
 bool Map::Update(float dt)
 {
     bool ret = true;
-
-    if(mapLoaded == false)
-        return false;
 
     ListItem<MapLayer*>* mapLayer; 
     mapLayer = mapData.layers.start;
@@ -189,6 +176,8 @@ bool Map::CleanUp()
         RELEASE(collisions->data);
         collisions = collisions->next;
     }
+
+    mapData.colliders.Clear();
 
     //pathfinding->CleanUp();
 
@@ -500,6 +489,8 @@ void Map::InitMap()
     CreateNavigationMap(mapData.width, mapData.height, &navigationMap);
     pathfinding->SetNavigationMap((uint)mapData.width, (uint)mapData.height, navigationMap);
     RELEASE_ARRAY(navigationMap);
+
+    active = true;
 }
 
 // L06: DONE 8: Create a method that translates x,y coordinates from map positions to world positions

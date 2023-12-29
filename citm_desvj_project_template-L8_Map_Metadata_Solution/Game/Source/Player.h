@@ -72,8 +72,8 @@ public:
 	bool dark;
 	bool blend = false;
 	//Audio fx
-	int pickCoinFxId;
-	int victory;
+	int pickCoinFxId = -1;
+	int victory = -1;
 
 	// L07 DONE 5: Add physics to the player - declare a Physics body
 	PhysBody* pbody;

@@ -39,6 +39,10 @@ public:
 	//
 	bool SaveState(pugi::xml_node node);
 
+	void ActiveNone();
+
+	void Lvl1EntitiesActive();
+
 public:
 
 	List<Entity*> entities;

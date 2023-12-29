@@ -47,19 +47,17 @@ bool EnemySlime::Start()
 {
 	distChase = 10;
 	initPosition = position;
-	texture = app->tex->Load(texturePath);
 	currentAnimation = &walkinganimchase;
 
 	// L07 DONE 5: Add physics to the player - initialize physics body
-	pbody = app->physics->CreateCircle(position.x, position.y, currentAnimation->GetCurrentFrame().w/2, bodyType::DYNAMIC);
-
-	// L07 DONE 6: Assign player class (using "this") to the listener of the pbody. This makes the Physics module to call the OnCollision method
-	pbody->listener = this;
-
-	// L07 DONE 7: Assign collider type
-	pbody->ctype = ColliderType::ENEMY;
-
-	pbody->body->SetGravityScale(0);
+	if (pbody == NULL) {
+		pbody = app->physics->CreateCircle(position.x, position.y, currentAnimation->GetCurrentFrame().w / 2, bodyType::DYNAMIC);
+		// L07 DONE 6: Assign player class (using "this") to the listener of the pbody. This makes the Physics module to call the OnCollision method
+		pbody->listener = this;
+		// L07 DONE 7: Assign collider type
+		pbody->ctype = ColliderType::ENEMY;
+		pbody->body->SetGravityScale(0);
+	}
 
 	chaseVelovity = 0.12;
 	patrolVelocity = 0.1;
@@ -230,6 +228,13 @@ bool EnemySlime::SaveState(pugi::xml_node& node)
 	EnemyNode.append_attribute("y").set_value(position.y);
 	EnemyNode.append_attribute("dead").set_value(dead);
 	EnemyNode.append_attribute("dark").set_value(dark);
+	return true;
+}
+
+bool EnemySlime::CleanUp()
+{
+	app->tex->UnLoad(texture);
+	Enemy::CleanUp();
 	return true;
 }
 

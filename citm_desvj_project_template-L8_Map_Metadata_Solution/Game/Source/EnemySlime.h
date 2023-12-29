@@ -20,6 +20,8 @@ public:
 
 	bool SaveState(pugi::xml_node& node);
 
+	bool CleanUp();
+
 	Animation idleanim;
 	Animation walkinganimchase;
 	Animation dieanim;

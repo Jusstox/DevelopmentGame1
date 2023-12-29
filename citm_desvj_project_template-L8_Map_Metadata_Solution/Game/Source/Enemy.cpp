@@ -30,6 +30,7 @@ bool Enemy::Awake()
 bool Enemy::Start()
 {
 	mouseTileTex = app->tex->Load("Assets/Maps/tileSelection.png");
+	texture = app->tex->Load(texturePath);
 	dead = false;
 	hit = false;
 	patrol = true;
@@ -46,7 +47,7 @@ bool Enemy::Update(float dt)
 	}
 	else {
 		pbody->body->SetLinearVelocity(b2Vec2(0,0));
-		pbody->body->SetTransform(b2Vec2(-10, 0),0);
+		pbody->body->SetTransform(b2Vec2(-10, 1),0);
 	}
 
 	if (!dead) {
@@ -88,6 +89,8 @@ bool Enemy::Update(float dt)
 
 bool Enemy::CleanUp()
 {
+	app->tex->UnLoad(texture);
+	app->tex->UnLoad(mouseTileTex);
 	return true;
 }
 

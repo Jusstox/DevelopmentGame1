@@ -1,19 +1,18 @@
-#ifndef __SCENE_H__
-#define __SCENE_H__
+#ifndef __SCENE_INTRO__
+#define __SCENE_INTRO__
 
-#include "Module.h"
-#include "Player.h"
+#include "Scene.h"
 
 struct SDL_Texture;
 
-class Scene : public Module
+class SceneIntro : public Scene
 {
 public:
 
-	Scene();
+	SceneIntro();
 
 	// Destructor
-	virtual ~Scene();
+	virtual ~SceneIntro();
 
 	// Called before render is available
 	bool Awake(pugi::xml_node config);
@@ -32,24 +31,14 @@ public:
 
 	// Called before quitting
 	bool CleanUp();
+
 	uint windowW, windowH;
-
-	Player* GetPlayer() {
-		return player;
-	}
-
-	void cameraLimit();
-	
-	bool lockCamera = true;
 
 private:
 	SDL_Texture* img;
 	float textPosX, textPosY = 0;
 	uint texW, texH;
-
-	//L03: DONE 3b: Declare a Player attribute
-	Player* player;
-
+	pugi::xml_node config;
 };
 
-#endif // __SCENE_H__
+#endif //__SCENE_INTRO__

@@ -38,6 +38,9 @@
     <ClCompile Include="Source\Level1.cpp">
       <Filter>Scenes</Filter>
     </ClCompile>
+    <ClCompile Include="Source\SceneIntro.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Window.h" />
@@ -103,6 +106,9 @@
       <Filter>Scenes</Filter>
     </ClInclude>
     <ClInclude Include="Source\Level1.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneIntro.h">
       <Filter>Scenes</Filter>
     </ClInclude>
   </ItemGroup>

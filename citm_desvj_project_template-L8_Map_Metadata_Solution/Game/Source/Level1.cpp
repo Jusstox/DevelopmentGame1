@@ -9,6 +9,7 @@
 #include "Item.h"
 #include "Physics.h"
 #include "Enemy.h"
+#include "SceneManager.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -24,7 +25,7 @@ Level1::~Level1()
 
 bool Level1::Awake(pugi::xml_node config)
 {
-	LOG("Loading Scene");
+	LOG("Loading Level1");
 	bool ret = true;
 
 	//L03: DONE 3b: Instantiate the player using the entity manager
@@ -32,6 +33,7 @@ bool Level1::Awake(pugi::xml_node config)
 	player = (Player*)app->entityManager->CreateEntity(EntityType::PLAYER);
 	//Assigns the XML node to a member in player
 	player->config = config.child("player");
+	player->lvl = 1;
 
 	//Get the map name from the config file and assigns the value in the module
 	app->map->name = config.child("map").attribute("name").as_string();
@@ -53,6 +55,7 @@ bool Level1::Awake(pugi::xml_node config)
 		Enemy* EnemyFly = (Enemy*)app->entityManager->CreateEntity(EntityType::ENEMYFLY);
 		EnemyFly->parameters = flyenemieNode;
 		EnemyFly->animconfig = enemieNode;
+		EnemyFly->lvl = 1;
 	}
 
 	//WalkerEnemy
@@ -61,6 +64,7 @@ bool Level1::Awake(pugi::xml_node config)
 		Enemy* EnemySlime = (Enemy*)app->entityManager->CreateEntity(EntityType::ENEMYSLIME);
 		EnemySlime->parameters = walkenemieNode;
 		EnemySlime->animconfig = enemieNode;
+		EnemySlime->lvl = 1;
 	}
 
 	return ret;
@@ -68,6 +72,9 @@ bool Level1::Awake(pugi::xml_node config)
 
 bool Level1::Start()
 {
+	app->map->InitMap();
+	app->entityManager->Lvl1EntitiesActive();
+	app->entityManager->Start();
 	//Get the size of the window
 	app->win->GetWindowSize(windowW, windowH);
 
@@ -127,6 +134,11 @@ bool Level1::Update(float dt)
 
 	if (app->input->GetKey(SDL_SCANCODE_C) == KEY_DOWN) {
 		app->map->CleanUp();
+		app->map->active = false;
+		app->entityManager->ActiveNone();
+		app->sceneManager->ChangeScane();
+		app->render->camera.x = 0;
+		app->render->camera.y = 0;
 	}
 
 

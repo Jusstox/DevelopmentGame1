@@ -2,20 +2,22 @@
 
 #include "App.h"
 #include "Level1.h"
-#include "Map.h"
+#include "SceneIntro.h"
 
 
 SceneManager::SceneManager()
 {
 	name.Create("scenemanager");
 
+	sceneIntro = new SceneIntro();
 	level1 = new Level1();
 
+	scenes.Add(sceneIntro);
 	scenes.Add(level1);
 
-	sceneType = LEVEL1;
+	sceneType = INTRO;
 
-	currentScene = level1;
+	currentScene = sceneIntro;
 }
 
 SceneManager::~SceneManager()
@@ -25,14 +27,24 @@ SceneManager::~SceneManager()
 
 bool SceneManager::Awake(pugi::xml_node config)
 {
-	level1->Init();
-	level1->Awake(config.child(level1->name.GetString()));
-	level1->Start();
-	return true;
+	configScenes = config;
+	bool ret = true;
+	ListItem<Scene*>* item;
+	Scene* pScene = NULL;
+
+	for (item = scenes.start; item != NULL; item = item->next)
+	{
+		pScene = item->data;
+
+		ret = item->data->Awake(config.child(item->data->name.GetString()));
+	}
+	return ret;
 }
 
 bool SceneManager::Start()
 {
+	sceneIntro->Init();
+	sceneIntro->Start();
 	return true;
 }
 
@@ -101,6 +113,33 @@ bool SceneManager::LoadState(pugi::xml_node node)
 	}
 
 	return ret;
+}
+
+void SceneManager::ChangeScane()
+{
+	switch (sceneType)
+	{
+	case INTRO:
+		sceneIntro->CleanUp();
+		sceneIntro->active = false;
+		currentScene = level1;
+		level1->Init();
+		level1->Start();
+		sceneType = LEVEL1;
+		break;
+	case LEVEL1:
+		level1->CleanUp();
+		level1->active = false;
+		currentScene = sceneIntro;
+		sceneIntro->Init();
+		sceneIntro->Start();
+		sceneType = INTRO;
+		break;
+	case NONE:
+		break;
+	default:
+		break;
+	}
 }
 
 bool SceneManager::SaveState(pugi::xml_node node)

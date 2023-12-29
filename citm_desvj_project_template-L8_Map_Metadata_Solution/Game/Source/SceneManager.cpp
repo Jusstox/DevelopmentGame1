@@ -17,7 +17,7 @@ SceneManager::SceneManager()
 	scenes.Add(sceneIntro);
 	scenes.Add(level1);
 
-	sceneType = INTRO;
+	sceneType = NONE;
 
 	currentScene = sceneIntro;
 }
@@ -49,9 +49,10 @@ bool SceneManager::Awake(pugi::xml_node config)
 
 bool SceneManager::Start()
 {
-	sceneIntro->Init();
-	sceneIntro->Start();
 	SDL_SetRenderDrawBlendMode(app->render->renderer, SDL_BLENDMODE_BLEND);
+	fade = true;
+	maxFadeFrames = 85;
+	currentStep = Fade_Step::TO_BLACK;
 	return true;
 }
 
@@ -157,6 +158,11 @@ void SceneManager::ChangeScane()
 		sceneType = INTRO;
 		break;
 	case NONE:
+		sceneIntro->Init();
+		sceneIntro->Start();
+		sceneType = INTRO;
+		currentScene = sceneIntro;
+		maxFadeFrames = 100;
 		break;
 	default:
 		break;

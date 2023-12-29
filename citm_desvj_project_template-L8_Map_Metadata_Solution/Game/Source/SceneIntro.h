@@ -35,6 +35,7 @@ public:
 	uint windowW, windowH;
 
 private:
+	int fx;
 	SDL_Texture* img;
 	float textPosX, textPosY = 0;
 	uint texW, texH;

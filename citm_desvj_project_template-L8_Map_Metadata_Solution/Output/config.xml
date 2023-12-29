@@ -20,11 +20,11 @@
   
   <scenemanager>
   
-  <sceneintro texturePath="Assets/Textures/ninja-pixilart.png" />
+  <sceneintro texturePath="Assets/Textures/unnamed.png" fx="Assets/Audio/Fx/intro.ogg"/>
 
   <level1>
   
-    <player x="150" y="350" speed="0.5" texturePath="Assets/Textures/ninja-pixilart.png" coinfxpath="Assets/Audio/Fx/retro-video-game-coin-pickup-38299.ogg"
+    <player x="150" y="545" speed="0.5" texturePath="Assets/Textures/ninja-pixilart.png" coinfxpath="Assets/Audio/Fx/retro-video-game-coin-pickup-38299.ogg"
 	winfxpath="Assets/Audio/Fx/victory_sJDDywi.ogg"	musicpath="Assets/Audio/Music/music.ogg" textureblendPath="Assets/Textures/bgroup.png">
 		<animations>
 			<idleanim loop="true" speed="0.1f">

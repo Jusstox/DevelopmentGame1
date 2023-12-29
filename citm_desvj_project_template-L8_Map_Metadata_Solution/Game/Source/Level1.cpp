@@ -133,12 +133,8 @@ bool Level1::Update(float dt)
 	if (app->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN) app->LoadRequest();
 
 	if (app->input->GetKey(SDL_SCANCODE_C) == KEY_DOWN) {
-		app->map->CleanUp();
-		app->map->active = false;
-		app->entityManager->ActiveNone();
-		app->sceneManager->ChangeScane();
-		app->render->camera.x = 0;
-		app->render->camera.y = 0;
+		app->sceneManager->fade = true;
+		app->sceneManager->currentStep = TO_BLACK;
 	}
 
 
@@ -158,7 +154,9 @@ bool Level1::PostUpdate()
 bool Level1::CleanUp()
 {
 	LOG("Freeing scene");
-
+	app->map->CleanUp();
+	app->map->active = false;
+	app->entityManager->ActiveNone();
 	return true;
 }
 

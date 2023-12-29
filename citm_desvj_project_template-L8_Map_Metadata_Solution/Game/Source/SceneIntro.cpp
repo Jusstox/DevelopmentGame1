@@ -23,6 +23,8 @@ bool SceneIntro::Awake(pugi::xml_node config)
 bool SceneIntro::Start()
 {
 	img = app->tex->Load(config.attribute("texturePath").as_string());
+	app->render->camera.x = 0;
+	app->render->camera.y = 0;
 	return true;
 }
 

@@ -3,6 +3,8 @@
 #include "App.h"
 #include "Level1.h"
 #include "SceneIntro.h"
+#include "Window.h"
+#include "Log.h"
 
 
 SceneManager::SceneManager()
@@ -27,6 +29,10 @@ SceneManager::~SceneManager()
 
 bool SceneManager::Awake(pugi::xml_node config)
 {
+	app->win->GetWindowSize(windowW, windowH);
+
+	screenRect = { 0, 0, (int)windowW, (int)windowH };
+
 	configScenes = config;
 	bool ret = true;
 	ListItem<Scene*>* item;
@@ -45,6 +51,7 @@ bool SceneManager::Start()
 {
 	sceneIntro->Init();
 	sceneIntro->Start();
+	SDL_SetRenderDrawBlendMode(app->render->renderer, SDL_BLENDMODE_BLEND);
 	return true;
 }
 
@@ -69,6 +76,11 @@ bool SceneManager::Update(float dt)
 
 		ret = item->data->Update(dt);
 	}
+
+	if (fade) {
+		MakeFade();
+	}
+
 	return ret;
 }
 
@@ -88,6 +100,15 @@ bool SceneManager::PostUpdate()
 
 		ret = item->data->PostUpdate();
 	}
+
+	if (fade) {
+		float fadeRatio = (float)frameCount / (float)maxFadeFrames;
+		LOG("%f", fadeRatio);
+		// Render the black square with alpha on the screen
+		SDL_SetRenderDrawColor(app->render->renderer, 0, 0, 0, (Uint8)(fadeRatio * 255.0f));
+		SDL_RenderFillRect(app->render->renderer, &screenRect);
+	}
+
 	return ret;
 }
 
@@ -139,6 +160,28 @@ void SceneManager::ChangeScane()
 		break;
 	default:
 		break;
+	}
+}
+
+void SceneManager::MakeFade()
+{
+	if (currentStep == Fade_Step::TO_BLACK)
+	{
+		++frameCount;
+		if (frameCount >= maxFadeFrames)
+		{
+			ChangeScane();
+			currentStep = Fade_Step::FROM_BLACK;
+		}
+	}
+	else
+	{
+		--frameCount;
+		if (frameCount <= 0)
+		{
+			currentStep = Fade_Step::NO;
+			fade = false;
+		}
 	}
 }
 

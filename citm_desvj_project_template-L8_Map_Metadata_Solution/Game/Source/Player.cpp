@@ -122,7 +122,6 @@ bool Player::Start() {
 		pickCoinFxId = app->audio->LoadFx(config.attribute("coinfxpath").as_string());
 		victory = app->audio->LoadFx(config.attribute("winfxpath").as_string());
 	}
-	app->audio->PlayMusic(config.attribute("musicpath").as_string(),0);
 
 	speed = config.attribute("speed").as_float();
 	death = false;
@@ -432,7 +431,6 @@ void Player::respawn()
 	pbody->body->SetTransform(initPos, 0);
 	position = initPosition;
 	
-
 	dark = false;
 }
 

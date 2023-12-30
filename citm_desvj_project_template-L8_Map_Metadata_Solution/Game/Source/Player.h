@@ -76,9 +76,9 @@ public:
 	int victory = -1;
 
 	// L07 DONE 5: Add physics to the player - declare a Physics body
-	PhysBody* pbody;
-	PhysBody* pfeet;
-	PhysBody* pbodyshuriken;
+	PhysBody* pbody = NULL;
+	PhysBody* pfeet = NULL;
+	PhysBody* pbodyshuriken = NULL;
 	bool shuriken = false;
 	int maxremainingJumpSteps = 30;
 	int remainingJumpSteps = 0;

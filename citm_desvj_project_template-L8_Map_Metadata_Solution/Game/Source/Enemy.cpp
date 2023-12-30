@@ -24,6 +24,7 @@ bool Enemy::Awake()
 	Patrol2 = { parameters.attribute("dest2X").as_int() , parameters.attribute("dest2Y").as_int() };
 	dark = parameters.attribute("dark").as_bool();
 	dieFX = app->audio->LoadFx(parameters.attribute("fxpath").as_string());
+	pbody = NULL;
 	return true;
 }
 

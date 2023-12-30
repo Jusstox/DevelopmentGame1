@@ -63,6 +63,8 @@ public:
 
 public:
 
+	pugi::xml_node sceneconfig;
+
 	SString name;
 	bool active;
 

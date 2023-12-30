@@ -1,18 +1,17 @@
-#ifndef __SCENE_INTRO__
-#define __SCENE_INTRO__
-
+#ifndef __MENU__
+#define __MENU__
 #include "Scene.h"
 
 struct SDL_Texture;
 
-class SceneIntro : public Scene
+class Menu :  public Scene
 {
 public:
 
-	SceneIntro();
+	Menu();
 
 	// Destructor
-	virtual ~SceneIntro();
+	virtual ~Menu();
 
 	// Called before render is available
 	bool Awake(pugi::xml_node config);
@@ -35,11 +34,11 @@ public:
 	uint windowW, windowH;
 
 private:
-	int fx = -1;
+	int fx;
 	SDL_Texture* img;
 	float textPosX, textPosY = 0;
 	uint texW, texH;
 	pugi::xml_node config;
 };
 
-#endif //__SCENE_INTRO__
+#endif //__MENU__

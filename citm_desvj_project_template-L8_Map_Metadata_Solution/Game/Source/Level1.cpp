@@ -28,6 +28,7 @@ bool Level1::Awake(pugi::xml_node config)
 	LOG("Loading Level1");
 	bool ret = true;
 
+	sceneconfig = config;
 	//L03: DONE 3b: Instantiate the player using the entity manager
 	//L04 DONE 7: Get player paremeters
 	player = (Player*)app->entityManager->CreateEntity(EntityType::PLAYER);
@@ -75,6 +76,7 @@ bool Level1::Start()
 	app->map->InitMap();
 	app->entityManager->Lvl1EntitiesActive();
 	app->entityManager->Start();
+	app->audio->PlayMusic(sceneconfig.attribute("musicpath").as_string(),1.5);
 	//Get the size of the window
 	app->win->GetWindowSize(windowW, windowH);
 
@@ -135,6 +137,7 @@ bool Level1::Update(float dt)
 	if (app->input->GetKey(SDL_SCANCODE_C) == KEY_DOWN) {
 		app->sceneManager->fade = true;
 		app->sceneManager->currentStep = TO_BLACK;
+		app->sceneManager->maxFadeFrames = 200;
 	}
 
 

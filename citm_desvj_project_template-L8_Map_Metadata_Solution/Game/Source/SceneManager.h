@@ -3,11 +3,14 @@
 
 #include "Module.h"
 #include "Scene.h"
+
 #include "List.h"
+
 #include "SDL/include/SDL_rect.h"
 
 class Level1;
 class SceneIntro;
+class Menu;
 
 enum Fade_Step
 {
@@ -19,6 +22,7 @@ enum Fade_Step
 enum SceneType
 {
 	INTRO,
+	MENU,
 	LEVEL1,
 	NONE
 };
@@ -60,6 +64,7 @@ public:
 
 	Level1* level1;
 	SceneIntro* sceneIntro;
+	Menu* menu;
 
 	uint windowW, windowH;
 
@@ -68,6 +73,9 @@ public:
 	void MakeFade();
 
 	Fade_Step currentStep = Fade_Step::NO;
+
+	Uint32 maxFadeFrames = 75;
+	Uint32 maxFadeFramesBack = 0;
 
 private:
 
@@ -81,7 +89,6 @@ private:
 
 	// A frame count system to handle the fade time and ratio
 	Uint32 frameCount = 0;
-	Uint32 maxFadeFrames = 100;
 };
 
 #endif	// __SCENE_MANAGER__

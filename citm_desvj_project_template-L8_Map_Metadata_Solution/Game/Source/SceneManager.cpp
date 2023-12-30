@@ -3,6 +3,7 @@
 #include "App.h"
 #include "Level1.h"
 #include "SceneIntro.h"
+#include "Menu.h"
 #include "Window.h"
 #include "Log.h"
 
@@ -12,9 +13,11 @@ SceneManager::SceneManager()
 	name.Create("scenemanager");
 
 	sceneIntro = new SceneIntro();
+	menu = new Menu();
 	level1 = new Level1();
 
 	scenes.Add(sceneIntro);
+	scenes.Add(menu);
 	scenes.Add(level1);
 
 	sceneType = NONE;
@@ -51,7 +54,6 @@ bool SceneManager::Start()
 {
 	SDL_SetRenderDrawBlendMode(app->render->renderer, SDL_BLENDMODE_BLEND);
 	fade = true;
-	maxFadeFrames = 85;
 	currentStep = Fade_Step::TO_BLACK;
 	return true;
 }
@@ -104,7 +106,6 @@ bool SceneManager::PostUpdate()
 
 	if (fade) {
 		float fadeRatio = (float)frameCount / (float)maxFadeFrames;
-		LOG("%f", fadeRatio);
 		// Render the black square with alpha on the screen
 		SDL_SetRenderDrawColor(app->render->renderer, 0, 0, 0, (Uint8)(fadeRatio * 255.0f));
 		SDL_RenderFillRect(app->render->renderer, &screenRect);
@@ -144,6 +145,14 @@ void SceneManager::ChangeScane()
 	case INTRO:
 		sceneIntro->CleanUp();
 		sceneIntro->active = false;
+		currentScene = menu;
+		menu->Init();
+		menu->Start();
+		sceneType = MENU;
+		break;
+	case MENU:
+		menu->CleanUp();
+		menu->active = false;
 		currentScene = level1;
 		level1->Init();
 		level1->Start();
@@ -152,17 +161,16 @@ void SceneManager::ChangeScane()
 	case LEVEL1:
 		level1->CleanUp();
 		level1->active = false;
-		currentScene = sceneIntro;
-		sceneIntro->Init();
-		sceneIntro->Start();
-		sceneType = INTRO;
+		currentScene = menu;
+		menu->Init();
+		menu->Start();
+		sceneType = MENU;
 		break;
 	case NONE:
 		sceneIntro->Init();
 		sceneIntro->Start();
 		sceneType = INTRO;
 		currentScene = sceneIntro;
-		maxFadeFrames = 100;
 		break;
 	default:
 		break;
@@ -178,6 +186,10 @@ void SceneManager::MakeFade()
 		{
 			ChangeScane();
 			currentStep = Fade_Step::FROM_BLACK;
+			if (maxFadeFramesBack != 0) {
+				frameCount = maxFadeFramesBack;
+				maxFadeFrames = maxFadeFramesBack;
+			}
 		}
 	}
 	else
@@ -187,6 +199,7 @@ void SceneManager::MakeFade()
 		{
 			currentStep = Fade_Step::NO;
 			fade = false;
+			maxFadeFramesBack = 0;
 		}
 	}
 }

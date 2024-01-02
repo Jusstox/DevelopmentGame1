@@ -6,6 +6,7 @@
 #include "PugiXml/src/pugixml.hpp"
 
 class Player;
+class GuiControl;
 
 class Scene
 {
@@ -57,6 +58,11 @@ public:
 
 	virtual Player* GetPlayer() {
 		return player;
+	}
+
+	virtual bool OnGuiMouseClickEvent(GuiControl* control)
+	{
+		return true;
 	}
 
 	uint windowW, windowH;

@@ -2,6 +2,9 @@
 #define __MENU__
 #include "Scene.h"
 
+#include "GuiControl.h"
+#include "GuiControlButton.h"
+
 struct SDL_Texture;
 
 class Menu :  public Scene
@@ -31,6 +34,8 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
+	bool OnGuiMouseClickEvent(GuiControl* control);
+
 	uint windowW, windowH;
 
 private:
@@ -39,6 +44,9 @@ private:
 	float textPosX, textPosY = 0;
 	uint texW, texH;
 	pugi::xml_node config;
+
+	// L15: TODO 2: Declare a GUI Control Button 
+	GuiControlButton* gcButtom;
 };
 
 #endif //__MENU__

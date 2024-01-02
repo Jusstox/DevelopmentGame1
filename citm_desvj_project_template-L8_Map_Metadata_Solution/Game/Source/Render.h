@@ -6,6 +6,7 @@
 #include "Point.h"
 
 #include "SDL/include/SDL.h"
+#include "SDL_ttf/include/SDL_ttf.h"
 
 class Render : public Module
 {
@@ -39,6 +40,7 @@ public:
 	bool DrawLine(int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Uint8 b, Uint8 a = 255, bool useCamera = true) const;
 	bool DrawCircle(int x1, int y1, int redius, Uint8 r, Uint8 g, Uint8 b, Uint8 a = 255, bool useCamera = true) const;
 	bool DrawTexturePR(SDL_Texture* texture, int x, int y, const SDL_Rect* section = NULL, float speed = 1.0f, double angle = 0, int pivotX = INT_MAX, int pivotY = INT_MAX) const;
+	bool DrawText(const char* text, int posX, int posY, int w, int h);
 
 	// Set background color
 	void SetBackgroundColor(SDL_Color color);
@@ -62,6 +64,7 @@ public:
 	SDL_Rect camera;
 	SDL_Rect viewport;
 	SDL_Color background;
+	TTF_Font* font;
 };
 
 #endif // __RENDER_H__

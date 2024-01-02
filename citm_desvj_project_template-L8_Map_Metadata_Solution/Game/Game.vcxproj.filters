@@ -44,6 +44,12 @@
     <ClCompile Include="Source\Menu.cpp">
       <Filter>Scenes</Filter>
     </ClCompile>
+    <ClCompile Include="Source\GuiControlButton.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GuiManager.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Window.h" />
@@ -117,6 +123,15 @@
     <ClInclude Include="Source\Menu.h">
       <Filter>Scenes</Filter>
     </ClInclude>
+    <ClInclude Include="Source\GuiControl.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GuiControlButton.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GuiManager.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="External">
@@ -133,6 +148,9 @@
     </Filter>
     <Filter Include="Scenes">
       <UniqueIdentifier>{78842cc3-ab81-4d07-b8c2-9859105ddee0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI">
+      <UniqueIdentifier>{0e0b8c96-8cb3-4631-90a7-5a59938fb1ba}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

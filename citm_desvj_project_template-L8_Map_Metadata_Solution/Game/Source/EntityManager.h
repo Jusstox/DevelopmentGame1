@@ -42,6 +42,7 @@ public:
 	void ActiveNone();
 
 	void Lvl1EntitiesActive();
+	void Lvl2EntitiesActive();
 
 public:
 

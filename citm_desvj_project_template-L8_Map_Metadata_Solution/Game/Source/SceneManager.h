@@ -9,6 +9,7 @@
 #include "SDL/include/SDL_rect.h"
 
 class Level1;
+class Level2;
 class SceneIntro;
 class Menu;
 
@@ -24,6 +25,7 @@ enum SceneType
 	INTRO,
 	MENU,
 	LEVEL1,
+	LEVEL2,
 	NONE
 };
 
@@ -59,10 +61,12 @@ public:
 	bool SaveState(pugi::xml_node node);
 
 	Scene* currentScene;
+	Scene* newScene = nullptr;
 
 	void ChangeScane();
 
 	Level1* level1;
+	Level2* level2;
 	SceneIntro* sceneIntro;
 	Menu* menu;
 

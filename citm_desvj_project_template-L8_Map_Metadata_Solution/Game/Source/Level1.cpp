@@ -29,16 +29,10 @@ bool Level1::Awake(pugi::xml_node config)
 	bool ret = true;
 
 	sceneconfig = config;
-	//L03: DONE 3b: Instantiate the player using the entity manager
-	//L04 DONE 7: Get player paremeters
-	player = (Player*)app->entityManager->CreateEntity(EntityType::PLAYER);
-	//Assigns the XML node to a member in player
-	player->config = config.child("player");
-	player->lvl = 1;
 
 	//Get the map name from the config file and assigns the value in the module
-	app->map->name = config.child("map").attribute("name").as_string();
-	app->map->path = config.child("map").attribute("path").as_string();
+	app->map->name = config.attribute("name").as_string();
+	app->map->path = config.attribute("path").as_string();
 
 	// iterate all items in the scene
 	// Check https://pugixml.org/docs/quickstart.html#access
@@ -67,6 +61,13 @@ bool Level1::Awake(pugi::xml_node config)
 		EnemySlime->animconfig = enemieNode;
 		EnemySlime->lvl = 1;
 	}
+
+	//L03: DONE 3b: Instantiate the player using the entity manager
+	//L04 DONE 7: Get player paremeters
+	player = (Player*)app->entityManager->CreateEntity(EntityType::PLAYER);
+	//Assigns the XML node to a member in player
+	player->config = config.child("player");
+	player->lvl = 1;
 
 	return ret;
 }
@@ -136,6 +137,7 @@ bool Level1::Update(float dt)
 
 	if (app->input->GetKey(SDL_SCANCODE_C) == KEY_DOWN) {
 		app->sceneManager->fade = true;
+		app->sceneManager->newScene = (Scene*)app->sceneManager->level2;
 		app->sceneManager->currentStep = TO_BLACK;
 		app->sceneManager->maxFadeFrames = 200;
 	}

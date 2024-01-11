@@ -2,6 +2,7 @@
 
 #include "App.h"
 #include "Level1.h"
+#include "Level2.h"
 #include "SceneIntro.h"
 #include "Menu.h"
 #include "Window.h"
@@ -15,10 +16,12 @@ SceneManager::SceneManager()
 	sceneIntro = new SceneIntro();
 	menu = new Menu();
 	level1 = new Level1();
+	level2 = new Level2();
 
 	scenes.Add(sceneIntro);
 	scenes.Add(menu);
 	scenes.Add(level1);
+	scenes.Add(level2);
 
 	sceneType = NONE;
 
@@ -55,6 +58,7 @@ bool SceneManager::Start()
 	SDL_SetRenderDrawBlendMode(app->render->renderer, SDL_BLENDMODE_BLEND);
 	fade = true;
 	currentStep = Fade_Step::TO_BLACK;
+	newScene = sceneIntro;
 	return true;
 }
 
@@ -140,41 +144,11 @@ bool SceneManager::LoadState(pugi::xml_node node)
 
 void SceneManager::ChangeScane()
 {
-	switch (sceneType)
-	{
-	case INTRO:
-		sceneIntro->CleanUp();
-		sceneIntro->active = false;
-		currentScene = menu;
-		menu->Init();
-		menu->Start();
-		sceneType = MENU;
-		break;
-	case MENU:
-		menu->CleanUp();
-		menu->active = false;
-		currentScene = level1;
-		level1->Init();
-		level1->Start();
-		sceneType = LEVEL1;
-		break;
-	case LEVEL1:
-		level1->CleanUp();
-		level1->active = false;
-		currentScene = menu;
-		menu->Init();
-		menu->Start();
-		sceneType = MENU;
-		break;
-	case NONE:
-		sceneIntro->Init();
-		sceneIntro->Start();
-		sceneType = INTRO;
-		currentScene = sceneIntro;
-		break;
-	default:
-		break;
-	}
+	currentScene->CleanUp();
+	currentScene->active = false;
+	currentScene = newScene;
+	newScene->Init();
+	newScene->Start();
 }
 
 void SceneManager::MakeFade()

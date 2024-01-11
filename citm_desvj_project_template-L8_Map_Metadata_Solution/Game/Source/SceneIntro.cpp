@@ -51,9 +51,10 @@ bool SceneIntro::PostUpdate()
 	app->render->DrawTexture(img, windowW/2 - texW/2, windowH / 2 - texH / 2,NULL);
 	if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
 		app->sceneManager->fade = true;
+		app->sceneManager->newScene = (Scene*)app->sceneManager->menu;
 		app->sceneManager->currentStep = TO_BLACK;
 		app->sceneManager->maxFadeFrames = 100;
-		app->sceneManager->maxFadeFramesBack = 200;
+	//	app->sceneManager->maxFadeFramesBack = 200;
 	}
 	return true;
 }

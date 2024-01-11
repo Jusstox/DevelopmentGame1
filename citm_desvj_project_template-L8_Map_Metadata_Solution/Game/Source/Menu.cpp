@@ -64,6 +64,7 @@ bool Menu::OnGuiMouseClickEvent(GuiControl* control)
 {
 	// L15: DONE 5: Implement the OnGuiMouseClickEvent method
 	app->sceneManager->fade = true;
+	app->sceneManager->newScene = (Scene*)app->sceneManager->level1;
 	app->sceneManager->currentStep = TO_BLACK;
 	app->sceneManager->maxFadeFrames = 100;
 

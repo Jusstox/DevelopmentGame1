@@ -109,6 +109,7 @@ bool Player::Start() {
 		pbodyshuriken->listener = this;
 		pbodyshuriken->ctype = ColliderType::SHURIKEN;
 	}
+	pbodyshuriken->body->SetActive(true);
 
 	if (pfeet == NULL) {
 		pfeet = app->physics->CreateRectangleSensor(position.x + currentAnimation->GetCurrentFrame().w / 2,
@@ -116,6 +117,7 @@ bool Player::Start() {
 			5, bodyType::DYNAMIC);
 		pfeet->listener = this;
 	}
+	pfeet->body->SetActive(true);
 
 	//initialize audio effect
 	if (pickCoinFxId == -1) {
@@ -357,6 +359,9 @@ bool Player::CleanUp()
 {
 	app->tex->UnLoad(texture);
 	app->tex->UnLoad(blendTexture);
+	pbody->body->SetActive(false);
+	pbodyshuriken->body->SetActive(false);
+	pfeet->body->SetActive(false);
 	return true;
 }
 
@@ -432,6 +437,7 @@ void Player::respawn()
 	position = initPosition;
 	
 	dark = false;
+	pbody->body->SetActive(true);
 }
 
 int Player::getPlayerTileX()
@@ -465,4 +471,18 @@ bool Player::SaveState(pugi::xml_node& node)
 	PlayerNode.append_attribute("y").set_value(position.y);
 	PlayerNode.append_attribute("dark").set_value(dark);
 	return true;
+}
+
+void Player::SetPlayerPos(int x, int y)
+{
+	pbody->body->SetActive(true);
+	pbodyshuriken->body->SetActive(true);
+	pfeet->body->SetActive(true);
+	dark = false;
+	position.x = x;
+	position.y = y;
+	position.x += (26 / 2);
+	position.y += (40 / 2);
+	b2Vec2 pPosition = b2Vec2(PIXEL_TO_METERS(position.x), PIXEL_TO_METERS(position.y));
+	pbody->body->SetTransform(pPosition, 0);
 }

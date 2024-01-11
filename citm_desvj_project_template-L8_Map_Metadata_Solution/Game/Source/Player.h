@@ -46,6 +46,8 @@ public:
 
 	bool SaveState(pugi::xml_node& node);
 
+	void SetPlayerPos(int x, int y);
+
 public:
 
 	//L02: DONE 2: Declare player parameters
@@ -76,7 +78,6 @@ public:
 	int victory = -1;
 
 	// L07 DONE 5: Add physics to the player - declare a Physics body
-	PhysBody* pbody = NULL;
 	PhysBody* pfeet = NULL;
 	PhysBody* pbodyshuriken = NULL;
 	bool shuriken = false;

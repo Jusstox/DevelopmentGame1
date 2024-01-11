@@ -231,11 +231,4 @@ bool EnemySlime::SaveState(pugi::xml_node& node)
 	return true;
 }
 
-bool EnemySlime::CleanUp()
-{
-	app->tex->UnLoad(texture);
-	Enemy::CleanUp();
-	return true;
-}
-
 

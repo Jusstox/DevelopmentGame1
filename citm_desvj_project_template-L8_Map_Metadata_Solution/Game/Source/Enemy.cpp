@@ -30,6 +30,7 @@ bool Enemy::Awake()
 
 bool Enemy::Start()
 {
+	pbody->body->SetActive(true);
 	mouseTileTex = app->tex->Load("Assets/Maps/tileSelection.png");
 	texture = app->tex->Load(texturePath);
 	dead = false;
@@ -51,30 +52,9 @@ bool Enemy::Update(float dt)
 		pbody->body->SetTransform(b2Vec2(-10, 1),0);
 	}
 
-	if (!dead) {
-		if (app->sceneManager->currentScene->GetPlayer()->dark || app->sceneManager->currentScene->GetPlayer()->godmode) {
-			if (dark) {
-				if (right) {
-					app->render->DrawTexturePR(texture, position.x, position.y, &currentAnimation->GetCurrentFrame());
-				}
-				else {
-					app->render->DrawTexture(texture, position.x, position.y, &currentAnimation->GetCurrentFrame());
-				}
-			}
-		}
-		if(!app->sceneManager->currentScene->GetPlayer()->dark || app->sceneManager->currentScene->GetPlayer()->godmode){
-			if (!dark) {
-				if (right) {
-					app->render->DrawTexturePR(texture, position.x, position.y, &currentAnimation->GetCurrentFrame());
-				}
-				else {
-					app->render->DrawTexture(texture, position.x, position.y, &currentAnimation->GetCurrentFrame());
-				}
-			}
-		}
-	}
-
 	currentAnimation->Update(dt);
+
+	Draw();
 	
 	if (dead)
 	{
@@ -88,10 +68,42 @@ bool Enemy::Update(float dt)
 	return true;
 }
 
+bool Enemy::Draw()
+{
+	if (!dead) {
+		if ((app->sceneManager->currentScene->GetPlayer()->dark &&
+			(abs(app->sceneManager->currentScene->GetPlayer()->getPlayerTileX() - getEnemyTileX()) < 8) &&
+			(abs(app->sceneManager->currentScene->GetPlayer()->getPlayerTileY() - getEnemyTileY()) < 8))
+			|| app->sceneManager->currentScene->GetPlayer()->godmode) {
+			if (dark) {
+				if (right) {
+					app->render->DrawTexturePR(texture, position.x, position.y, &currentAnimation->GetCurrentFrame());
+				}
+				else {
+					app->render->DrawTexture(texture, position.x, position.y, &currentAnimation->GetCurrentFrame());
+				}
+			}
+		}
+		if (!app->sceneManager->currentScene->GetPlayer()->dark || app->sceneManager->currentScene->GetPlayer()->godmode) {
+			if (!dark) {
+				if (right) {
+					app->render->DrawTexturePR(texture, position.x, position.y, &currentAnimation->GetCurrentFrame());
+				}
+				else {
+					app->render->DrawTexture(texture, position.x, position.y, &currentAnimation->GetCurrentFrame());
+				}
+			}
+		}
+	}
+
+	return true;
+}
+
 bool Enemy::CleanUp()
 {
 	app->tex->UnLoad(texture);
 	app->tex->UnLoad(mouseTileTex);
+	pbody->body->SetActive(false);
 	return true;
 }
 

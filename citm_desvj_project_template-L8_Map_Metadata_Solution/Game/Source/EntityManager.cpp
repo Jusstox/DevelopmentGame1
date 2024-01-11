@@ -163,6 +163,7 @@ void EntityManager::ActiveNone()
 
 	for (item = entities.start; item != NULL; item = item->next)
 	{
+		b2Vec2 vel = b2Vec2(0, 0);
 		item->data->active = false;
 		item->data->CleanUp();
 	}
@@ -176,6 +177,23 @@ void EntityManager::Lvl1EntitiesActive()
 	for (item = entities.start; item != NULL; item = item->next)
 	{
 		if (item->data->lvl == 1 && !item->data->pendingToDelete) {
+			item->data->active = true;
+		}
+		else {
+			item->data->active = false;
+			item->data->CleanUp();
+		}
+	}
+}
+
+void EntityManager::Lvl2EntitiesActive()
+{
+	//Iterates over the entities and calls Start
+	ListItem<Entity*>* item;
+
+	for (item = entities.start; item != NULL; item = item->next)
+	{
+		if (item->data->lvl == 2 && !item->data->pendingToDelete) {
 			item->data->active = true;
 		}
 		else {

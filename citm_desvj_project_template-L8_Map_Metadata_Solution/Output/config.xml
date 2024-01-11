@@ -23,8 +23,10 @@
   <sceneintro texturePath="Assets/Textures/unnamed.png" fx="Assets/Audio/Fx/intro.ogg"/>
   
   <menu texturePath="Assets/Textures/menu.jpg" musicpath="Assets/Audio/Music/music.ogg"/>
+  
+  <level2 musicpath="Assets/Audio/Music/music.ogg" path="Assets/Maps/" name="Mapa 2.tmx"/>
 
-  <level1 musicpath="Assets/Audio/Music/music.ogg">
+  <level1 musicpath="Assets/Audio/Music/music.ogg" path="Assets/Maps/" name="Mapa real(porfa).tmx">
   
     <player x="150" y="545" speed="0.5" texturePath="Assets/Textures/ninja-pixilart.png" coinfxpath="Assets/Audio/Fx/retro-video-game-coin-pickup-38299.ogg"
 	winfxpath="Assets/Audio/Fx/victory_sJDDywi.ogg" textureblendPath="Assets/Textures/bgroup.png">
@@ -55,7 +57,7 @@
 		</animations>
 	</player>
 	
-    <map path="Assets/Maps/" name="Mapa real(porfa).tmx"/>
+    <map/>
 	
     <item x="256" y="515" texturepath="Assets/Textures/goldCoin.png"/>
     <item x="416" y="512" texturepath="Assets/Textures/goldCoin.png"/>
@@ -137,7 +139,7 @@
 		
 	<enemies/>
 	
-  </level1>
+  </level1>  
   
   </scenemanager>
   

@@ -6,23 +6,24 @@
 	<audio />
 	<:anonymous />
 	<scenemanager>
-		<scenemanager currentScene="2" />
+		<scenemanager currentScene="4" />
 	</scenemanager>
 	<:anonymous />
 	<entitymanager>
-		<Player x="487" y="1472" dark="true" />
-		<Enemy x="3808" y="1280" dead="false" dark="true" />
-		<Enemy x="1316" y="1298" dead="false" dark="false" />
-		<Enemy x="3456" y="576" dead="false" dark="true" />
-		<Enemy x="4544" y="512" dead="false" dark="true" />
+		<Enemy x="3403" y="1273" dead="false" dark="true" />
+		<Enemy x="0" y="0" dead="true" dark="false" />
+		<Enemy x="3440" y="651" dead="false" dark="true" />
+		<Enemy x="4560" y="493" dead="false" dark="true" />
 		<Enemy x="7264" y="1312" dead="false" dark="false" />
 		<Enemy x="6848" y="224" dead="false" dark="false" />
-		<Enemy x="2104" y="850" dead="false" dark="false" />
+		<Enemy x="1984" y="851" dead="false" dark="false" />
 		<Enemy x="0" y="0" dead="true" dark="true" />
-		<Enemy x="3808" y="32" dead="false" dark="false" />
+		<Enemy x="0" y="0" dead="true" dark="false" />
 		<Enemy x="5760" y="32" dead="false" dark="false" />
+		<Player x="3472" y="-2" dark="false" />
 	</entitymanager>
+	<guiManager />
 	<renderer>
-		<camera x="0" y="-768" />
+		<camera x="-2812" y="0" />
 	</renderer>
 </game_state>

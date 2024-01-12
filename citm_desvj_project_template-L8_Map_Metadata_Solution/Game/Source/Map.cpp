@@ -150,6 +150,7 @@ bool Map::CleanUp()
     
     while (tileset != NULL) {
         app->tex->UnLoad(tileset->data->texture);
+        tileset->data->texture = nullptr;
         RELEASE(tileset->data);
         tileset = tileset->next;
     }
@@ -178,8 +179,6 @@ bool Map::CleanUp()
     }
 
     mapData.colliders.Clear();
-
-    //pathfinding->CleanUp();
 
     return true;
 }

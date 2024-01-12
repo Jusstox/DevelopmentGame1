@@ -329,8 +329,6 @@ bool Player::Update(float dt)
 		//jump sensor
 		b2Vec2 fpos = b2Vec2(pbodyPos.p.x, pbodyPos.p.y + 0.2);
 		pfeet->body->SetTransform(fpos,0);
-		LOG("%d", pfeet->body->GetTransform().p.y);
-		LOG("%d", pfeet->body->GetTransform().p.x);
 	}
 	else {
 		if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) {

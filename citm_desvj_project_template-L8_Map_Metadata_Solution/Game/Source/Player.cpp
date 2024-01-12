@@ -118,6 +118,7 @@ bool Player::Start() {
 		pfeet->listener = this;
 	}
 	pfeet->body->SetActive(true);
+	pfeet->body->SetGravityScale(1);
 
 	//initialize audio effect
 	if (pickCoinFxId == -1) {
@@ -328,6 +329,8 @@ bool Player::Update(float dt)
 		//jump sensor
 		b2Vec2 fpos = b2Vec2(pbodyPos.p.x, pbodyPos.p.y + 0.2);
 		pfeet->body->SetTransform(fpos,0);
+		LOG("%d", pfeet->body->GetTransform().p.y);
+		LOG("%d", pfeet->body->GetTransform().p.x);
 	}
 	else {
 		if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) {
@@ -360,8 +363,8 @@ bool Player::CleanUp()
 	app->tex->UnLoad(texture);
 	app->tex->UnLoad(blendTexture);
 	pbody->body->SetActive(false);
+	pfeet->body->SetGravityScale(0);
 	pbodyshuriken->body->SetActive(false);
-	pfeet->body->SetActive(false);
 	return true;
 }
 
@@ -375,6 +378,11 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 	switch (physB->ctype)
 	{
 	case ColliderType::PLATFORM:
+		if (physA == pbody) {
+			if (contactPonts.y == 1) {
+				remainingJumpSteps = 0;
+			}
+		}
 		if (physA == pfeet) {
 			if (state == JUMP2) {
 				jumpAnim2.Reset();

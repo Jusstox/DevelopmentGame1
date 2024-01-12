@@ -103755,7 +103755,7 @@
    <tile/>
   </data>
  </layer>
- <objectgroup id="12" name="Capa de Objetos 1">
+ <objectgroup id="12" name="plataformas">
   <object id="3" x="0" y="578.667" width="286.151" height="348.666"/>
   <object id="4" x="224" y="928" width="29.2121" height="124.666"/>
   <object id="5" x="545.666" y="448.417" width="92.6667" height="796.916"/>

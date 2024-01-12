@@ -267,85 +267,65 @@ bool Map::Load(SString mapFileName)
         // L07 DONE 3: Create colliders      
         // L07 DONE 7: Assign collider type
         // Later you can create a function here to load and create the colliders from the map
-        for (pugi::xml_node layerNode = mapFileXML.child("map").child("objectgroup").child("object"); layerNode != NULL; layerNode = layerNode.next_sibling("object"))
+        for (pugi::xml_node objectgroupNode = mapFileXML.child("map").child("objectgroup"); objectgroupNode != NULL; objectgroupNode = objectgroupNode.next_sibling("objectgroup"))
         {
-            int x = layerNode.attribute("x").as_int();
-            int y = layerNode.attribute("y").as_int();
-            int w = layerNode.attribute("width").as_int();
-            int h = layerNode.attribute("height").as_int();
-            if (w == 0) {
-                std::string s = layerNode.child("polygon").attribute("points").as_string();
-                std::istringstream iss(s);
-                std::string point;
-                std::vector<int> intVector;
+            for (pugi::xml_node objectNode = objectgroupNode.child("object"); objectNode != NULL; objectNode = objectNode.next_sibling("object"))
+            {
+                int x = objectNode.attribute("x").as_int();
+                int y = objectNode.attribute("y").as_int();
+                int w = objectNode.attribute("width").as_int();
+                int h = objectNode.attribute("height").as_int();
+                if (w == 0) {
+                    std::string s = objectNode.child("polygon").attribute("points").as_string();
+                    std::istringstream iss(s);
+                    std::string point;
+                    std::vector<int> intVector;
 
-                while (std::getline(iss, point, ' ')) {
-                    size_t commaPos = point.find(',');
-                    float x = std::stof(point.substr(0, commaPos));
-                    float y = std::stof(point.substr(commaPos + 1));
+                    while (std::getline(iss, point, ' ')) {
+                        size_t commaPos = point.find(',');
+                        float x = std::stof(point.substr(0, commaPos));
+                        float y = std::stof(point.substr(commaPos + 1));
 
-                    // Convert to int (you might want to round or truncate depending on your specific needs)
-                    int intX = static_cast<int>(x);
-                    int intY = static_cast<int>(y);
+                        // Convert to int (you might want to round or truncate depending on your specific needs)
+                        int intX = static_cast<int>(x);
+                        int intY = static_cast<int>(y);
 
-                    intVector.push_back(intX);
-                    intVector.push_back(intY);
+                        intVector.push_back(intX);
+                        intVector.push_back(intY);
+                    }
+                    int* intArray = intVector.data();
+
+                    PhysBody* c1 = app->physics->CreateChain(x, y, intArray, intVector.size(), STATIC);
+                    c1->ctype = ColliderType::PLATFORM;
+                    mapData.colliders.Add(c1);
                 }
-                int* intArray = intVector.data();
-
-                PhysBody* c1 = app->physics->CreateChain(x, y, intArray, intVector.size(), STATIC);
-                c1->ctype = ColliderType::PLATFORM;
-                mapData.colliders.Add(c1);
+                else {
+                    PhysBody* c1;
+                    SString name = objectgroupNode.attribute("name").as_string();
+                    if (name == "plataformas") {
+                        c1 = app->physics->CreateRectangle(x + w / 2, y + h / 2, w, h, STATIC);
+                        c1->ctype = ColliderType::PLATFORM;
+                    }
+                    else if (name == "ganar") {
+                        c1 = app->physics->CreateRectangleSensor(x + w / 2, y + h / 2, w, h, STATIC);
+                        c1->ctype = ColliderType::VICTORY;
+                    }
+                    else if (name == "muerte") {
+                        c1 = app->physics->CreateRectangle(x + w / 2, y + h / 2, w, h, STATIC);
+                        c1->ctype = ColliderType::DEATH;
+                    }
+                    else if (name == "Luz") {
+                        c1 = app->physics->CreateRectangleSensor(x + w / 2, y + h / 2, w, h, STATIC);
+                        c1->ctype = ColliderType::DARK;
+                    }
+                    else if (name == "afuera") {
+                        c1 = app->physics->CreateRectangleSensor(x + w / 2, y + h / 2, w, h, STATIC);
+                        c1->ctype = ColliderType::OUTSIDE;
+                    }
+                   
+                    mapData.colliders.Add(c1);
+                }
             }
-            else{
-                PhysBody * c1 = app->physics->CreateRectangle(x + w / 2, y + h / 2, w, h, STATIC);
-                c1->ctype = ColliderType::PLATFORM;
-                mapData.colliders.Add(c1);
-            }
-        }
-
-        for (pugi::xml_node layerNode = mapFileXML.child("map").child("objectgroup").next_sibling("objectgroup").child("object"); layerNode != NULL; layerNode = layerNode.next_sibling("object"))
-        {
-            int x = layerNode.attribute("x").as_int();
-            int y = layerNode.attribute("y").as_int();
-            int w = layerNode.attribute("width").as_int();
-            int h = layerNode.attribute("height").as_int();
-            PhysBody* c1 = app->physics->CreateRectangleSensor(x + w / 2, y + h / 2, w, h, STATIC);
-            c1->ctype = ColliderType::VICTORY;
-            mapData.colliders.Add(c1);
-        }
-
-        for (pugi::xml_node layerNode = mapFileXML.child("map").child("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").child("object"); layerNode != NULL; layerNode = layerNode.next_sibling("object"))
-        {
-            int x = layerNode.attribute("x").as_int();
-            int y = layerNode.attribute("y").as_int();
-            int w = layerNode.attribute("width").as_int();
-            int h = layerNode.attribute("height").as_int();
-            PhysBody* c1 = app->physics->CreateRectangle(x + w / 2, y + h / 2, w, h, STATIC);
-            c1->ctype = ColliderType::DEATH;
-            mapData.colliders.Add(c1);
-        }
-
-        for (pugi::xml_node layerNode = mapFileXML.child("map").child("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").child("object"); layerNode != NULL; layerNode = layerNode.next_sibling("object"))
-        {
-            int x = layerNode.attribute("x").as_int();
-            int y = layerNode.attribute("y").as_int();
-            int w = layerNode.attribute("width").as_int();
-            int h = layerNode.attribute("height").as_int();
-            PhysBody* c1 = app->physics->CreateRectangleSensor(x + w / 2, y + h / 2, w, h, STATIC);
-            c1->ctype = ColliderType::DARK;
-            mapData.colliders.Add(c1);
-        }
-
-        for (pugi::xml_node layerNode = mapFileXML.child("map").child("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").next_sibling("objectgroup").child("object"); layerNode != NULL; layerNode = layerNode.next_sibling("object"))
-        {
-            int x = layerNode.attribute("x").as_int();
-            int y = layerNode.attribute("y").as_int();
-            int w = layerNode.attribute("width").as_int();
-            int h = layerNode.attribute("height").as_int();
-            PhysBody* c1 = app->physics->CreateRectangleSensor(x + w / 2, y + h / 2, w, h, STATIC);
-            c1->ctype = ColliderType::OUTSIDE;
-            mapData.colliders.Add(c1);
         }
 
           // L05: DONE 5: LOG all the data loaded iterate all tilesetsand LOG everything

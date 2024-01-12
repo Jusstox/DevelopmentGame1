@@ -5786,7 +5786,7 @@
    <tile/>
   </data>
  </layer>
- <objectgroup id="25" name="Capa de Objetos 1" visible="0">
+ <objectgroup id="25" name="plataformas">
   <object id="186" x="0" y="1472" width="928" height="64"/>
   <object id="187" x="992" y="1376" width="544" height="96"/>
   <object id="188" x="800" y="1088" width="544" height="96"/>

@@ -34,6 +34,9 @@ bool Menu::Start()
 	app->win->GetWindowSize(windowW, windowH);
 	SDL_Rect btPos = { windowW / 2 - 60, windowH / 2 - 10, 120,20 };
 	gcButtom = (GuiControlButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 1, "MyButton", btPos, this);
+	SDL_Rect sliderPos = { windowW / 2 - 200, windowH / 2 - 10 + 60, 400,20 };
+	SDL_Rect sliderBoundsPos = { sliderPos.x + sliderPos.w - 15, sliderPos.y + (sliderPos.h/2) - 15, 30, 30 };
+	gcSlider = (GuiSlider*)app->guiManager->CreateGuiControl(GuiControlType::SLIDER, 2, "MyButton", sliderPos, this, sliderBoundsPos);
 	return true;
 }
 
@@ -57,16 +60,19 @@ bool Menu::CleanUp()
 {
 	app->tex->UnLoad(img);
 	app->guiManager->DeleteGuiControl(gcButtom);
+	app->guiManager->DeleteGuiControl(gcSlider);
 	return true;
 }
 
 bool Menu::OnGuiMouseClickEvent(GuiControl* control)
 {
 	// L15: DONE 5: Implement the OnGuiMouseClickEvent method
-	app->sceneManager->fade = true;
-	app->sceneManager->newScene = (Scene*)app->sceneManager->level1;
-	app->sceneManager->currentStep = TO_BLACK;
-	app->sceneManager->maxFadeFrames = 100;
+	if (control->id == 1) {
+		app->sceneManager->fade = true;
+		app->sceneManager->newScene = (Scene*)app->sceneManager->level1;
+		app->sceneManager->currentStep = TO_BLACK;
+		app->sceneManager->maxFadeFrames = 100;
+	}
 
 	return true;
 }

@@ -4,6 +4,7 @@
 
 #include "GuiControl.h"
 #include "GuiControlButton.h"
+#include "GuiSlider.h"
 
 struct SDL_Texture;
 
@@ -47,6 +48,7 @@ private:
 
 	// L15: TODO 2: Declare a GUI Control Button 
 	GuiControlButton* gcButtom;
+	GuiSlider* gcSlider;
 };
 
 #endif //__MENU__

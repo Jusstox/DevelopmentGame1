@@ -360,9 +360,11 @@ bool Player::CleanUp()
 {
 	app->tex->UnLoad(texture);
 	app->tex->UnLoad(blendTexture);
-	pbody->body->SetActive(false);
-	pfeet->body->SetGravityScale(0);
-	pbodyshuriken->body->SetActive(false);
+	if (pbody != nullptr) {
+		pbody->body->SetActive(false);
+		pfeet->body->SetGravityScale(0);
+		pbodyshuriken->body->SetActive(false);
+	}
 	return true;
 }
 

@@ -1,7 +1,6 @@
 #include "GuiControlButton.h"
 #include "Render.h"
 #include "App.h"
-#include "Audio.h"
 
 GuiControlButton::GuiControlButton(uint32 id, SDL_Rect bounds, const char* text) : GuiControl(GuiControlType::BUTTON, id)
 {

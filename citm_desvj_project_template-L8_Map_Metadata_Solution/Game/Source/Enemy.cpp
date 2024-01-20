@@ -103,6 +103,7 @@ bool Enemy::CleanUp()
 {
 	app->tex->UnLoad(texture);
 	app->tex->UnLoad(mouseTileTex);
+	if(pbody != nullptr)
 	pbody->body->SetActive(false);
 	return true;
 }

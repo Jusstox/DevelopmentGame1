@@ -4,6 +4,8 @@
 #include "Input.h"
 #include "Render.h"
 #include "Scene.h"
+#include "App.h"
+#include "Physics.h"
 
 #include "Point.h"
 #include "SString.h"
@@ -49,6 +51,7 @@ public:
 	{
 		color.r = 255; color.g = 255; color.b = 255;
 		texture = NULL;
+		debug = app->physics->debug;
 	}
 
 	// Called each loop iteration
@@ -90,6 +93,8 @@ public:
 	SDL_Rect section;       // Texture atlas base section
 
 	Scene* observer;        // Observer 
+
+	bool debug;
 };
 
 #endif // __GUICONTROL_H__

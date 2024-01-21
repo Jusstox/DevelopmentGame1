@@ -12,6 +12,9 @@ GuiSlider::GuiSlider(uint32 id, SDL_Rect bounds, const char* text, SDL_Rect slid
 
 	canClick = true;
 	drawBasic = false;
+
+	textW = 100;
+	textH = 30;
 }
 
 GuiSlider::~GuiSlider()
@@ -72,6 +75,9 @@ bool GuiSlider::Update(float dt)
 			app->audio->ChangeVolume(percent);
 			break;
 		}
+		SDL_Rect title = { bounds.x + bounds.w / 2 - textW / 2, bounds.y - textH, textW, textH };
+		app->render->DrawRectangle(title, 0, 0, 0, 255, true, false);
+		app->render->DrawText(text.GetString(), bounds.x + bounds.w/2 - textW/2, bounds.y - textH, textW, textH, 255, 255, 255);
 	}
 	return false;
 }

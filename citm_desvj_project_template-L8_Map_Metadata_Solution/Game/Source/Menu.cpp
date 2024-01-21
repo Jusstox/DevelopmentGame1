@@ -32,11 +32,23 @@ bool Menu::Start()
 	app->render->camera.x = 0;
 	app->render->camera.y = 0;
 	app->win->GetWindowSize(windowW, windowH);
-	SDL_Rect btPos = { windowW / 2 - 60, windowH / 2 - 10, 120,20 };
-	gcButtom = (GuiControlButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 1, "MyButton", btPos, this);
-	SDL_Rect sliderPos = { windowW / 2 - 200, windowH / 2 - 10 + 60, 400,20 };
-	SDL_Rect sliderBoundsPos = { sliderPos.x + sliderPos.w - 15, sliderPos.y + (sliderPos.h/2) - 15, 30, 30 };
-	gcSlider = (GuiSlider*)app->guiManager->CreateGuiControl(GuiControlType::SLIDER, 2, "MyButton", sliderPos, this, sliderBoundsPos);
+	// 25px per letter
+	SDL_Rect playPos = { windowW / 20, windowH / 2 - 25 - (windowH/7)*2, 100,50 };
+	startButton = (GuiControlButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 1, "PLAY", playPos, this);
+	SDL_Rect continuePos = { windowW / 20, windowH / 2 - 25 - (windowH / 7), 200,50 };
+	continueButton = (GuiControlButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 2, "CONTINUE", continuePos, this);
+	SDL_Rect settingsPos = { windowW / 20, windowH / 2 - 25, 200,50 };
+	settingsButton = (GuiControlButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 3, "SETTINGS", settingsPos, this);
+	SDL_Rect creditsPos = { windowW / 20, windowH / 2 - 25 + (windowH / 7), 175,50 };
+	creditsButton = (GuiControlButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 4, "CREDITS", creditsPos, this);
+	SDL_Rect exitPos = { windowW / 20, windowH / 2 - 25 + (windowH / 7) * 2, 100,50 };
+	exitButton = (GuiControlButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 5, "EXIT", exitPos, this);
+	app->guiManager->GetFromID(2)->state = GuiControlState::DISABLED;
+
+
+	//SDL_Rect sliderPos = { windowW / 2 - 200, windowH / 2 - 10 + 60, 400,20 };
+	//SDL_Rect sliderBoundsPos = { sliderPos.x + sliderPos.w - 15, sliderPos.y + (sliderPos.h/2) - 15, 30, 30 };
+	//gcSlider = (GuiSlider*)app->guiManager->CreateGuiControl(GuiControlType::SLIDER, 2, "Volume", sliderPos, this, sliderBoundsPos);
 	return true;
 }
 
@@ -53,14 +65,19 @@ bool Menu::Update(float dt)
 
 bool Menu::PostUpdate()
 {
+	if (quit)
+		return false;
 	return true;
 }
 
 bool Menu::CleanUp()
 {
 	app->tex->UnLoad(img);
-	app->guiManager->DeleteGuiControl(gcButtom);
-	app->guiManager->DeleteGuiControl(gcSlider);
+	app->guiManager->DeleteGuiControl(startButton);
+	app->guiManager->DeleteGuiControl(continueButton);
+	app->guiManager->DeleteGuiControl(settingsButton);
+	app->guiManager->DeleteGuiControl(creditsButton);
+	app->guiManager->DeleteGuiControl(exitButton);
 	return true;
 }
 
@@ -72,6 +89,9 @@ bool Menu::OnGuiMouseClickEvent(GuiControl* control)
 		app->sceneManager->newScene = (Scene*)app->sceneManager->level1;
 		app->sceneManager->currentStep = TO_BLACK;
 		app->sceneManager->maxFadeFrames = 100;
+	}
+	if (control->id == 5) {
+		quit = true;
 	}
 
 	return true;

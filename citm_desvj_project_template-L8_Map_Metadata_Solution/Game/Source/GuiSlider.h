@@ -20,7 +20,7 @@ private:
 	int mouseX, mouseY;
 	unsigned int click;
 	SDL_Rect sliderBounds;
-
+	int textW, textH;
 	bool canClick = true;
 	bool drawBasic = false;
 };

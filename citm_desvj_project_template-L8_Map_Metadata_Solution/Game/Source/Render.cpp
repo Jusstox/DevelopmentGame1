@@ -56,7 +56,7 @@ bool Render::Awake(pugi::xml_node config)
 
 	TTF_Init();
 
-	font = TTF_OpenFont("Assets/Fonts/arial/arial.ttf", 25);
+	font = TTF_OpenFont("Assets/Fonts/arial/kato.ttf", 200);
 
 	return ret;
 }
@@ -314,9 +314,8 @@ bool Render::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, Uin
 	return ret;
 }
 
-bool Render::DrawText(const char* text, int posx, int posy, int w, int h) {
-
-	SDL_Color color = { 255, 255, 255 };
+bool Render::DrawText(const char* text, int posx, int posy, int w, int h, int r, int g, int b) {
+	SDL_Color color = { r,g,b };
 	SDL_Surface* surface = TTF_RenderText_Solid(font, text, color);
 	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
 

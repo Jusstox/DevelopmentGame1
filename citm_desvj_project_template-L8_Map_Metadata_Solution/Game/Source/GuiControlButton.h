@@ -24,6 +24,10 @@ private:
 
 	bool canClick = true;
 	bool drawBasic = false;
+	bool anim = false;
+	float animW = 0;
+	float animH = 0;
+	float animSpeed = 0.02;
 };
 
 #endif // __GUICONTROLBUTTON_H__

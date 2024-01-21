@@ -18,6 +18,8 @@ GuiControlButton::~GuiControlButton()
 
 bool GuiControlButton::Update(float dt)
 {
+	debug = app->physics->debug;
+
 	if (state != GuiControlState::DISABLED)
 	{
 		// L15: DONE 3: Update the state of the GUiButton according to the mouse position
@@ -44,21 +46,48 @@ bool GuiControlButton::Update(float dt)
 		switch (state)
 		{
 		case GuiControlState::DISABLED:
+			if (debug)
 			app->render->DrawRectangle(bounds, 200, 200, 200, 255, true, false);
 			break;
 		case GuiControlState::NORMAL:
+			if (debug)
 			app->render->DrawRectangle(bounds, 0, 0, 255, 255, true, false);
+			app->render->DrawText(text.GetString(), bounds.x, bounds.y, bounds.w, bounds.h, 220, 220, 220);
+			anim = false;
+			animW = 0;
+			animH = 0;
 			break;
 		case GuiControlState::FOCUSED:
+			if (debug)
 			app->render->DrawRectangle(bounds, 0, 0, 20, 255, true, false);
+			app->render->DrawText(text.GetString(), bounds.x - (int)animW, bounds.y - (int)animH, bounds.w + (int)animW*2, bounds.h + (int)animH*2, 255,255,255);
+			if (!anim) {
+				animW += animSpeed * dt;
+				animH += animSpeed * dt;
+				if (animW >= 10) {
+					anim = !anim;
+				}
+			}
+			else {
+				animW -= animSpeed * dt;
+				animH -= animSpeed * dt;
+				if (animW <= 0) {
+					anim = !anim;
+				}
+			}
 			break;
 		case GuiControlState::PRESSED:
+			if (debug)
 			app->render->DrawRectangle(bounds, 0, 255, 0, 255, true, false);
+			app->render->DrawText(text.GetString(), bounds.x + 5, bounds.y + 5, bounds.w - 10, bounds.h - 10, 25, 25, 25);
 			break;
 		}
 
-		app->render->DrawText(text.GetString(), bounds.x, bounds.y, bounds.w, bounds.h);
-
+	}
+	else {
+		if (debug)
+		app->render->DrawRectangle(bounds, 200, 200, 200, 255, true, false);
+		app->render->DrawText(text.GetString(), bounds.x, bounds.y, bounds.w, bounds.h, 50, 50, 50);
 	}
 
 	return false;

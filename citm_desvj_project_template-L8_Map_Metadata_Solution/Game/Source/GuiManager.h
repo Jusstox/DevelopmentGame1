@@ -30,6 +30,8 @@ public:
 	// Additional methods
 	GuiControl* CreateGuiControl(GuiControlType type, int id, const char* text, SDL_Rect bounds, Scene* observer, SDL_Rect sliderBounds = { 0,0,0,0 });
 
+	GuiControl* GetFromID(int id);
+
 public:
 
 	List<GuiControl*> guiControlsList;

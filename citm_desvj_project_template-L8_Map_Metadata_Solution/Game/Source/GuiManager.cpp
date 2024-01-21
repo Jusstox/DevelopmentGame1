@@ -83,5 +83,17 @@ bool GuiManager::DeleteGuiControl(GuiControl* guiControl)
 	return true;
 }
 
+GuiControl* GuiManager::GetFromID(int id)
+{
+	ListItem<GuiControl*>* control = guiControlsList.start;
+
+	while (control != nullptr)
+	{
+		if (control->data->id == id)
+			return control->data;
+		control = control->next;
+	}
+}
+
 
 

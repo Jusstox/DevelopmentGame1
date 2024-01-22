@@ -4,7 +4,7 @@
 #include "Audio.h"
 #include "Log.h"
 
-GuiSlider::GuiSlider(uint32 id, SDL_Rect bounds, const char* text, SDL_Rect sliderbounds) : GuiControl(GuiControlType::BUTTON, id)
+GuiSlider::GuiSlider(uint32 id, SDL_Rect bounds, const char* text, SDL_Rect sliderbounds) : GuiControl(GuiControlType::SLIDER, id)
 {
 	this->bounds = bounds;
 	this->text = text;
@@ -15,6 +15,8 @@ GuiSlider::GuiSlider(uint32 id, SDL_Rect bounds, const char* text, SDL_Rect slid
 
 	textW = 100;
 	textH = 30;
+
+	percent = 1.0f;
 }
 
 GuiSlider::~GuiSlider()
@@ -29,15 +31,13 @@ bool GuiSlider::Update(float dt)
 		app->input->GetMousePosition(mouseX, mouseY);
 
 		//If the position of the mouse if inside the bounds of the button 
-		if (mouseX > sliderBounds.x && mouseX < sliderBounds.x + sliderBounds.w && mouseY > sliderBounds.y && mouseY < sliderBounds.y + sliderBounds.h) {
+		if ((mouseX > bounds.x && mouseX < bounds.x + bounds.w && mouseY > bounds.y && mouseY < bounds.y + bounds.h) ||
+			(mouseX > sliderBounds.x && mouseX < sliderBounds.x + sliderBounds.w && mouseY > sliderBounds.y && mouseY < sliderBounds.y + sliderBounds.h)) {
 
 			state = GuiControlState::FOCUSED;
 
 			if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_REPEAT) {
 				state = GuiControlState::PRESSED;
-			}
-
-			if (app->input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_UP) {
 				NotifyObserver();
 			}
 		}
@@ -71,13 +71,12 @@ bool GuiSlider::Update(float dt)
 			}
 			app->render->DrawRectangle(sliderBounds, 0, 255, 0, 255, true, false);
 			float fx = abs((float)(bounds.x - (sliderBounds.x + sliderBounds.w/2)));
-			float percent = (fx / ((float)bounds.w));
-			app->audio->ChangeVolume(percent);
+			percent = (fx / ((float)bounds.w));
+			LOG("%f", percent);
 			break;
 		}
 		SDL_Rect title = { bounds.x + bounds.w / 2 - textW / 2, bounds.y - textH, textW, textH };
-		app->render->DrawRectangle(title, 0, 0, 0, 255, true, false);
-		app->render->DrawText(text.GetString(), bounds.x + bounds.w/2 - textW/2, bounds.y - textH, textW, textH, 255, 255, 255);
+		app->render->DrawText(text.GetString(), bounds.x + bounds.w/2 - (text.Length() * 25)/2, bounds.y - 50 - 10, text.Length()*25, 50, 255, 255, 255);
 	}
 	return false;
 }

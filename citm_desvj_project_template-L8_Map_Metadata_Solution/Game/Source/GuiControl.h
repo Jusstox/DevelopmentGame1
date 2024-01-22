@@ -79,6 +79,10 @@ public:
 		observer->OnGuiMouseClickEvent(this);
 	}
 
+	virtual void CleanUp() {
+
+	};
+
 public:
 
 	uint32 id;
@@ -95,6 +99,7 @@ public:
 	Scene* observer;        // Observer 
 
 	bool debug;
+	bool active = true;
 };
 
 #endif // __GUICONTROL_H__

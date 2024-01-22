@@ -12,6 +12,7 @@ class Level1;
 class Level2;
 class SceneIntro;
 class Menu;
+class Settings;
 
 enum Fade_Step
 {
@@ -60,6 +61,10 @@ public:
 
 	bool SaveState(pugi::xml_node node);
 
+	void OpenSettings();
+
+	void CloseSettings();
+
 	Scene* currentScene;
 	Scene* newScene = nullptr;
 
@@ -69,6 +74,7 @@ public:
 	Level2* level2;
 	SceneIntro* sceneIntro;
 	Menu* menu;
+	Settings* settings;
 
 	uint windowW, windowH;
 

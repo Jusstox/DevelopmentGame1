@@ -32,6 +32,10 @@ public:
 
 	GuiControl* GetFromID(int id);
 
+	void ActiveAllGui();
+
+	void DesactvieAllGui();
+
 public:
 
 	List<GuiControl*> guiControlsList;

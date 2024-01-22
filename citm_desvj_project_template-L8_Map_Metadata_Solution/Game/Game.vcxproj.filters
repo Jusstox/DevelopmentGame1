@@ -59,6 +59,9 @@
     <ClCompile Include="Source\GuiCheckBox.cpp">
       <Filter>GUI</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Settings.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Window.h" />
@@ -149,6 +152,9 @@
     </ClInclude>
     <ClInclude Include="Source\GuiCheckBox.h">
       <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Settings.h">
+      <Filter>Scenes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -8,6 +8,7 @@
 #include "Audio.h"
 #include "GuiManager.h"
 #include "Log.h"
+#include "Settings.h"
 
 Menu::Menu() : Scene()
 {
@@ -26,6 +27,7 @@ bool Menu::Awake(pugi::xml_node config)
 
 bool Menu::Start()
 {
+	settings = false;
 	img = app->tex->Load(config.attribute("texturePath").as_string());
 	app->audio->PlayMusic(config.attribute("musicpath").as_string(), 1.5);
 	app->tex->GetSize(img, texW, texH);
@@ -45,10 +47,6 @@ bool Menu::Start()
 	exitButton = (GuiControlButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 5, "EXIT", exitPos, this);
 	app->guiManager->GetFromID(2)->state = GuiControlState::DISABLED;
 
-
-	//SDL_Rect sliderPos = { windowW / 2 - 200, windowH / 2 - 10 + 60, 400,20 };
-	//SDL_Rect sliderBoundsPos = { sliderPos.x + sliderPos.w - 15, sliderPos.y + (sliderPos.h/2) - 15, 30, 30 };
-	//gcSlider = (GuiSlider*)app->guiManager->CreateGuiControl(GuiControlType::SLIDER, 2, "Volume", sliderPos, this, sliderBoundsPos);
 	return true;
 }
 
@@ -78,6 +76,7 @@ bool Menu::CleanUp()
 	app->guiManager->DeleteGuiControl(settingsButton);
 	app->guiManager->DeleteGuiControl(creditsButton);
 	app->guiManager->DeleteGuiControl(exitButton);
+	app->guiManager->CleanUp();
 	return true;
 }
 
@@ -89,6 +88,10 @@ bool Menu::OnGuiMouseClickEvent(GuiControl* control)
 		app->sceneManager->newScene = (Scene*)app->sceneManager->level1;
 		app->sceneManager->currentStep = TO_BLACK;
 		app->sceneManager->maxFadeFrames = 100;
+	}
+	if (control->id == 3) {
+		app->guiManager->DesactvieAllGui();
+		app->sceneManager->OpenSettings();
 	}
 	if (control->id == 5) {
 		quit = true;

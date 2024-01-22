@@ -5,8 +5,9 @@
 #include "Level2.h"
 #include "SceneIntro.h"
 #include "Menu.h"
+#include "Settings.h"
 #include "Window.h"
-#include "Log.h"
+#include "GuiManager.h"
 
 
 SceneManager::SceneManager()
@@ -15,11 +16,13 @@ SceneManager::SceneManager()
 
 	sceneIntro = new SceneIntro();
 	menu = new Menu();
+	settings = new Settings();
 	level1 = new Level1();
 	level2 = new Level2();
 
 	scenes.Add(sceneIntro);
 	scenes.Add(menu);
+	scenes.Add(settings);
 	scenes.Add(level1);
 	scenes.Add(level2);
 
@@ -175,6 +178,21 @@ void SceneManager::MakeFade()
 			fade = false;
 			maxFadeFramesBack = 0;
 		}
+	}
+}
+
+void SceneManager::OpenSettings()
+{
+	settings->Start();
+	settings->active = true;
+}
+
+void SceneManager::CloseSettings()
+{
+	settings->CleanUp();
+	settings->active = false;
+	if (currentScene == menu) {
+		app->guiManager->ActiveAllGui();
 	}
 }
 

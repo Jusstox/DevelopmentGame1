@@ -1,22 +1,20 @@
-#ifndef __MENU__
-#define __MENU__
-#include "Scene.h"
+#ifndef __SETTINGS__
+#define __SETTINGS__
 
+#include "Scene.h"
 #include "GuiControl.h"
 #include "GuiControlButton.h"
 #include "GuiSlider.h"
 #include "GuiCheckBox.h"
 
-struct SDL_Texture;
-
-class Menu :  public Scene
+class Settings :  public Scene
 {
 public:
 
-	Menu();
+	Settings();
 
 	// Destructor
-	virtual ~Menu();
+	virtual ~Settings();
 
 	// Called before render is available
 	bool Awake(pugi::xml_node config);
@@ -41,21 +39,14 @@ public:
 	uint windowW, windowH;
 
 private:
-	int fx;
-	SDL_Texture* img;
-	float textPosX, textPosY = 0;
-	uint texW, texH;
+	SDL_Rect quat;
 	pugi::xml_node config;
 	bool quit = false;
-
+	bool fullscreen;
 	// L15: TODO 2: Declare a GUI Control Button 
-	GuiControlButton* startButton;
-	GuiControlButton* continueButton;
-	GuiControlButton* settingsButton;
-	GuiControlButton* creditsButton;
-	GuiControlButton* exitButton;
-	GuiSlider* gcSlider;
+	GuiSlider* gcMSlider;
+	GuiSlider* gcFSlider;
 	GuiCheckBox* checkBox;
 };
 
-#endif //__MENU__
+#endif //__SETTINGS__

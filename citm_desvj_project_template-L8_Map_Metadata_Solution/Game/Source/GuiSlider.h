@@ -14,7 +14,7 @@ public:
 
 	// Called each loop iteration
 	bool Update(float dt);
-
+	float percent;
 private:
 
 	int mouseX, mouseY;

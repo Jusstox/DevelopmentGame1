@@ -73,7 +73,7 @@ public:
 
 	SString name;
 	bool active;
-
+	bool settings;
 	Player* player = nullptr;
 };
 

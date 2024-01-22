@@ -179,6 +179,11 @@ bool Map::CleanUp()
 
     mapData.colliders.Clear();
 
+    mapData.height = 0;
+    mapData.width = 0;
+    mapData.tileheight = 0;
+    mapData.tilewidth = 0;
+
     return true;
 }
 

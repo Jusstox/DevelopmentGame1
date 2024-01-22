@@ -33,7 +33,9 @@ public:
 	bool PlayFx(unsigned int fx, int repeat = 0);
 
 	//change volume
-	void ChangeVolume(float percent);
+	void ChangeMusicVolume(float percent);
+
+	void ChangeFxVolume(float percent);
 
 private:
 

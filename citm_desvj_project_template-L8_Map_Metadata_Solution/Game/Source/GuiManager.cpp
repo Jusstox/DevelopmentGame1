@@ -4,6 +4,7 @@
 
 #include "GuiControlButton.h"
 #include "GuiSlider.h"
+#include "GuiCheckBox.h"
 #include "Audio.h"
 
 GuiManager::GuiManager() :Module()
@@ -32,6 +33,9 @@ GuiControl* GuiManager::CreateGuiControl(GuiControlType type, int id, const char
 	case GuiControlType::SLIDER:
 		guiControl = new GuiSlider(id, bounds, text, sliderBounds);
 		break;
+	case GuiControlType::CHECKBOX:
+		guiControl = new GuiCheckBox(id, bounds, text);
+		break;
 	}
 
 	//Set the observer
@@ -50,7 +54,9 @@ bool GuiManager::Update(float dt)
 
 	while (control != nullptr)
 	{
-		control->data->Update(dt);
+		if (control->data->active) {
+			control->data->Update(dt);
+		}
 		control = control->next;
 	}
 
@@ -76,8 +82,9 @@ bool GuiManager::DeleteGuiControl(GuiControl* guiControl)
 	for (control = guiControlsList.start; control != NULL; control = control->next)
 	{
 		if (control->data == guiControl) {
+			control->data->CleanUp();
 			guiControlsList.Del(control);
-			continue;
+			break;
 		}
 	}
 	return true;
@@ -92,6 +99,24 @@ GuiControl* GuiManager::GetFromID(int id)
 		if (control->data->id == id)
 			return control->data;
 		control = control->next;
+	}
+}
+
+void GuiManager::ActiveAllGui()
+{
+	ListItem<GuiControl*>* control;
+	for (control = guiControlsList.start; control != NULL; control = control->next)
+	{
+		control->data->active = true;
+	}
+}
+
+void GuiManager::DesactvieAllGui()
+{
+	ListItem<GuiControl*>* control;
+	for (control = guiControlsList.start; control != NULL; control = control->next)
+	{
+		control->data->active = false;
 	}
 }
 

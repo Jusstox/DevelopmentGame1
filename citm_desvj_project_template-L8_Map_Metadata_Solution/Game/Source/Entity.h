@@ -76,6 +76,10 @@ public:
 
 	};
 
+	virtual void Respawn() {};
+
+	virtual void MoveAway() {};
+
 public:
 
 	SString name;
@@ -91,6 +95,7 @@ public:
 	bool renderable = true;
 	bool BodyPendingToDelete = false;
 	bool pendingToDelete = false;
+	bool respawn = false;
 
 	int lvl;
 };

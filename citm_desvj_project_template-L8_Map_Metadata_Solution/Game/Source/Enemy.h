@@ -50,6 +50,10 @@ public:
 
 	bool dark;
 
+	void Respawn();
+
+	void MoveAway();
+
 protected:
 	const char* texturePath;
 	SDL_Texture* texture = nullptr;

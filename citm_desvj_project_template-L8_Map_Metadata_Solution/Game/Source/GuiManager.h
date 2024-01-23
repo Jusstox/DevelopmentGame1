@@ -41,6 +41,9 @@ public:
 	List<GuiControl*> guiControlsList;
 	SDL_Texture* texture;
 
+	SDL_Rect quat;
+	uint windowW, windowH;
+
 };
 
 #endif // __GUIMANAGER_H__

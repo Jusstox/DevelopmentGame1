@@ -8,6 +8,8 @@
 #include "Audio.h"
 #include "GuiManager.h"
 #include "Settings.h"
+#include "Level1.h"
+#include "Level2.h"
 
 Menu::Menu() : Scene()
 {
@@ -98,10 +100,15 @@ bool Menu::OnGuiMouseClickEvent(GuiControl* control)
 		app->sceneManager->newScene = (Scene*)app->sceneManager->level1;
 		app->sceneManager->currentStep = TO_BLACK;
 		app->sceneManager->maxFadeFrames = 100;
+		app->sceneManager->level1->reset = true;
 	}
 	if (control->id == 3) {
 		app->guiManager->DesactvieAllGui();
 		app->sceneManager->OpenSettings();
+		settings = true;
+	}
+	if (control->id == 4) {
+		app->sceneManager->level1->reset = false;
 		settings = true;
 	}
 	if (control->id == 5) {

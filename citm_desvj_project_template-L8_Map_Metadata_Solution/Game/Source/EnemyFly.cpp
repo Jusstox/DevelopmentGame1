@@ -44,7 +44,6 @@ bool EnemyFly::Awake()
 
 bool EnemyFly::Start()
 {
-	initPosition = position;
 	currentAnimation = &flyinganim;
 	// L07 DONE 5: Add physics to the player - initialize physics body
 	if (pbody == NULL) {
@@ -239,4 +238,11 @@ bool EnemyFly::SaveState(pugi::xml_node& node)
 	EnemyNode.append_attribute("dead").set_value(dead);
 	EnemyNode.append_attribute("dark").set_value(dark);
 	return true;
+}
+
+void EnemyFly::Respawn()
+{
+	currentAnimation = &flyinganim;
+	dieanim.Reset();
+	Enemy::Respawn();
 }

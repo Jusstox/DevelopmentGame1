@@ -182,6 +182,7 @@ void EntityManager::Lvl1EntitiesActive()
 		else {
 			item->data->active = false;
 			item->data->CleanUp();
+			item->data->MoveAway();
 		}
 	}
 }
@@ -199,6 +200,19 @@ void EntityManager::Lvl2EntitiesActive()
 		else {
 			item->data->active = false;
 			item->data->CleanUp();
+			item->data->MoveAway();
+		}
+	}
+}
+
+void EntityManager::respawnEntities(int lvl)
+{
+	ListItem<Entity*>* item;
+
+	for (item = entities.start; item != NULL; item = item->next)
+	{
+		if (item->data->lvl == lvl) {
+			item->data->Respawn();
 		}
 	}
 }

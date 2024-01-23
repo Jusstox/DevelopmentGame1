@@ -47,7 +47,6 @@ private:
 	float textPosX, textPosY = 0;
 	uint texW, texH;
 	pugi::xml_node config;
-	bool quit = false;
 
 	// L15: TODO 2: Declare a GUI Control Button 
 	GuiControlButton* startButton;

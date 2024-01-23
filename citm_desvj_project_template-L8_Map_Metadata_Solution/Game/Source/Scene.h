@@ -75,6 +75,7 @@ public:
 	bool active;
 	bool settings;
 	Player* player = nullptr;
+	bool quit = false;
 };
 
 #endif // __SCENE_H__

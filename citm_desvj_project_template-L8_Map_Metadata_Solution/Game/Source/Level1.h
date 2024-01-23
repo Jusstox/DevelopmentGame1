@@ -39,7 +39,7 @@ public:
 	}
 
 	void cameraLimit();
-
+	bool reset = false;
 	bool lockCamera = true;
 
 private:
@@ -49,7 +49,7 @@ private:
 
 	//L03: DONE 3b: Declare a Player attribute
 	Player* player;
-
+	
 };
 
 #endif // __LEVEL1_H__

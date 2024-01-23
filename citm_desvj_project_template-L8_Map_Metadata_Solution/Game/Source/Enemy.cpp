@@ -19,6 +19,7 @@ bool Enemy::Awake()
 {
 	position.x = parameters.attribute("x").as_int();
 	position.y = parameters.attribute("y").as_int();
+	initPosition = position;
 	texturePath = parameters.attribute("texturepath").as_string();
 	Patrol1 = { parameters.attribute("dest1X").as_int() ,parameters.attribute("dest1Y").as_int() };
 	Patrol2 = { parameters.attribute("dest2X").as_int() , parameters.attribute("dest2Y").as_int() };
@@ -58,7 +59,7 @@ bool Enemy::Update(float dt)
 	
 	if (dead)
 	{
-		pendingToDelete = true;
+		//pendingToDelete = true;
 		position.x = 0;
 		position.y = 0;
 		// mirar de borrar texture i memory leaks
@@ -186,4 +187,24 @@ void Enemy::Patrol()
 			patrol = true;
 		}
 	}
+}
+
+void Enemy::Respawn()
+{
+	b2Vec2 initPos = b2Vec2(PIXEL_TO_METERS(initPosition.x), PIXEL_TO_METERS(initPosition.y));
+	pbody->body->SetTransform(initPos, 0);
+	position = initPosition;
+	pbody->body->SetActive(true);
+	dead = false;
+	hit = false;
+	patrol = true;
+	b2Transform pbodyPos = pbody->body->GetTransform();
+	position.x = METERS_TO_PIXELS(pbodyPos.p.x) - (currentAnimation->GetCurrentFrame().w / 2);
+	position.y = METERS_TO_PIXELS(pbodyPos.p.y) - (currentAnimation->GetCurrentFrame().h / 2);
+}
+
+void Enemy::MoveAway()
+{
+	pbody->body->SetLinearVelocity(b2Vec2(0, 0));
+	pbody->body->SetTransform(b2Vec2(-10, 1), 0);
 }

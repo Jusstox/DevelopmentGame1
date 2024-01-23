@@ -44,6 +44,8 @@ public:
 	void Lvl1EntitiesActive();
 	void Lvl2EntitiesActive();
 
+	void respawnEntities(int lvl);
+
 public:
 
 	List<Entity*> entities;

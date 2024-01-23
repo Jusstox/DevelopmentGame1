@@ -10,6 +10,9 @@
 #include "Physics.h"
 #include "Enemy.h"
 #include "SceneManager.h"
+#include "GuiManager.h"
+#include "Settings.h"
+#include "Level2.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -67,13 +70,23 @@ bool Level1::Awake(pugi::xml_node config)
 	player = (Player*)app->entityManager->CreateEntity(EntityType::PLAYER);
 	//Assigns the XML node to a member in player
 	player->config = config.child("player");
-	player->lvl = 1;
 
 	return ret;
 }
 
 bool Level1::Start()
 {
+	if (player->lvl == 2 || reset) {
+		app->sceneManager->level2->CleanUp();
+		app->map->name = sceneconfig.attribute("name").as_string();
+		app->map->path = sceneconfig.attribute("path").as_string();
+		if (player->lvl == 1 || player->lvl == 2) {
+			player->respawn();
+			app->entityManager->respawnEntities(1);
+		}
+		player->lvl = 1;
+		reset = false;
+	}
 	app->map->InitMap();
 	app->entityManager->Lvl1EntitiesActive();
 	app->entityManager->Start();
@@ -93,7 +106,7 @@ bool Level1::Start()
 	if (app->render->camera.y >= 0) {
 		app->render->camera.y = 0;
 	}
-
+	settings = false;
 	return true;
 }
 
@@ -142,9 +155,13 @@ bool Level1::Update(float dt)
 		app->sceneManager->maxFadeFrames = 200;
 	}
 
-	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN) {
+	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN && !app->sceneManager->settings->menuSetings && settings == false) {
 		app->sceneManager->OpenSettings();
 		settings = true;
+	}
+
+	if (quit) {
+		return false;
 	}
 
 	return true;

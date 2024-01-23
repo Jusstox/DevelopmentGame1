@@ -78,6 +78,8 @@ bool Player::Awake() {
 	shurikenanim.PushBack({ 102,0,15,15 });
 	shurikenanim.speed = 0.1f;
 
+	lvl = 0;
+
 	return true;
 }
 
@@ -440,12 +442,24 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 
 void Player::respawn()
 {
-	b2Vec2 initPos = b2Vec2(PIXEL_TO_METERS(initPosition.x), PIXEL_TO_METERS(initPosition.y));
-	pbody->body->SetTransform(initPos, 0);
-	position = initPosition;
-	
-	dark = false;
-	pbody->body->SetActive(true);
+	if (lvl == 1) {
+		b2Vec2 initPos = b2Vec2(PIXEL_TO_METERS(initPosition.x), PIXEL_TO_METERS(initPosition.y));
+		pbody->body->SetTransform(initPos, 0);
+		position = initPosition;
+
+		dark = false;
+		pbody->body->SetActive(true);
+	}
+	else {
+		pbody->body->SetActive(true);
+		dark = false;
+		position.x = 32;
+		position.y = 44 * 32;
+		position.x += (26 / 2);
+		position.y += (40 / 2);
+		b2Vec2 pPosition = b2Vec2(PIXEL_TO_METERS(position.x), PIXEL_TO_METERS(position.y));
+		pbody->body->SetTransform(pPosition, 0);
+	}
 }
 
 int Player::getPlayerTileX()

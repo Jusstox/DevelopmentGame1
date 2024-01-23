@@ -40,11 +40,6 @@ bool Map::Start() {
     //Initialize pathfinding 
     pathfinding = new PathFinding();
     active = false;
-    app->win->GetWindowSize(windowW, windowH);
-    quat.x = 0;
-    quat.y = 0;
-    quat.w = windowW;
-    quat.h = windowH;
     return true;
 }
 
@@ -125,11 +120,6 @@ bool Map::Update(float dt)
         mapLayer = mapLayer->next;
     }
 
-    if (app->sceneManager->currentScene->settings) {
-        SDL_SetRenderDrawColor(app->render->renderer, 0, 0, 0, (Uint8)(125));
-        SDL_RenderFillRect(app->render->renderer, &quat);
-    }
-
     return ret;
 }
 
@@ -155,17 +145,18 @@ bool Map::CleanUp()
     LOG("Unloading map");
 
     // L05: DONE 2: Make sure you clean up any memory allocated from tilesets/map
-    ListItem<TileSet*>* tileset;
-    tileset = mapData.tilesets.start;
-    
-    while (tileset != NULL) {
-        app->tex->UnLoad(tileset->data->texture);
-        tileset->data->texture = nullptr;
-        RELEASE(tileset->data);
-        tileset = tileset->next;
-    }
+    // 
+    //ListItem<TileSet*>* tileset;
+    //tileset = mapData.tilesets.start;
+    //
+    //while (tileset != NULL) {
+    //    app->tex->UnLoad(tileset->data->texture);
+    //    tileset->data->texture = nullptr;
+    //    RELEASE(tileset->data);
+    //    tileset = tileset->next;
+    //}
 
-    mapData.tilesets.Clear();
+    //mapData.tilesets.Clear();
 
     // L06: DONE 2: clean up all layer data
     ListItem<MapLayer*>* layerItem;

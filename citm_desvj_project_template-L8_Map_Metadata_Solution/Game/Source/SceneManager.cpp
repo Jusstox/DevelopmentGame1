@@ -191,9 +191,7 @@ void SceneManager::CloseSettings()
 {
 	settings->CleanUp();
 	settings->active = false;
-	if (currentScene == menu) {
-		app->guiManager->ActiveAllGui();
-	}
+	app->guiManager->ActiveAllGui();
 	currentScene->settings = false;
 }
 

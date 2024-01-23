@@ -37,6 +37,7 @@ public:
 	bool OnGuiMouseClickEvent(GuiControl* control);
 
 	uint windowW, windowH;
+	bool menuSetings = false;
 
 private:
 	pugi::xml_node config;
@@ -47,6 +48,12 @@ private:
 	GuiSlider* gcFSlider;
 	GuiCheckBox* checkBoxFS;
 	GuiCheckBox* checkBoxVS;
+
+	GuiControlButton* resumeButton;
+	GuiControlButton* settingsButton;
+	GuiControlButton* menuButton;
+	GuiControlButton* exitButton;
+	
 };
 
 #endif //__SETTINGS__

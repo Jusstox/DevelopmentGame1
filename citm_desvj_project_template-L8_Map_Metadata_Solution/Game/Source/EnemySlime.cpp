@@ -46,7 +46,6 @@ bool EnemySlime::Awake()
 bool EnemySlime::Start()
 {
 	distChase = 10;
-	initPosition = position;
 	currentAnimation = &walkinganimchase;
 
 	// L07 DONE 5: Add physics to the player - initialize physics body
@@ -229,6 +228,13 @@ bool EnemySlime::SaveState(pugi::xml_node& node)
 	EnemyNode.append_attribute("dead").set_value(dead);
 	EnemyNode.append_attribute("dark").set_value(dark);
 	return true;
+}
+
+void EnemySlime::Respawn()
+{
+	currentAnimation = &idleanim;
+	dieanim.Reset();
+	Enemy::Respawn();
 }
 
 

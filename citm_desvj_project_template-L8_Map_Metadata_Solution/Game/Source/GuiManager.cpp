@@ -1,11 +1,13 @@
 #include "GuiManager.h"
 #include "App.h"
 #include "Textures.h"
+#include "SceneManager.h"
 
 #include "GuiControlButton.h"
 #include "GuiSlider.h"
 #include "GuiCheckBox.h"
 #include "Audio.h"
+#include "Window.h"
 
 GuiManager::GuiManager() :Module()
 {
@@ -16,6 +18,11 @@ GuiManager::~GuiManager() {}
 
 bool GuiManager::Start()
 {
+	app->win->GetWindowSize(windowW, windowH);
+	quat.x = 0;
+	quat.y = 0;
+	quat.w = windowW;
+	quat.h = windowH;
 	return true;
 }
 
@@ -49,7 +56,10 @@ GuiControl* GuiManager::CreateGuiControl(GuiControlType type, int id, const char
 
 bool GuiManager::Update(float dt)
 {	
-
+	if (app->sceneManager->currentScene->settings) {
+		SDL_SetRenderDrawColor(app->render->renderer, 0, 0, 0, (Uint8)(125));
+		SDL_RenderFillRect(app->render->renderer, &quat);
+	}
 	ListItem<GuiControl*>* control = guiControlsList.start;
 
 	while (control != nullptr)

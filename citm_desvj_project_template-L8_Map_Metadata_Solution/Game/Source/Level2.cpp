@@ -2,6 +2,7 @@
 
 #include "App.h"
 #include "SceneManager.h"
+#include "Settings.h"
 #include "Level1.h"
 #include "Map.h"
 #include "Audio.h"
@@ -31,7 +32,7 @@ bool Level2::Start()
 	player->lvl = 2;
 	app->entityManager->Lvl2EntitiesActive();
 	app->entityManager->Start();
-	player->SetPlayerPos(32, 44 * 32);
+	player->respawn();
 	app->audio->PlayMusic(sceneconfig.attribute("musicpath").as_string(), 1.5);
 
 	app->win->GetWindowSize(windowW, windowH);
@@ -45,7 +46,7 @@ bool Level2::Start()
 	if (app->render->camera.y >= 0) {
 		app->render->camera.y = 0;
 	}
-
+	settings = false;
 	return true;
 }
 
@@ -81,9 +82,13 @@ bool Level2::Update(float dt)
 	}
 
 
-	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN) {
+	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN && !app->sceneManager->settings->menuSetings && settings == false) {
 		app->sceneManager->OpenSettings();
 		settings = true;
+	}
+
+	if (quit) {
+		return false;
 	}
 
 	return true;

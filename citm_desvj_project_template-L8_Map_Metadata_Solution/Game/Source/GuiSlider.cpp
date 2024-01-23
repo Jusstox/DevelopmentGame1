@@ -72,7 +72,6 @@ bool GuiSlider::Update(float dt)
 			app->render->DrawRectangle(sliderBounds, 0, 255, 0, 255, true, false);
 			float fx = abs((float)(bounds.x - (sliderBounds.x + sliderBounds.w/2)));
 			percent = (fx / ((float)bounds.w));
-			LOG("%f", percent);
 			break;
 		}
 		SDL_Rect title = { bounds.x + bounds.w / 2 - textW / 2, bounds.y - textH, textW, textH };

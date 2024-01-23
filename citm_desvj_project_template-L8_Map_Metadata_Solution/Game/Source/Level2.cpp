@@ -80,6 +80,12 @@ bool Level2::Update(float dt)
 		}
 	}
 
+
+	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN) {
+		app->sceneManager->OpenSettings();
+		settings = true;
+	}
+
 	return true;
 }
 

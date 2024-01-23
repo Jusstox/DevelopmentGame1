@@ -7,6 +7,7 @@
 #include "SceneManager.h"
 #include "Player.h"
 #include "Enemy.h"
+#include "Window.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -39,6 +40,11 @@ bool Map::Start() {
     //Initialize pathfinding 
     pathfinding = new PathFinding();
     active = false;
+    app->win->GetWindowSize(windowW, windowH);
+    quat.x = 0;
+    quat.y = 0;
+    quat.w = windowW;
+    quat.h = windowH;
     return true;
 }
 
@@ -117,6 +123,11 @@ bool Map::Update(float dt)
 
 
         mapLayer = mapLayer->next;
+    }
+
+    if (app->sceneManager->currentScene->settings) {
+        SDL_SetRenderDrawColor(app->render->renderer, 0, 0, 0, (Uint8)(125));
+        SDL_RenderFillRect(app->render->renderer, &quat);
     }
 
     return ret;

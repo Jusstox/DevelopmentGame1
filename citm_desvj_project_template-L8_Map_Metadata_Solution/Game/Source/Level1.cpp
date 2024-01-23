@@ -142,6 +142,10 @@ bool Level1::Update(float dt)
 		app->sceneManager->maxFadeFrames = 200;
 	}
 
+	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN) {
+		app->sceneManager->OpenSettings();
+		settings = true;
+	}
 
 	return true;
 }

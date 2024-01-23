@@ -7,7 +7,6 @@
 #include "Window.h"
 #include "Audio.h"
 #include "GuiManager.h"
-#include "Log.h"
 #include "Settings.h"
 
 Menu::Menu() : Scene()
@@ -27,6 +26,11 @@ bool Menu::Awake(pugi::xml_node config)
 
 bool Menu::Start()
 {
+	app->win->GetWindowSize(windowW, windowH);
+	quat.x = 0;
+	quat.y = 0;
+	quat.w = windowW;
+	quat.h = windowH;
 	settings = false;
 	img = app->tex->Load(config.attribute("texturePath").as_string());
 	app->audio->PlayMusic(config.attribute("musicpath").as_string(), 1.5);
@@ -58,6 +62,12 @@ bool Menu::PreUpdate()
 bool Menu::Update(float dt)
 {
 	app->render->DrawTexture(img, windowW / 2 - texW / 2, windowH / 2 - texH / 2, NULL);
+	if (settings) {
+		quat.x = app->render->camera.x;
+		quat.y = app->render->camera.y;
+		SDL_SetRenderDrawColor(app->render->renderer, 0, 0, 0, (Uint8)(125));
+		SDL_RenderFillRect(app->render->renderer, &quat);
+	}
 	return true;
 }
 
@@ -92,6 +102,7 @@ bool Menu::OnGuiMouseClickEvent(GuiControl* control)
 	if (control->id == 3) {
 		app->guiManager->DesactvieAllGui();
 		app->sceneManager->OpenSettings();
+		settings = true;
 	}
 	if (control->id == 5) {
 		quit = true;

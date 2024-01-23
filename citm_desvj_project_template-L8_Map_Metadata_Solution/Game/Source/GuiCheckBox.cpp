@@ -31,7 +31,7 @@ bool GuiCheckBox::Update(float dt)
 	debug = app->physics->debug;
 
 	if (checked) {
-		app->render->DrawTexture(check, bounds.x + 4, bounds.y + 4, NULL);
+		app->render->DrawTexture(check, bounds.x + 4 + app->render->camera.x*-1, bounds.y + 4 + app->render->camera.y*-1, NULL,1);
 	}
 
 	if (state != GuiControlState::DISABLED)
@@ -84,8 +84,8 @@ bool GuiCheckBox::Update(float dt)
 				app->render->DrawRectangle(bounds, 0, 255, 0, 255, true, false);
 			break;
 		}
-		app->render->DrawTexture(box, bounds.x, bounds.y, NULL);
-		app->render->DrawText(text.GetString(), bounds.x - bounds.w / 2 - 250, bounds.y, 250, 50, 255, 255, 255);
+		app->render->DrawTexture(box, bounds.x + app->render->camera.x * -1, bounds.y + app->render->camera.y * -1, NULL);
+		app->render->DrawText(text.GetString(), bounds.x - bounds.w / 2 - text.Length() * 25, bounds.y, text.Length() * 25, 50, 255, 255, 255);
 	}
 
 	return false;

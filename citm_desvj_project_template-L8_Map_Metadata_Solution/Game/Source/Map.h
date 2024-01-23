@@ -178,6 +178,9 @@ private:
     bool mapLoaded;
     MapLayer* navigationLayer;
     int blockedGid = 149; //!!!! make sure that you assign blockedGid according to your map
+
+    SDL_Rect quat;
+    uint windowW, windowH;
 };
 
 

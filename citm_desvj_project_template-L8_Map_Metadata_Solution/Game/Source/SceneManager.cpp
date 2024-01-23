@@ -22,9 +22,9 @@ SceneManager::SceneManager()
 
 	scenes.Add(sceneIntro);
 	scenes.Add(menu);
-	scenes.Add(settings);
 	scenes.Add(level1);
 	scenes.Add(level2);
+	scenes.Add(settings);
 
 	sceneType = NONE;
 
@@ -194,6 +194,7 @@ void SceneManager::CloseSettings()
 	if (currentScene == menu) {
 		app->guiManager->ActiveAllGui();
 	}
+	currentScene->settings = false;
 }
 
 bool SceneManager::SaveState(pugi::xml_node node)

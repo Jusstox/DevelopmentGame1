@@ -39,14 +39,14 @@ public:
 	uint windowW, windowH;
 
 private:
-	SDL_Rect quat;
 	pugi::xml_node config;
 	bool quit = false;
 	bool fullscreen;
 	// L15: TODO 2: Declare a GUI Control Button 
 	GuiSlider* gcMSlider;
 	GuiSlider* gcFSlider;
-	GuiCheckBox* checkBox;
+	GuiCheckBox* checkBoxFS;
+	GuiCheckBox* checkBoxVS;
 };
 
 #endif //__SETTINGS__

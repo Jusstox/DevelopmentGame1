@@ -23,14 +23,14 @@ bool Level2::Awake(pugi::xml_node config)
 	sceneconfig = config;
 	player = app->sceneManager->level1->GetPlayer();
 
-	/*pugi::xml_node enemieNode = config.child("enemies");
+	pugi::xml_node enemieNode = config.child("enemies");
 	for (pugi::xml_node flyenemieNode = enemieNode.child("flyenemy"); flyenemieNode; flyenemieNode = flyenemieNode.next_sibling("flyenemy"))
 	{
 		Enemy* EnemyFly = (Enemy*)app->entityManager->CreateEntity(EntityType::ENEMYFLY);
 		EnemyFly->parameters = flyenemieNode;
 		EnemyFly->animconfig = enemieNode;
 		EnemyFly->lvl = 2;
-	}*/
+	}
 	return true;
 }
 

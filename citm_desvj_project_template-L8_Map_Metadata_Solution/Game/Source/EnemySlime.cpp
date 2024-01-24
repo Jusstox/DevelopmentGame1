@@ -196,6 +196,7 @@ void EnemySlime::moveToPoint(float dt)
 
 bool EnemySlime::LoadState(pugi::xml_node& node)
 {
+	if (active == false) return true;
 	pugi::xml_node EnemyNode = node;
 	dead = EnemyNode.attribute("dead").as_bool();
 	if (dead) {

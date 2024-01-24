@@ -37,22 +37,17 @@ bool Level2::Awake(pugi::xml_node config)
 bool Level2::Start()
 {
 	if (player->lvl == 1) {
-		if (player->lvl == 1) {
-			app->sceneManager->level1->CleanUp();
-		}
-		if (player->lvl == 1 || player->lvl == 2) {
-			player->respawn();
-			app->entityManager->respawnEntities(2);
-		}
+		app->sceneManager->level1->CleanUp();
+		app->map->name = sceneconfig.attribute("name").as_string();
+		app->map->path = sceneconfig.attribute("path").as_string();
+		app->entityManager->ActiveAll();
 		player->lvl = 2;
+		player->respawn();
+		app->entityManager->respawnEntities(2);
 	}
-	app->map->name = sceneconfig.attribute("name").as_string();
-	app->map->path = sceneconfig.attribute("path").as_string();
 	app->map->InitMap();
-	player->lvl = 2;
-	app->entityManager->Lvl2EntitiesActive();
 	app->entityManager->Start();
-	player->respawn();
+	app->entityManager->Lvl2EntitiesActive();
 	app->audio->PlayMusic(sceneconfig.attribute("musicpath").as_string(), 1.5);
 
 	app->win->GetWindowSize(windowW, windowH);

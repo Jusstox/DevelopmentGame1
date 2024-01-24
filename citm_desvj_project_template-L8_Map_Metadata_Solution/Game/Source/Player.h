@@ -91,6 +91,7 @@ public:
 	bool death;
 	iPoint initPosition;
 	float force;
+	fPoint direction;
 };
 
 #endif // __PLAYER_H__

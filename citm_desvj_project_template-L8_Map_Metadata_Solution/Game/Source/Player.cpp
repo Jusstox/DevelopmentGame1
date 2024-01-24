@@ -156,9 +156,21 @@ bool Player::Update(float dt)
 		if (dark) {
 			app->render->DrawTexturePR(blendTexture, position.x - 300, position.y - 300, &blendFadeIN.GetCurrentFrame());
 		}
+		pbodyshuriken->body->SetLinearVelocity(b2Vec2(0, 0));
+		if (shuriken) {
+			b2Transform pbodyPos = pbodyshuriken->body->GetTransform();
+			Sposition.x = METERS_TO_PIXELS(pbodyPos.p.x) - 15;
+			Sposition.y = METERS_TO_PIXELS(pbodyPos.p.y) - 15;
+			app->render->DrawTexture(texture, Sposition.x + currentSAnimation->GetCurrentFrame().w / 2,
+				Sposition.y + currentSAnimation->GetCurrentFrame().h / 2, &shurikenanim.GetCurrentFrame());
+		}
 		return true;
 	}
 	else {
+		if (shuriken) {
+			b2Vec2 shirukenvel = b2Vec2(direction.x * 8, direction.y * 8);
+			pbodyshuriken->body->SetLinearVelocity(shirukenvel);
+		}
 		pbody->body->SetGravityScale(1);
 	}
 
@@ -304,7 +316,6 @@ bool Player::Update(float dt)
 					spawnPos.y, mousePos.x, mousePos.y, 255, 0, 0, 255, true);
 			}
 
-			fPoint direction;
 			direction.x = mousePos.x - spawnPos.x;
 			direction.y = mousePos.y - spawnPos.y;
 			float Module = sqrt(pow(direction.x, 2) + pow(direction.y, 2));
@@ -316,9 +327,6 @@ bool Player::Update(float dt)
 			b2Vec2 pPosition = b2Vec2(PIXEL_TO_METERS(spawnPos.x), PIXEL_TO_METERS(spawnPos.y));
 			b2Vec2 vec = b2Vec2(position.x + currentAnimation->GetCurrentFrame().w / 2, 10);
 			pbodyshuriken->body->SetTransform(pPosition, 0);
-
-			b2Vec2 shirukenvel = b2Vec2(direction.x * 8, direction.y * 8);
-			pbodyshuriken->body->SetLinearVelocity(shirukenvel);
 		}
 	}
 

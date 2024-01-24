@@ -42,18 +42,23 @@ bool Enemy::Start()
 
 bool Enemy::Update(float dt)
 {
-	if(!hit) {
-		pbody->body->SetLinearVelocity(velocity);
-		b2Transform pbodyPos = pbody->body->GetTransform();
-		position.x = METERS_TO_PIXELS(pbodyPos.p.x) - (currentAnimation->GetCurrentFrame().w / 2);
-		position.y = METERS_TO_PIXELS(pbodyPos.p.y) - (currentAnimation->GetCurrentFrame().h / 2);
+	if (!app->sceneManager->currentScene->settings) {
+		if (!hit) {
+			pbody->body->SetLinearVelocity(velocity);
+			b2Transform pbodyPos = pbody->body->GetTransform();
+			position.x = METERS_TO_PIXELS(pbodyPos.p.x) - (currentAnimation->GetCurrentFrame().w / 2);
+			position.y = METERS_TO_PIXELS(pbodyPos.p.y) - (currentAnimation->GetCurrentFrame().h / 2);
+		}
+		else {
+			pbody->body->SetLinearVelocity(b2Vec2(0, 0));
+			pbody->body->SetTransform(b2Vec2(-10, 1), 0);
+		}
+
+		currentAnimation->Update(dt);
 	}
 	else {
-		pbody->body->SetLinearVelocity(b2Vec2(0,0));
-		pbody->body->SetTransform(b2Vec2(-10, 1),0);
+		pbody->body->SetLinearVelocity(b2Vec2(0, 0));
 	}
-
-	currentAnimation->Update(dt);
 
 	Draw();
 	
@@ -205,6 +210,8 @@ void Enemy::Respawn()
 
 void Enemy::MoveAway()
 {
-	pbody->body->SetLinearVelocity(b2Vec2(0, 0));
-	pbody->body->SetTransform(b2Vec2(-10, 1), 0);
+	if (pbody != NULL) {
+		pbody->body->SetLinearVelocity(b2Vec2(0, 0));
+		pbody->body->SetTransform(b2Vec2(-10, 1), 0);
+	}
 }

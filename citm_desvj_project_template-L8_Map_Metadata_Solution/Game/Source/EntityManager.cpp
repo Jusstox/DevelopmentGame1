@@ -163,7 +163,6 @@ void EntityManager::ActiveNone()
 
 	for (item = entities.start; item != NULL; item = item->next)
 	{
-		b2Vec2 vel = b2Vec2(0, 0);
 		item->data->active = false;
 		item->data->CleanUp();
 	}
@@ -247,4 +246,15 @@ bool EntityManager::Update(float dt)
 	}
 
 	return ret;
+}
+
+void EntityManager::ActiveAll()
+{
+	//Iterates over the entities and calls Start
+	ListItem<Entity*>* item;
+
+	for (item = entities.start; item != NULL; item = item->next)
+	{
+		item->data->active = true;
+	}
 }

@@ -141,6 +141,26 @@ bool Player::Update(float dt)
 {
 	//dt = dt / 2;
 	// L07 DONE 5: Add physics to the player - updated player position using physics
+	if (app->sceneManager->currentScene->settings) {
+		if (flip) {
+			app->render->DrawTexturePR(texture, position.x, position.y, &currentAnimation->GetCurrentFrame());
+		}
+		else {
+			app->render->DrawTexture(texture, position.x, position.y, &currentAnimation->GetCurrentFrame());
+		}
+		pbody->body->SetLinearVelocity(b2Vec2(0, 0));
+		pbody->body->SetGravityScale(0);
+		b2Transform pbodyPos = pbody->body->GetTransform();
+		b2Vec2 fpos = b2Vec2(pbodyPos.p.x, pbodyPos.p.y + 0.2);
+		pfeet->body->SetTransform(fpos, 0);
+		if (dark) {
+			app->render->DrawTexturePR(blendTexture, position.x - 300, position.y - 300, &blendFadeIN.GetCurrentFrame());
+		}
+		return true;
+	}
+	else {
+		pbody->body->SetGravityScale(1);
+	}
 
 	//L03: DONE 4: render the player texture and modify the position of the player using WSAD keys and render the texture
 	b2Vec2 velocity = b2Vec2(0, -GRAVITY_Y);

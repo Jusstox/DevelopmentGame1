@@ -24,7 +24,37 @@
   
   <menu texturePath="Assets/Textures/menu.jpg" musicpath="Assets/Audio/Music/music.ogg"/>
   
-  <level2 musicpath="Assets/Audio/Music/music.ogg" path="Assets/Maps/" name="Mapa 2.tmx"/>
+  <level2 musicpath="Assets/Audio/Music/music.ogg" path="Assets/Maps/" name="Mapa 2.tmx">
+	<enemies>
+		<flyenemy x="1216" y="1344" texturepath="Assets/Textures/Bat.png" dark="true" dest1X="32" dest1Y="42" dest2X="46" dest2Y="42" fxpath="Assets/Audio/Fx/Murcielado_death.ogg"/>
+		<flyenemyanimations>
+			<flyanim loop="true" speed="0.15f">
+				<fly x="0" y="0" w="39" h="35"/>
+				<fly x="40" y="0" w="38" h="34"/>
+				<fly x="83" y="0" w="38" h="33"/>
+				<fly x="122" y="0" w="39" h="32"/>
+				<fly x="161" y="0" w="39" h="35"/>
+				<fly x="0" y="46" w="42" h="33"/>
+			</flyanim>
+			<flyanimchase loop="true" speed="0.15f">
+				<chase x="0" y="127" w="39" h="35"/>
+				<chase x="40" y="127" w="38" h="34"/>
+				<chase x="83" y="127" w="38" h="33"/>
+				<chase x="122" y="127" w="39" h="32"/>
+				<chase x="161" y="127" w="39" h="35"/>
+				<chase x="0" y="173" w="42" h="33"/>
+			</flyanimchase>
+			<dieanim loop="false" speed="0.1f">
+				<die x="0" y="215" w="43" h="24"/>
+				<die x="47" y="92" w="40" h="21"/>
+				<die x="98" y="91" w="28" h="21"/>
+				<die x="138" y="100" w="23" h="8"/>
+				<die x="171" y="101" w="6" h="5"/>
+				<die x="188" y="101" w="6" h="3"/>
+			</dieanim>
+		</flyenemyanimations>
+	</enemies>	
+  </level2>
 
   <level1 musicpath="Assets/Audio/Music/music.ogg" path="Assets/Maps/" name="Mapa real(porfa).tmx">
   

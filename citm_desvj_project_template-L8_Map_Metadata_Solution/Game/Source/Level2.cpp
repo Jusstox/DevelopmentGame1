@@ -2,6 +2,7 @@
 
 #include "App.h"
 #include "SceneManager.h"
+#include "Enemy.h"
 #include "Settings.h"
 #include "Level1.h"
 #include "Map.h"
@@ -21,11 +22,30 @@ bool Level2::Awake(pugi::xml_node config)
 {
 	sceneconfig = config;
 	player = app->sceneManager->level1->GetPlayer();
+
+	/*pugi::xml_node enemieNode = config.child("enemies");
+	for (pugi::xml_node flyenemieNode = enemieNode.child("flyenemy"); flyenemieNode; flyenemieNode = flyenemieNode.next_sibling("flyenemy"))
+	{
+		Enemy* EnemyFly = (Enemy*)app->entityManager->CreateEntity(EntityType::ENEMYFLY);
+		EnemyFly->parameters = flyenemieNode;
+		EnemyFly->animconfig = enemieNode;
+		EnemyFly->lvl = 2;
+	}*/
 	return true;
 }
 
 bool Level2::Start()
 {
+	if (player->lvl == 1) {
+		if (player->lvl == 1) {
+			app->sceneManager->level1->CleanUp();
+		}
+		if (player->lvl == 1 || player->lvl == 2) {
+			player->respawn();
+			app->entityManager->respawnEntities(2);
+		}
+		player->lvl = 2;
+	}
 	app->map->name = sceneconfig.attribute("name").as_string();
 	app->map->path = sceneconfig.attribute("path").as_string();
 	app->map->InitMap();

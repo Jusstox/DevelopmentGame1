@@ -80,6 +80,7 @@ bool Level1::Start()
 		app->sceneManager->level2->CleanUp();
 		app->map->name = sceneconfig.attribute("name").as_string();
 		app->map->path = sceneconfig.attribute("path").as_string();
+		app->entityManager->ActiveAll();
 		if (player->lvl == 1 || player->lvl == 2) {
 			player->respawn();
 			app->entityManager->respawnEntities(1);
@@ -88,8 +89,8 @@ bool Level1::Start()
 		reset = false;
 	}
 	app->map->InitMap();
-	app->entityManager->Lvl1EntitiesActive();
 	app->entityManager->Start();
+	app->entityManager->Lvl1EntitiesActive();
 	app->audio->PlayMusic(sceneconfig.attribute("musicpath").as_string(),1.5);
 	//Get the size of the window
 	app->win->GetWindowSize(windowW, windowH);

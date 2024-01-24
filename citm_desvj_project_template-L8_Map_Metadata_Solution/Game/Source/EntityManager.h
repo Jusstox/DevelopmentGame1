@@ -46,6 +46,8 @@ public:
 
 	void respawnEntities(int lvl);
 
+	void ActiveAll();
+
 public:
 
 	List<Entity*> entities;

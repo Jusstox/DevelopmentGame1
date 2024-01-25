@@ -93,8 +93,11 @@ public:
 	float force;
 	fPoint direction;
 
+	bool fxbossplayed = false;
 	bool bossing = false;
 	bool fight = false;
+
+	int lives = 3;
 };
 
 #endif // __PLAYER_H__

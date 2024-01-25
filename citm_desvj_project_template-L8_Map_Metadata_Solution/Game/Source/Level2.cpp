@@ -62,7 +62,7 @@ bool Level2::Start()
 	app->map->InitMap();
 	app->entityManager->Start();
 	app->entityManager->Lvl2EntitiesActive();
-	app->audio->PlayMusic(sceneconfig.attribute("musicpath").as_string());
+	app->audio->PlayMusic(sceneconfig.attribute("musicpath").as_string(),0);
 
 	app->win->GetWindowSize(windowW, windowH);
 

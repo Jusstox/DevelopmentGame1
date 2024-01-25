@@ -136,6 +136,8 @@ bool Player::Start() {
 	godmode = false;
 	bossing = false;
 	fight = false;
+	fxbossplayed = false;
+	lives = 3;
 
 	return true;
 }
@@ -242,14 +244,15 @@ bool Player::Update(float dt)
 
 	if (death) {
 		state = DIE;
+		fight = false;
 		if (dieAnim.HasFinished()) {
 			dieAnim.Reset();
 			state = IDLE;
 			respawn();
 			bossing = false;
-			fight = false;
 			death = false;
 			app->entityManager->respawnEntities(lvl);
+			lives--;
 		}
 	}
 
@@ -472,6 +475,10 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 		break;
 	case ColliderType::ARENA:
 		fight = true;
+		if (fxbossplayed == false) {
+			app->audio->PlayMusic("Assets/Audio/Music/Boss-music.ogg", 0);
+			fxbossplayed = true;
+		}
 		break;
 	default:
 		break;
@@ -498,6 +505,8 @@ void Player::respawn()
 		b2Vec2 pPosition = b2Vec2(PIXEL_TO_METERS(position.x), PIXEL_TO_METERS(position.y));
 		pbody->body->SetTransform(pPosition, 0);
 	}
+	app->audio->PlayMusic("Assets/Audio/Music/music.ogg",0);
+	fxbossplayed = false;
 }
 
 int Player::getPlayerTileX()

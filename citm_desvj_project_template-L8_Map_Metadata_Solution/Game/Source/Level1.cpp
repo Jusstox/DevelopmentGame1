@@ -91,7 +91,7 @@ bool Level1::Start()
 	app->map->InitMap();
 	app->entityManager->Start();
 	app->entityManager->Lvl1EntitiesActive();
-	app->audio->PlayMusic(sceneconfig.attribute("musicpath").as_string());
+	app->audio->PlayMusic(sceneconfig.attribute("musicpath").as_string(),0);
 	//Get the size of the window
 	app->win->GetWindowSize(windowW, windowH);
 

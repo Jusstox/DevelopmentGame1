@@ -35,7 +35,7 @@ bool Menu::Start()
 	quat.h = windowH;
 	settings = false;
 	img = app->tex->Load(config.attribute("texturePath").as_string());
-	app->audio->PlayMusic(config.attribute("musicpath").as_string(), 1.5);
+	app->audio->PlayMusic(config.attribute("musicpath").as_string(),0);
 	app->tex->GetSize(img, texW, texH);
 	app->render->camera.x = 0;
 	app->render->camera.y = 0;

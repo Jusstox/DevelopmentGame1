@@ -57,7 +57,7 @@
 			</dieanim>
 		</flyenemyanimations>
 		
-		<boss x="1152" y="608" texturepath="Assets/Textures/Boss.png" texturepatha="Assets/Textures/Boss_attack.png" dark="false" fxpath="Assets/Audio/Fx/Murcielado_death.ogg" fxpathdark="Assets/Audio/Fx/darkness.ogg"/>
+		<boss x="1152" y="608" texturepath="Assets/Textures/Boss.png" texturepatha="Assets/Textures/Boss_attack.png" dark="false" fxpath="Assets/Audio/Fx/Murcielado_death.ogg" fxpathdark="Assets/Audio/Fx/darkness.ogg" fxpathatack="Assets/Audio/Fx/Laser.ogg"/>
 		<bossenemyanimations>
 			<flyanim loop="true" speed="0.15f">
 				<fly x="0" y="8" w="106" h="153"/>

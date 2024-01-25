@@ -32,6 +32,7 @@ bool Boss::Awake()
 	texturePatha = parameters.attribute("texturepatha").as_string();
 
 	fxdark = app->audio->LoadFx(parameters.attribute("fxpathdark").as_string());
+	fxatack = app->audio->LoadFx(parameters.attribute("fxpathatack").as_string());
 
 	Enemy::Awake();
 
@@ -71,6 +72,7 @@ bool Boss::Start()
 	p1 = 0;
 	p2 = 0;
 	p3 = 0;
+	fxatackplayed = false;
 
 	Enemy::Start();
 
@@ -150,6 +152,10 @@ bool Boss::Update(float dt)
 		}
 
 		if (atacking) {
+			if (!fxatackplayed) {
+				app->audio->PlayFx(fxatack);
+				fxatackplayed = true;
+			}
 			if (currentAnimation->GetCurrentFrameInt() == 13) {
 				if (right) {
 					patack->body->SetTransform(b2Vec2(PIXEL_TO_METERS(position.x + 1), PIXEL_TO_METERS(position.y + 2.5)), 0);
@@ -159,6 +165,7 @@ bool Boss::Update(float dt)
 				}
 			}
 			if (atackanim.HasFinished()) {
+				fxatackplayed = false;
 				currentAnimation = &flyinganim;
 				patack->body->SetTransform(b2Vec2(PIXEL_TO_METERS(-10), PIXEL_TO_METERS(-10)), 0);
 				atackanim.Reset();
@@ -226,22 +233,24 @@ void Boss::OnCollision(PhysBody* physA, PhysBody* physB)
 	switch (physB->ctype)
 	{
 	case ColliderType::SHURIKEN:
-		lives--;
-		if (lives == 20) {
-			app->sceneManager->currentScene->GetPlayer()->dark = true;
-			app->sceneManager->currentScene->GetPlayer()->bossing = true;
-			spawnp = true;
-			waiting = true;
-			pawnsdead = 0;
-			app->audio->PlayFx(fxdark);
-		}
-		if (lives == 10) {
-			app->sceneManager->currentScene->GetPlayer()->dark = true;
-			app->sceneManager->currentScene->GetPlayer()->bossing = true;
-			spawnp = true;
-			waiting = true;
-			pawnsdead = 0;
-			app->audio->PlayFx(fxdark);
+		if (app->sceneManager->currentScene->GetPlayer()->fight) {
+			lives--;
+			if (lives == 20) {
+				app->sceneManager->currentScene->GetPlayer()->dark = true;
+				app->sceneManager->currentScene->GetPlayer()->bossing = true;
+				spawnp = true;
+				waiting = true;
+				pawnsdead = 0;
+				app->audio->PlayFx(fxdark);
+			}
+			if (lives == 10) {
+				app->sceneManager->currentScene->GetPlayer()->dark = true;
+				app->sceneManager->currentScene->GetPlayer()->bossing = true;
+				spawnp = true;
+				waiting = true;
+				pawnsdead = 0;
+				app->audio->PlayFx(fxdark);
+			}
 		}
 		break;
 	default:
@@ -272,6 +281,7 @@ void Boss::Respawn()
 	Enemy::Respawn();
 	Start();
 	velocity.x = 0;
+	fxatackplayed = false;
 }
 
 bool Boss::Draw()

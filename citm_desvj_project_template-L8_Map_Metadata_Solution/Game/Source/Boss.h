@@ -35,6 +35,8 @@ public:
 	int pawnsdead = 0;
 
 	int fxdark = -1;
+	int fxatack = -1;
+	bool fxatackplayed = false;
 
 	PhysBody* patack = NULL;
 

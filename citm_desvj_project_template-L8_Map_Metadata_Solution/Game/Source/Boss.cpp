@@ -1,6 +1,7 @@
 #include "Boss.h"
 #include "SceneManager.h"
 #include "Player.h"
+#include "Audio.h"
 
 Boss::Boss()
 {

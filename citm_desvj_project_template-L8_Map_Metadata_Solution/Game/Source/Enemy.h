@@ -58,6 +58,7 @@ public:
 protected:
 	const char* texturePath;
 	SDL_Texture* texture = nullptr;
+	SDL_Texture* texturea = nullptr;
 	int lives;
 	Animation* currentAnimation = nullptr;
 	iPoint initPosition;

@@ -109,6 +109,9 @@ bool Enemy::CleanUp()
 {
 	app->tex->UnLoad(texture);
 	app->tex->UnLoad(mouseTileTex);
+	if (texturePath != nullptr) {
+		app->tex->UnLoad(texturea);
+	}
 	if(pbody != nullptr)
 	pbody->body->SetActive(false);
 	return true;
@@ -130,7 +133,13 @@ int Enemy::getEnemyTileY()
 
 const DynArray<iPoint>* Enemy::SearchWay()
 {
-	iPoint origin = iPoint(TileX, TileY);
+	iPoint origin;
+	if (type == EntityType::BOSS) {
+		origin = iPoint(TileX, TileY + 1);
+	}
+	else {
+		origin = iPoint(TileX, TileY);
+	}
 
 	app->map->pathfinding->CreatePath(origin, dest);
 

@@ -134,7 +134,7 @@ bool EntityManager::LoadState(pugi::xml_node node)
 	pugi::xml_node EnemyNode = node.child("Enemy");
 	for (item = entities.start; item != NULL && ret == true; item = item->next)
 	{
-		if (item->data->type == EntityType::ENEMY) {
+		if (item->data->type == EntityType::ENEMY || item->data->type == EntityType::BOSS) {
 			item->data->LoadState(EnemyNode);
 		}
 		else {

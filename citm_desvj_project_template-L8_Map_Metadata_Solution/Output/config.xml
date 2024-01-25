@@ -54,17 +54,58 @@
 			</dieanim>
 		</flyenemyanimations>
 		
-		<boss x="300" y="1408" texturepath="Assets/Textures/Boss.png" dark="false" fxpath="Assets/Audio/Fx/Murcielado_death.ogg"/>
+		<boss x="300" y="1408" texturepath="Assets/Textures/Boss.png" texturepatha="Assets/Textures/Boss_attack.png" dark="false" fxpath="Assets/Audio/Fx/Murcielado_death.ogg"/>
 		<bossenemyanimations>
 			<flyanim loop="true" speed="0.15f">
-				<fly x="0" y="0" w="106" h="160"/>
-				<fly x="106" y="0" w="106" h="160"/>
-				<fly x="213" y="0" w="106" h="160"/>
-				<fly x="319" y="0" w="106" h="160"/>
-				<fly x="426" y="0" w="106" h="160"/>
-				<fly x="534" y="0" w="106" h="160"/>
-				<fly x="642" y="0" w="106" h="160"/>
+				<fly x="0" y="8" w="106" h="153"/>
+				<fly x="106" y="8" w="106" h="153"/>
+				<fly x="213" y="8" w="106" h="153"/>
+				<fly x="319" y="8" w="106" h="153"/>
+				<fly x="426" y="8" w="106" h="153"/>
+				<fly x="534" y="8" w="106" h="153"/>
+				<fly x="642" y="8" w="106" h="153"/>
+				<fly x="0" y="164" w="106" h="153"/>
+				<fly x="108" y="164" w="106" h="153"/>
+				<fly x="214" y="164" w="106" h="153"/>
+				<fly x="320" y="164" w="106" h="153"/>
+				<fly x="427" y="164" w="106" h="153"/>
+				<fly x="535" y="164" w="106" h="153"/>
+				<fly x="641" y="164" w="106" h="153"/>
+				<fly x="0" y="328" w="106" h="153"/>
+				<fly x="108" y="327" w="106" h="153"/>
+				<fly x="215" y="329" w="106" h="153"/>
+				<fly x="321" y="329" w="106" h="153"/>
+				<fly x="427" y="332" w="106" h="153"/>
+				<fly x="531" y="334" w="106" h="153"/>
+				<fly x="635" y="334" w="106" h="153"/>
+				<fly x="0" y="489" w="106" h="153"/>
+				<fly x="106" y="489" w="106" h="153"/>
 			</flyanim>
+			<atackanim loop="false" speed="0.2f">
+				<atack x="0" y="14" w="109" h="171"/>
+				<atack x="109" y="14" w="109" h="171"/>
+				<atack x="218" y="14" w="109" h="171"/>
+				<atack x="328" y="14" w="109" h="171"/>
+				<atack x="440" y="14" w="109" h="171"/>
+				<atack x="534" y="14" w="109" h="171"/>
+				<atack x="739" y="14" w="109" h="171"/>
+				<atack x="15" y="192" w="87" h="155"/>
+				<atack x="121" y="192" w="87" h="155"/>
+				<atack x="226" y="192" w="94" h="155"/>
+				<atack x="324" y="192" w="94" h="155"/>
+				<atack x="432" y="192" w="127" h="155"/>
+				<atack x="570" y="192" w="183" h="155"/>
+				<atack x="2" y="349" w="189" h="155"/>
+				<atack x="196" y="349" w="188" h="155"/>
+				<atack x="390" y="349" w="189" h="155"/>
+				<atack x="593" y="349" w="186" h="155"/>
+				<atack x="6" y="506" w="185" h="149"/>
+				<atack x="193" y="506" w="185" h="149"/>
+				<atack x="382" y="506" w="182" h="149"/>
+				<atack x="567" y="506" w="165" h="149"/>
+				<atack x="5-157" y="657" w="152" h="153"/>
+				<atack x="157-311" y="657" w="154" h="153"/>
+			</atackanim>
 		</bossenemyanimations>
 	</enemies>	
   </level2>

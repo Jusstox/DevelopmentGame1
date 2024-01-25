@@ -20,7 +20,11 @@ public:
 
 	void Respawn();
 
+	bool Draw();
+
+	const char* texturePatha;
 	Animation flyinganim;
 	Animation atackanim;
+	bool atacking = false;
 };
 

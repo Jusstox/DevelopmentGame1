@@ -55,6 +55,10 @@ public:
 
 	void MoveAway();
 
+	Enemy* pawn[3];
+	bool dead;
+	bool hit;
+
 protected:
 	const char* texturePath;
 	SDL_Texture* texture = nullptr;
@@ -67,8 +71,7 @@ protected:
 	float chaseVelovity;
 	float patrolVelocity;
 	bool right;
-	bool dead;
-	bool hit;
+
 
 	int distChase;
 	iPoint dest;
@@ -83,7 +86,6 @@ protected:
 	iPoint Patrol1;
 	iPoint Patrol2;
 	bool patrol;
-
 	int dieFX = -1;
 	
 };

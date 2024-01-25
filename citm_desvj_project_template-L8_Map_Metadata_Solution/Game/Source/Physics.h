@@ -33,6 +33,7 @@ enum class ColliderType {
 	OUTSIDE,
 	ENEMY,
 	SHURIKEN,
+	ARENA,
 	UNKNOWN
 	// ..
 };

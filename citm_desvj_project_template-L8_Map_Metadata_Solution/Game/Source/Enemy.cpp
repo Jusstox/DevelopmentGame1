@@ -135,7 +135,7 @@ const DynArray<iPoint>* Enemy::SearchWay()
 {
 	iPoint origin;
 	if (type == EntityType::BOSS) {
-		origin = iPoint(TileX, TileY + 1);
+		origin = iPoint(TileX, TileY + 2);
 	}
 	else {
 		origin = iPoint(TileX, TileY);
@@ -187,6 +187,7 @@ void Enemy::moveToPlayer(float dt)
 
 void Enemy::Patrol()
 {
+
 	if (patrol) {
 		dest.x = Patrol1.x;
 		dest.y = Patrol1.y;

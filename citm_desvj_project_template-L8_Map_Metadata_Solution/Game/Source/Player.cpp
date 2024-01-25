@@ -10,6 +10,7 @@
 #include "Physics.h"
 #include "Window.h"
 #include "Map.h"
+#include "Level1.h"
 
 Player::Player() : Entity(EntityType::PLAYER)
 {
@@ -133,6 +134,8 @@ bool Player::Start() {
 	flip = false;
 	dark = false;
 	godmode = false;
+	bossing = false;
+	fight = false;
 
 	return true;
 }
@@ -180,12 +183,12 @@ bool Player::Update(float dt)
 	if (app->input->GetKey(SDL_SCANCODE_F10) == KEY_DOWN) {
 		if (!godmode) {
 			godmode = true;
-			if (dark)
+			if (dark && !bossing)
 				dark = false;
 			b2Vec2 vel = b2Vec2(0, 0);
 			pbody->body->SetLinearVelocity(vel);
 			pfeet->body->SetLinearVelocity(vel);
-			vel = b2Vec2(-100, -100);
+			vel = b2Vec2(-200, -200);
 			pbody->body->SetTransform(vel,0);
 			pfeet->body->SetTransform(vel, 0);
 		}
@@ -243,7 +246,10 @@ bool Player::Update(float dt)
 			dieAnim.Reset();
 			state = IDLE;
 			respawn();
+			bossing = false;
+			fight = false;
 			death = false;
+			app->entityManager->respawnEntities(lvl);
 		}
 	}
 
@@ -434,6 +440,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 		if (physA == pbody) {
 			app->audio->PlayFx(victory);
 		}
+		app->sceneManager->level1->goNextlvl();
 		break;
 	case ColliderType::DEATH:
 		if (physA == pbody) {
@@ -462,6 +469,9 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 		if (physA == pbodyshuriken) {
 			shuriken = false;
 		}
+		break;
+	case ColliderType::ARENA:
+		fight = true;
 		break;
 	default:
 		break;

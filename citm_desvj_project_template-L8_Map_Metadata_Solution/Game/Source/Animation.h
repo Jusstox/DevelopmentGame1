@@ -60,6 +60,15 @@ public:
 
 		return frames[actualFrame];
 	}
+
+	int GetCurrentFrameInt() const
+	{
+		int actualFrame = currentFrame;
+		if (pingpongDirection == -1)
+			actualFrame = totalFrames - currentFrame;
+
+		return actualFrame;
+	}
 };
 
 #endif

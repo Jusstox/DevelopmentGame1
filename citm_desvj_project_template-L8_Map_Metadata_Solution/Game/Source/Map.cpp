@@ -327,6 +327,10 @@ bool Map::Load(SString mapFileName)
                         c1 = app->physics->CreateRectangleSensor(x + w / 2, y + h / 2, w, h, STATIC);
                         c1->ctype = ColliderType::OUTSIDE;
                     }
+                    else if (name == "boss") {
+                        c1 = app->physics->CreateRectangleSensor(x + w / 2, y + h / 2, w, h, STATIC);
+                        c1->ctype = ColliderType::ARENA;
+                    }
                    
                     mapData.colliders.Add(c1);
                 }

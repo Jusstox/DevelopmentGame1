@@ -30,6 +30,8 @@ bool Boss::Awake()
 
 	texturePatha = parameters.attribute("texturepatha").as_string();
 
+	fxdark = app->audio->LoadFx(parameters.attribute("fxpathdark").as_string());
+
 	Enemy::Awake();
 
 	return true;
@@ -37,21 +39,37 @@ bool Boss::Awake()
 
 bool Boss::Start()
 {
-	distChase = 20;
+	distChase = 30;
 	currentAnimation = &flyinganim;
 
 	// L07 DONE 5: Add physics to the player - initialize physics body
 	if (pbody == NULL) {
-		pbody = app->physics->CreateCircle(position.x, position.y, currentAnimation->GetCurrentFrame().w / 2, bodyType::DYNAMIC);
+		pbody = app->physics->CreateCircle(position.x, position.y, currentAnimation->GetCurrentFrame().w / 2 - 10, bodyType::DYNAMIC);
 		// L07 DONE 6: Assign player class (using "this") to the listener of the pbody. This makes the Physics module to call the OnCollision method
 		pbody->listener = this;
 		// L07 DONE 7: Assign collider type
 		pbody->ctype = ColliderType::ENEMY;
+		pbody->body->SetGravityScale(0);
+	}
+	pbody->body->SetTransform(b2Vec2(PIXEL_TO_METERS(position.x), PIXEL_TO_METERS(position.y + 1)), 0);
+	inpos = pbody->body->GetTransform();
+
+	if (patack == NULL) {
+		patack = app->physics->CreateRectangleSensor(-10, -10, 30, 40, bodyType::DYNAMIC);
+		// L07 DONE 6: Assign player class (using "this") to the listener of the pbody. This makes the Physics module to call the OnCollision method
+		patack->listener = this;
+		// L07 DONE 7: Assign collider type
+		patack->ctype = ColliderType::DEATH;
+		patack->body->SetGravityScale(0);
 	}
 
-	chaseVelovity = 0.12;
+	chaseVelovity = 0.3;
 	ActualVelocity = chaseVelovity;
 	texturea = app->tex->Load(texturePatha);
+	pawnsdead = 0;
+	p1 = 0;
+	p2 = 0;
+	p3 = 0;
 
 	Enemy::Start();
 
@@ -61,23 +79,90 @@ bool Boss::Start()
 bool Boss::Update(float dt)
 {
 
-   /* if (canChase(distChase)) {
-		dest = iPoint(PTileX, PTileY);
-		moveToPlayer(dt);
-	}
-	else {
-		velocity = b2Vec2(0,0);
-	}*/
+	if (app->sceneManager->currentScene->GetPlayer()->fight) {
+		if (spawnp) {
+			for (size_t i = 0; i < 3; i++)
+			{
+				pawn[i]->active = true;
+				pawn[i]->dead = false;
+				pawn[i]->hit = false;
+				pawn[i]->position = initPosition;
+				pawn[i]->pbody->body->SetTransform(b2Vec2(inpos.p.x + i*2, inpos.p.y - 2), 0);
+			}
+			spawnp = false;
+			atacking = false;
+			waiting = true;
+			p1 = 0;
+			p2 = 0;
+			p3 = 0;
+		}
 
-	if (app->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN) {
-		atacking = true;
-		currentAnimation = &atackanim;
-	}
 
-	if (atacking) {
-		if (atackanim.HasFinished()) {
-			currentAnimation = &flyinganim;
-			atackanim.Reset();
+		if (waiting) {
+			for (size_t i = 0; i < 3; i++)
+			{
+				if (pawn[i]->dead) {
+					if (i == 0 && p1 == 0) {
+						p1 = 1;
+						pawnsdead++;
+					}
+					else if (i == 1 && p2 == 0) {
+						p2 = 1;
+						pawnsdead++;
+					}
+					else if (i == 2 && p3 == 0) {
+						p3 = 1;
+						pawnsdead++;
+					}
+				}
+			}
+			if (pawnsdead == 3) {
+				for (size_t i = 0; i < 3; i++)
+				{
+					pawn[i]->active = false;
+					pawn[i]->pbody->body->SetTransform(b2Vec2(-100, -100), 0);
+				}
+				app->sceneManager->currentScene->GetPlayer()->dark = false;
+				waiting = false;
+				pbody->body->SetTransform(b2Vec2(inpos.p.x, inpos.p.y), 0);
+				app->sceneManager->currentScene->GetPlayer()->bossing = false;
+			}
+			else {
+				pbody->body->SetLinearVelocity(b2Vec2(0, 0));
+				pbody->body->SetTransform(b2Vec2(PIXEL_TO_METERS(0), PIXEL_TO_METERS(0)), 0);
+				return true;
+			}
+		}
+
+		if (canChase(distChase) && !atacking) {
+			if (!app->sceneManager->currentScene->GetPlayer()->dark) {
+				dest = iPoint(PTileX, PTileY);
+				moveToPlayer(dt);
+			}
+			else {
+				pbody->body->SetLinearVelocity(b2Vec2(0, 0));
+				pbody->body->SetTransform(b2Vec2(PIXEL_TO_METERS(0), PIXEL_TO_METERS(0)), 0);
+			}
+		}
+		else {
+			velocity = b2Vec2(0, 0);
+		}
+
+		if (atacking) {
+			if (currentAnimation->GetCurrentFrameInt() == 13) {
+				if (right) {
+					patack->body->SetTransform(b2Vec2(PIXEL_TO_METERS(position.x + 1), PIXEL_TO_METERS(position.y + 2.5)), 0);
+				}
+				else {
+					patack->body->SetTransform(b2Vec2(PIXEL_TO_METERS(position.x + 3), PIXEL_TO_METERS(position.y + 2.5)), 0);
+				}
+			}
+			if (atackanim.HasFinished()) {
+				currentAnimation = &flyinganim;
+				patack->body->SetTransform(b2Vec2(PIXEL_TO_METERS(-10), PIXEL_TO_METERS(-10)), 0);
+				atackanim.Reset();
+				atacking = false;
+			}
 		}
 	}
 
@@ -86,7 +171,7 @@ bool Boss::Update(float dt)
 			pbody->body->SetLinearVelocity(velocity);
 			b2Transform pbodyPos = pbody->body->GetTransform();
 			position.x = METERS_TO_PIXELS(pbodyPos.p.x) - (currentAnimation->GetCurrentFrame().w / 2);
-			position.y = METERS_TO_PIXELS(pbodyPos.p.y) - (currentAnimation->GetCurrentFrame().h / 2 + 30);
+			position.y = METERS_TO_PIXELS(pbodyPos.p.y) - (currentAnimation->GetCurrentFrame().h / 2 + 10);
 		}
 		else {
 			pbody->body->SetLinearVelocity(b2Vec2(0, 0));
@@ -103,11 +188,7 @@ bool Boss::Update(float dt)
 
 	if (dead)
 	{
-		//pendingToDelete = true;
-		position.x = 0;
-		position.y = 0;
-		// mirar de borrar texture i memory leaks
-		//app->entityManager->DestroyEntity(this);
+
 	}
 
 	if (velocity.x < 0) {
@@ -124,73 +205,47 @@ void Boss::moveToPlayer(float dt)
 {
 	const DynArray<iPoint>* path = SearchWay();
 	//check if t has arrivied
-	if (path->Count() > 1) {
+	if (path->Count() > 2) {
 		//check if it shall move to x
-		if (TileX != path->At(1)->x) {
-			if (TileX > path->At(1)->x) {
-				velocity.x = -ActualVelocity * dt;
-			}
-			else {
-				velocity.x = ActualVelocity * dt;
-			}
-			if (path->Count() > 2) {
-				//if next step move y, go diagonal
-				if (path->At(2)->y != TileY) {
-					if ((TileY + 1) > path->At(2)->y) {
-						velocity.y = -ActualVelocity / 1.3 * dt;
-					}
-					else {
-						velocity.y = ActualVelocity / 1.3 * dt;
-					}
-					velocity.x /= 1.3;
-				}
-				else {
-					velocity.y = 0;
-				}
-			}
-		}
-		else { //check if it shall move to y
-			if ((TileY + 1) > path->At(1)->y) {
-				velocity.y = -ActualVelocity * dt;
-			}
-			else {
-				velocity.y = ActualVelocity * dt;
-			}
-			if (path->Count() > 2) {
-				//if next step move x, go diagonal
-				if (path->At(2)->x != TileX) {
-					if (TileX > path->At(2)->x) {
-						velocity.x = -ActualVelocity / 1.3 * dt;
-					}
-					else {
-						velocity.x = ActualVelocity / 1.3 * dt;
-					}
-					velocity.y /= 1.3;
-				}
-				else {
-					velocity.x = 0;
-				}
-			}
-		}
-	}
-	else if (path->Count() == 1) {
-		if (app->sceneManager->currentScene->GetPlayer()->position.x < position.x) {
+		if (TileX > path->At(1)->x) {
 			velocity.x = -ActualVelocity * dt;
 		}
-		else {
+		else if (TileX < path->At(1)->x) {
 			velocity.x = ActualVelocity * dt;
 		}
-		if (app->sceneManager->currentScene->GetPlayer()->position.y < position.y) {
-			velocity.y = -ActualVelocity * dt;
-		}
-		else {
-			velocity.y = ActualVelocity * dt;
-		}
+	}
+	else if (path->Count() == 2) {
+		atacking = true;
+		currentAnimation = &atackanim;
 	}
 }
 
 void Boss::OnCollision(PhysBody* physA, PhysBody* physB)
 {
+	switch (physB->ctype)
+	{
+	case ColliderType::SHURIKEN:
+		lives--;
+		if (lives == 20) {
+			app->sceneManager->currentScene->GetPlayer()->dark = true;
+			app->sceneManager->currentScene->GetPlayer()->bossing = true;
+			spawnp = true;
+			waiting = true;
+			pawnsdead = 0;
+			app->audio->PlayFx(fxdark);
+		}
+		if (lives == 10) {
+			app->sceneManager->currentScene->GetPlayer()->dark = true;
+			app->sceneManager->currentScene->GetPlayer()->bossing = true;
+			spawnp = true;
+			waiting = true;
+			pawnsdead = 0;
+			app->audio->PlayFx(fxdark);
+		}
+		break;
+	default:
+		break;
+	}
 }
 
 bool Boss::LoadState(pugi::xml_node& node)
@@ -206,7 +261,16 @@ bool Boss::SaveState(pugi::xml_node& node)
 void Boss::Respawn()
 {
 	currentAnimation = &flyinganim;
+	atackanim.Reset();
+	patack->body->SetTransform(b2Vec2(PIXEL_TO_METERS(-10), PIXEL_TO_METERS(-10)), 0);
+	waiting = false;
+	lives = 30;
+	pawnsdead = 0;
+	spawnp = false;
+	atacking = false;
 	Enemy::Respawn();
+	Start();
+	velocity.x = 0;
 }
 
 bool Boss::Draw()
@@ -229,10 +293,10 @@ bool Boss::Draw()
 			if (!app->sceneManager->currentScene->GetPlayer()->dark || app->sceneManager->currentScene->GetPlayer()->godmode) {
 				if (!dark) {
 					if (right) {
-						app->render->DrawTexturePR(texture, position.x, position.y, &currentAnimation->GetCurrentFrame());
+						app->render->DrawTexturePR(texture, position.x, position.y - 10, &currentAnimation->GetCurrentFrame());
 					}
 					else {
-						app->render->DrawTexture(texture, position.x, position.y, &currentAnimation->GetCurrentFrame());
+						app->render->DrawTexture(texture, position.x, position.y - 10, &currentAnimation->GetCurrentFrame());
 					}
 				}
 			}
@@ -256,10 +320,10 @@ bool Boss::Draw()
 			if (!app->sceneManager->currentScene->GetPlayer()->dark || app->sceneManager->currentScene->GetPlayer()->godmode) {
 				if (!dark) {
 					if (right) {
-						app->render->DrawTexturePR(texturea, position.x, position.y +13, &currentAnimation->GetCurrentFrame());
+						app->render->DrawTexturePR(texturea, position.x, position.y-2, &currentAnimation->GetCurrentFrame());
 					}
 					else {
-						app->render->DrawTexture(texturea, position.x, position.y +13, &currentAnimation->GetCurrentFrame());
+						app->render->DrawTexture(texturea, position.x, position.y-2, &currentAnimation->GetCurrentFrame());
 					}
 				}
 			}

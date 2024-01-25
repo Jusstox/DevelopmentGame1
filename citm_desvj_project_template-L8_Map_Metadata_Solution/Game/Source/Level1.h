@@ -38,6 +38,8 @@ public:
 		return player;
 	}
 
+	void goNextlvl();
+
 	void cameraLimit();
 	bool reset = false;
 	bool lockCamera = true;

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="60" height="48" tilewidth="32" tileheight="32" infinite="0" nextlayerid="31" nextobjectid="228">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="60" height="48" tilewidth="32" tileheight="32" infinite="0" nextlayerid="32" nextobjectid="251">
  <tileset firstgid="1" name="moon" tilewidth="32" tileheight="32" tilecount="24" columns="8">
   <image source="moon.png" width="256" height="96"/>
  </tileset>
@@ -5786,7 +5786,10 @@
    <tile/>
   </data>
  </layer>
- <objectgroup id="25" name="plataformas" visible="0">
+ <objectgroup id="31" name="boss">
+  <object id="231" x="352" y="608.5" width="1567" height="33"/>
+ </objectgroup>
+ <objectgroup id="25" name="plataformas">
   <object id="186" x="0" y="1472" width="928" height="64"/>
   <object id="187" x="992" y="1376" width="544" height="96"/>
   <object id="188" x="928" y="1120" width="544" height="96"/>
@@ -5810,6 +5813,7 @@
   <object id="222" x="128" y="160" width="64" height="32"/>
   <object id="225" x="192" y="0" width="160" height="32"/>
   <object id="227" x="-25" y="1248" width="25" height="223.333"/>
+  <object id="250" x="2.66667" y="-17.5" width="1917.08" height="17.5"/>
  </objectgroup>
  <objectgroup id="28" name="muerte" visible="0">
   <object id="209" x="928" y="1536" width="992" height="32"/>

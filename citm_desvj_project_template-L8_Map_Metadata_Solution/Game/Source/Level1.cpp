@@ -91,7 +91,7 @@ bool Level1::Start()
 	app->map->InitMap();
 	app->entityManager->Start();
 	app->entityManager->Lvl1EntitiesActive();
-	app->audio->PlayMusic(sceneconfig.attribute("musicpath").as_string(),1.5);
+	app->audio->PlayMusic(sceneconfig.attribute("musicpath").as_string());
 	//Get the size of the window
 	app->win->GetWindowSize(windowW, windowH);
 
@@ -153,7 +153,7 @@ bool Level1::Update(float dt)
 		app->sceneManager->fade = true;
 		app->sceneManager->newScene = (Scene*)app->sceneManager->level2;
 		app->sceneManager->currentStep = TO_BLACK;
-		app->sceneManager->maxFadeFrames = 200;
+		app->sceneManager->maxFadeFrames = 100;
 	}
 
 	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN && !app->sceneManager->settings->menuSetings && settings == false) {
@@ -185,6 +185,14 @@ bool Level1::CleanUp()
 	app->map->active = false;
 	app->entityManager->ActiveNone();
 	return true;
+}
+
+void Level1::goNextlvl()
+{
+	app->sceneManager->fade = true;
+	app->sceneManager->newScene = (Scene*)app->sceneManager->level2;
+	app->sceneManager->currentStep = TO_BLACK;
+	app->sceneManager->maxFadeFrames = 100;
 }
 
 void Level1::cameraLimit()

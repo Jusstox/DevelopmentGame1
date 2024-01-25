@@ -64,11 +64,17 @@ bool EnemyFly::Start()
 
 	Enemy::Start();
 
+	if (Patrol1.x == 0) {
+		active = false;
+		distChase = 30;
+	}
+
 	return true;
 }
 
 bool EnemyFly::Update(float dt)
 {
+
 	if (abs(app->sceneManager->currentScene->GetPlayer()->getPlayerTileX() - getEnemyTileX()) > 50) {
 		velocity.x = 0;
 		velocity.y = 0;
@@ -78,6 +84,33 @@ bool EnemyFly::Update(float dt)
 	velocity = b2Vec2(0, 0);	
 
 	if (!hit) {
+
+		if (Patrol1.x == 0) {
+			if (app->sceneManager->currentScene->GetPlayer()->dark) {
+				ActualVelocity = chaseVelovity;
+				dest = iPoint(PTileX, PTileY);
+				if (canChase(distChase)) {
+					moveToPlayer(dt);
+					currentAnimation = &flyinganimchase;
+				}
+				else {
+					pbody->body->SetLinearVelocity(b2Vec2(0,0));
+				}
+				Enemy::Update(dt);
+
+				if (velocity.x > 0) {
+					right = true;
+				}
+				if (velocity.x < 0) {
+					right = false;
+				}
+			}
+			else {
+				active = false;
+			}
+			return true;
+		}
+
 		if (canChase(distChase)) {
 			if ((dark && app->sceneManager->currentScene->GetPlayer()->dark) || (!dark && !app->sceneManager->currentScene->GetPlayer()->dark)) {
 				ActualVelocity = chaseVelovity;
@@ -102,6 +135,7 @@ bool EnemyFly::Update(float dt)
 	else {
 		if (dieanim.HasFinished()) {
 			dead = true;
+			dieanim.Reset();
 		}
 	}
 

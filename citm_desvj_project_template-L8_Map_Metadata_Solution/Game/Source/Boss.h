@@ -26,5 +26,19 @@ public:
 	Animation flyinganim;
 	Animation atackanim;
 	bool atacking = false;
+	int lives = 30;
+
+	b2Transform inpos;
+	int p1 = 0;
+	int p2 = 0;
+	int p3 = 0;
+	int pawnsdead = 0;
+
+	int fxdark = -1;
+
+	PhysBody* patack = NULL;
+
+	bool spawnp = false;
+	bool waiting = false;
 };
 

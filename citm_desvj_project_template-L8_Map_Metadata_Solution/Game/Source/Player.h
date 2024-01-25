@@ -92,6 +92,9 @@ public:
 	iPoint initPosition;
 	float force;
 	fPoint direction;
+
+	bool bossing = false;
+	bool fight = false;
 };
 
 #endif // __PLAYER_H__

@@ -22,21 +22,28 @@ bool Level2::Awake(pugi::xml_node config)
 {
 	sceneconfig = config;
 	player = app->sceneManager->level1->GetPlayer();
-
 	pugi::xml_node enemieNode = config.child("enemies");
-	for (pugi::xml_node flyenemieNode = enemieNode.child("flyenemy"); flyenemieNode; flyenemieNode = flyenemieNode.next_sibling("flyenemy"))
-	{
-		Enemy* EnemyFly = (Enemy*)app->entityManager->CreateEntity(EntityType::ENEMYFLY);
-		EnemyFly->parameters = flyenemieNode;
-		EnemyFly->animconfig = enemieNode;
-		EnemyFly->lvl = 2;
-	}
 
 	pugi::xml_node bossenemieNode = enemieNode.child("boss");
 	Enemy* EnemyBoss = (Enemy*)app->entityManager->CreateEntity(EntityType::BOSS);
 	EnemyBoss->parameters = bossenemieNode;
 	EnemyBoss->animconfig = enemieNode;
 	EnemyBoss->lvl = 2;
+
+	int i = 0;
+
+	for (pugi::xml_node flyenemieNode = enemieNode.child("flyenemy"); flyenemieNode; flyenemieNode = flyenemieNode.next_sibling("flyenemy"))
+	{
+		Enemy* EnemyFly = (Enemy*)app->entityManager->CreateEntity(EntityType::ENEMYFLY);
+		EnemyFly->parameters = flyenemieNode;
+		EnemyFly->animconfig = enemieNode;
+		EnemyFly->lvl = 2;
+		if (flyenemieNode.attribute("boss").as_bool()) {
+			EnemyBoss->pawn[i] = (Enemy*)EnemyFly;
+			i++;
+		}
+	}
+
 
 	return true;
 }
@@ -55,7 +62,7 @@ bool Level2::Start()
 	app->map->InitMap();
 	app->entityManager->Start();
 	app->entityManager->Lvl2EntitiesActive();
-	app->audio->PlayMusic(sceneconfig.attribute("musicpath").as_string(), 1.5);
+	app->audio->PlayMusic(sceneconfig.attribute("musicpath").as_string());
 
 	app->win->GetWindowSize(windowW, windowH);
 

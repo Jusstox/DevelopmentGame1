@@ -27,6 +27,9 @@
   <level2 musicpath="Assets/Audio/Music/music.ogg" path="Assets/Maps/" name="Mapa 2.tmx">
 	<enemies>
 		<flyenemy x="1216" y="1344" texturepath="Assets/Textures/Bat.png" dark="true" dest1X="32" dest1Y="42" dest2X="46" dest2Y="42" fxpath="Assets/Audio/Fx/Murcielado_death.ogg"/>
+		<flyenemy x="0" y="-1000" texturepath="Assets/Textures/Bat.png" dark="true" fxpath="Assets/Audio/Fx/Murcielado_death.ogg" boss="true"/>
+		<flyenemy x="0" y="-1000" texturepath="Assets/Textures/Bat.png" dark="true" fxpath="Assets/Audio/Fx/Murcielado_death.ogg" boss="true"/>
+		<flyenemy x="0" y="-1000" texturepath="Assets/Textures/Bat.png" dark="true" fxpath="Assets/Audio/Fx/Murcielado_death.ogg" boss="true"/>
 		<flyenemyanimations>
 			<flyanim loop="true" speed="0.15f">
 				<fly x="0" y="0" w="39" h="35"/>
@@ -54,7 +57,7 @@
 			</dieanim>
 		</flyenemyanimations>
 		
-		<boss x="300" y="1408" texturepath="Assets/Textures/Boss.png" texturepatha="Assets/Textures/Boss_attack.png" dark="false" fxpath="Assets/Audio/Fx/Murcielado_death.ogg"/>
+		<boss x="1152" y="608" texturepath="Assets/Textures/Boss.png" texturepatha="Assets/Textures/Boss_attack.png" dark="false" fxpath="Assets/Audio/Fx/Murcielado_death.ogg" fxpathdark="Assets/Audio/Fx/darkness.ogg"/>
 		<bossenemyanimations>
 			<flyanim loop="true" speed="0.15f">
 				<fly x="0" y="8" w="106" h="153"/>

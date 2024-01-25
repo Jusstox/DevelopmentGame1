@@ -53,6 +53,19 @@
 				<die x="188" y="101" w="6" h="3"/>
 			</dieanim>
 		</flyenemyanimations>
+		
+		<boss x="300" y="1408" texturepath="Assets/Textures/Boss.png" dark="false" fxpath="Assets/Audio/Fx/Murcielado_death.ogg"/>
+		<bossenemyanimations>
+			<flyanim loop="true" speed="0.15f">
+				<fly x="0" y="0" w="106" h="160"/>
+				<fly x="106" y="0" w="106" h="160"/>
+				<fly x="213" y="0" w="106" h="160"/>
+				<fly x="319" y="0" w="106" h="160"/>
+				<fly x="426" y="0" w="106" h="160"/>
+				<fly x="534" y="0" w="106" h="160"/>
+				<fly x="642" y="0" w="106" h="160"/>
+			</flyanim>
+		</bossenemyanimations>
 	</enemies>	
   </level2>
 

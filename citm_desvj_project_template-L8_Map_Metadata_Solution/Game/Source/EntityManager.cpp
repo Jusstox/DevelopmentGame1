@@ -2,6 +2,7 @@
 #include "Player.h"
 #include "EnemyFly.h"
 #include "EnemySlime.h"
+#include "Boss.h"
 #include "Item.h"
 #include "App.h"
 #include "Textures.h"
@@ -96,6 +97,9 @@ Entity* EntityManager::CreateEntity(EntityType type)
 		break;
 	case EntityType::ENEMYSLIME:
 		entity = new EnemySlime();
+		break;
+	case EntityType::BOSS:
+		entity = new Boss();
 		break;
 	default:
 		break;

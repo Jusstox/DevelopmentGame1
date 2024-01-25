@@ -31,6 +31,13 @@ bool Level2::Awake(pugi::xml_node config)
 		EnemyFly->animconfig = enemieNode;
 		EnemyFly->lvl = 2;
 	}
+
+	pugi::xml_node bossenemieNode = enemieNode.child("boss");
+	Enemy* EnemyBoss = (Enemy*)app->entityManager->CreateEntity(EntityType::BOSS);
+	EnemyBoss->parameters = bossenemieNode;
+	EnemyBoss->animconfig = enemieNode;
+	EnemyBoss->lvl = 2;
+
 	return true;
 }
 

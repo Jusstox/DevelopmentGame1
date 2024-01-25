@@ -13,6 +13,7 @@ enum class EnemyType
 {
 	WALKER,
 	FLY,
+	BOSS,
 	UNKNOWN
 };
 

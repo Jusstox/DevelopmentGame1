@@ -10,9 +10,13 @@ Github link: https://github.com/Jusstox/DevelopmentGame1
 ## New Stuff!!
 
 In this version of our game we have included some interesting features, 
-- A new finale to the game.
+- A new finale to the game (win and lose screens).
 - A boss battle with different stages!!
 - 1 new level and some map changes
+- Main menu
+- Intro scene
+- In game menu/settings
+- UI
 
 ### Optimization changes:
 
@@ -21,10 +25,9 @@ In this version of our game we have included some interesting features,
 -  Entities outside the cave dont render went outside and viceversa
 -  The enemies dont keep updating if you are very far
 -  Player is now loaded from the config.xml
+-  Load and unload map (NEW)
+-  Optick GUI implementation (NEW)
   
-
-
-
 
 # Key features
 
@@ -33,6 +36,12 @@ In this version of our game we have included some interesting features,
 - Realistic cave lighting 
 - Enemies patrol routes
 - Boss battle (NEW)
+- Checkpoints (NEW)
+- Tp to the next level (NEW)
+- Collectibles (NEW)
+
+
+
 
 # Controls
 
@@ -48,6 +57,12 @@ SPACEBAR - Jump
 
 Left click - Shoot shuriken at mouse position
 
+F1 Start from the first level 
+
+F2 Start from the second level 
+
+IF YOU SWITCH LEVELS ENTITIES ARE RESPAWNED
+
 F3 Respawn
 
 F4 Lock/Unlock camera 
@@ -55,6 +70,10 @@ F4 Lock/Unlock camera
 F5 Save current game 
 
 F6 Load save file
+
+F7 TP to checkpoints
+
+F8 View GUI bounds with states
 
 F9 Toggle colliders
 

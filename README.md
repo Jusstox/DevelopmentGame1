@@ -39,9 +39,8 @@ In this version of our game we have included some interesting features,
 - Checkpoints (NEW)
 - Tp to the next level (NEW)
 - Collectibles (NEW)
-
-
-
+- The load also applies through the scenes (NEW)
+- Save progress (NEW)
 
 # Controls
 

@@ -35,6 +35,8 @@ public:
 
 	void cameraLimit();
 
+	void goNextlvl();
+
 	bool lockCamera = true;
 	//L03: DONE 3b: Declare a Player attribute
 	Player* player;

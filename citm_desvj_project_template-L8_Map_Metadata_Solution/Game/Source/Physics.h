@@ -34,6 +34,7 @@ enum class ColliderType {
 	ENEMY,
 	SHURIKEN,
 	ARENA,
+	CHECKPOINT,
 	UNKNOWN
 	// ..
 };

@@ -11,6 +11,7 @@
 #include "Window.h"
 #include "Map.h"
 #include "Level1.h"
+#include "Level2.h"
 
 Player::Player() : Entity(EntityType::PLAYER)
 {
@@ -138,6 +139,13 @@ bool Player::Start() {
 	fight = false;
 	fxbossplayed = false;
 	lives = 3;
+	lost = false;
+	lastcheckpoint = initPosition;
+	lastcheckpoint2 = iPoint(32, 1408);
+	checkpointposlvl1[0] = iPoint(2544, 740);
+	checkpointposlvl1[1] = iPoint(3792, 30);
+	checkpointposlvl1[2] = iPoint(6100, 30);
+	icheckiterator = 0;
 
 	return true;
 }
@@ -203,6 +211,7 @@ bool Player::Update(float dt)
 		}
 	}
 
+	app->render->DrawText(text.GetString(), bounds.x, bounds.y, bounds.w, bounds.h, 50, 50, 50);
 
 	switch (state)
 	{
@@ -229,6 +238,37 @@ bool Player::Update(float dt)
 		respawn();
 	}
 
+	if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN) {
+		if (app->sceneManager->currentScene == app->sceneManager->level1){
+			respawn();
+		}
+		else {
+			app->sceneManager->level2->goNextlvl();
+		}
+	}
+
+	if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN) {
+		if (app->sceneManager->currentScene == app->sceneManager->level1) {
+			app->sceneManager->level1->goNextlvl();
+		}
+		else {
+			respawn();
+		}
+	}
+
+	if (app->input->GetKey(SDL_SCANCODE_F7) == KEY_DOWN) {
+		if (lvl == 1) {
+			pbody->body->SetTransform(b2Vec2(PIXEL_TO_METERS(checkpointposlvl1[icheckiterator].x), PIXEL_TO_METERS(checkpointposlvl1[icheckiterator].y)), 0);
+			icheckiterator++;
+			if (icheckiterator == 3) {
+				icheckiterator = 0;
+			}
+		}
+		else {
+			pbody->body->SetTransform(b2Vec2(PIXEL_TO_METERS(lastcheckpoint2.x), PIXEL_TO_METERS(lastcheckpoint2.y)), 0);
+		}
+	}
+
 	if (!shuriken) {
 		b2Vec2 diePos = b2Vec2(PIXEL_TO_METERS(-100), PIXEL_TO_METERS(-100));
 		pbodyshuriken->body->SetTransform(diePos, 0);
@@ -244,15 +284,23 @@ bool Player::Update(float dt)
 
 	if (death) {
 		state = DIE;
-		fight = false;
 		if (dieAnim.HasFinished()) {
 			dieAnim.Reset();
 			state = IDLE;
-			respawn();
-			bossing = false;
-			death = false;
-			app->entityManager->respawnEntities(lvl);
 			lives--;
+			death = false;
+			if (lives <= 0) {
+				//game over 
+				respawn();
+				lost = true;
+				bossing = false;
+				death = false;
+				fight = false;
+				app->entityManager->respawnEntities(lvl);
+			}
+			else {
+				respawnlastcheckpoint();
+			}
 		}
 	}
 
@@ -467,17 +515,33 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 		break;
 	case ColliderType::ENEMY:
 		if (physA == pbody) {
-			death = true;
+			if (!godmode) {
+				death = true;
+			}
 		}
 		if (physA == pbodyshuriken) {
 			shuriken = false;
 		}
 		break;
 	case ColliderType::ARENA:
-		fight = true;
-		if (fxbossplayed == false) {
-			app->audio->PlayMusic("Assets/Audio/Music/Boss-music.ogg", 0);
-			fxbossplayed = true;
+		if (physA == pbody) {
+			fight = true;
+			if (fxbossplayed == false) {
+				app->audio->PlayMusic("Assets/Audio/Music/Boss-music.ogg", 0);
+				fxbossplayed = true;
+			}
+		}
+		break;
+	case ColliderType::CHECKPOINT:
+		if (physA == pbody) {
+			if (lvl == 1) {
+				lastcheckpoint.x = METERS_TO_PIXELS(physB->body->GetTransform().p.x);
+				lastcheckpoint.y = METERS_TO_PIXELS(physB->body->GetTransform().p.y);
+			}
+			else {
+				lastcheckpoint2.x = METERS_TO_PIXELS(physB->body->GetTransform().p.x);
+				lastcheckpoint2.y = METERS_TO_PIXELS(physB->body->GetTransform().p.y);
+			}
 		}
 		break;
 	default:
@@ -505,7 +569,9 @@ void Player::respawn()
 		b2Vec2 pPosition = b2Vec2(PIXEL_TO_METERS(position.x), PIXEL_TO_METERS(position.y));
 		pbody->body->SetTransform(pPosition, 0);
 	}
-	app->audio->PlayMusic("Assets/Audio/Music/music.ogg",0);
+	if (fxbossplayed) {
+		app->audio->PlayMusic("Assets/Audio/Music/music.ogg", 0);
+	}
 	fxbossplayed = false;
 }
 
@@ -554,4 +620,25 @@ void Player::SetPlayerPos(int x, int y)
 	position.y += (40 / 2);
 	b2Vec2 pPosition = b2Vec2(PIXEL_TO_METERS(position.x), PIXEL_TO_METERS(position.y));
 	pbody->body->SetTransform(pPosition, 0);
+}
+
+void Player::respawnlastcheckpoint()
+{
+	if (lvl == 1) {
+		b2Vec2 initPos = b2Vec2(PIXEL_TO_METERS(lastcheckpoint.x), PIXEL_TO_METERS(lastcheckpoint.y));
+		pbody->body->SetTransform(initPos, 0);
+		position = initPosition;
+		pbody->body->SetActive(true);
+		if (lastcheckpoint == initPosition) {
+			dark = false;
+		}
+	}
+	else {
+		pbody->body->SetActive(true);
+		b2Vec2 pPosition = b2Vec2(PIXEL_TO_METERS(lastcheckpoint2.x), PIXEL_TO_METERS(lastcheckpoint2.y));
+		pbody->body->SetTransform(pPosition, 0);
+		if (lastcheckpoint2 == iPoint(32, 1408)) {
+			dark = false;
+		}
+	}
 }

@@ -161,3 +161,11 @@ void Level2::cameraLimit()
 		app->render->camera.y = limitCamYend;
 	}
 }
+
+void Level2::goNextlvl()
+{
+	app->sceneManager->fade = true;
+	app->sceneManager->newScene = (Scene*)app->sceneManager->level1;
+	app->sceneManager->currentStep = TO_BLACK;
+	app->sceneManager->maxFadeFrames = 100;
+}

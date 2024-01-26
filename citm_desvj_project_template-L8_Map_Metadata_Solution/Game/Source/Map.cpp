@@ -331,6 +331,10 @@ bool Map::Load(SString mapFileName)
                         c1 = app->physics->CreateRectangleSensor(x + w / 2, y + h / 2, w, h, STATIC);
                         c1->ctype = ColliderType::ARENA;
                     }
+                    else if (name == "checkpoint") {
+                        c1 = app->physics->CreateRectangleSensor(x + w / 2, y + h / 2, w, h, STATIC);
+                        c1->ctype = ColliderType::CHECKPOINT;
+                    }
                    
                     mapData.colliders.Add(c1);
                 }

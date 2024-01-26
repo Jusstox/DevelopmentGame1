@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="240" height="48" tilewidth="32" tileheight="32" infinite="0" nextlayerid="21" nextobjectid="186">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="240" height="48" tilewidth="32" tileheight="32" infinite="0" nextlayerid="22" nextobjectid="195">
  <tileset firstgid="1" name="moon" tilewidth="32" tileheight="32" tilecount="24" columns="8">
   <image source="moon.png" width="256" height="96"/>
  </tileset>
@@ -103867,6 +103867,11 @@
   <object id="182" x="4192" y="-64" width="1024" height="64"/>
   <object id="183" x="2400" y="-64" width="640" height="64"/>
  </objectgroup>
+ <objectgroup id="21" name="checkpoint">
+  <object id="187" x="3775.33" y="0" width="33.3333" height="61.3333"/>
+  <object id="188" x="6080" y="1" width="33" height="61"/>
+  <object id="191" x="2528.5" y="705" width="32" height="95"/>
+ </objectgroup>
  <objectgroup id="14" name="ganar">
   <object id="134" x="7648" y="512" width="32" height="256"/>
  </objectgroup>
@@ -103902,6 +103907,7 @@
   <object id="164" x="5662.5" y="213.333" width="128" height="10.6667"/>
   <object id="165" x="5926" y="992" width="7.5" height="480"/>
   <object id="166" x="2452.94" y="640.545" width="7" height="160"/>
+  <object id="194" x="6058.67" y="0" width="78" height="64"/>
  </objectgroup>
  <layer id="19" name="Navigation" width="240" height="48">
   <properties>

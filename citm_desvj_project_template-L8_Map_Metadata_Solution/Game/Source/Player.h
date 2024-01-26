@@ -48,6 +48,8 @@ public:
 
 	void SetPlayerPos(int x, int y);
 
+	void respawnlastcheckpoint();
+
 public:
 
 	//L02: DONE 2: Declare player parameters
@@ -90,14 +92,22 @@ public:
 	sates state;
 	bool death;
 	iPoint initPosition;
+	iPoint lastcheckpoint;
+	iPoint lastcheckpoint2;
 	float force;
 	fPoint direction;
+
+	int icheckiterator = 0;
 
 	bool fxbossplayed = false;
 	bool bossing = false;
 	bool fight = false;
+	bool lost = false;
 
+	iPoint checkpointposlvl1[3];
+	iPoint checkpointposlvl2;
 	int lives = 3;
+	SString textLives;
 };
 
 #endif // __PLAYER_H__

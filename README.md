@@ -10,11 +10,9 @@ Github link: https://github.com/Jusstox/DevelopmentGame1
 ## New Stuff!!
 
 In this version of our game we have included some interesting features, 
-- 2 new types enemies: the shadow bat and the green slime.
-- Enemies have patrol routes and chase you
-- New attack shuriken throw
-- Map changes
-- Lightning changes to the caves!
+- A new finale to the game.
+- A boss battle with different stages!!
+- 1 new level and some map changes
 
 ### Optimization changes:
 
@@ -31,9 +29,10 @@ In this version of our game we have included some interesting features,
 # Key features
 
 - Double jump
-- Shuriken throw (NEW!)
-- Realistic cave lighting (NEW!)
-- Enemies patrol routes (NEW!)
+- Shuriken throw 
+- Realistic cave lighting 
+- Enemies patrol routes
+- Boss battle (NEW)
 
 # Controls
 

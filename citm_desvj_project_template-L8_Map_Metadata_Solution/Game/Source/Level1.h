@@ -44,6 +44,8 @@ public:
 	bool reset = false;
 	bool lockCamera = true;
 
+	bool hasToReload = false;
+
 private:
 	SDL_Texture* img;
 	float textPosX, textPosY = 0;

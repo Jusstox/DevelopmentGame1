@@ -59,6 +59,8 @@ bool Settings::PreUpdate()
 
 bool Settings::Update(float dt)
 {
+	OPTICK_EVENT();
+
 	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN && app->sceneManager->currentScene == (Scene*)app->sceneManager->menu) {
 		app->sceneManager->CloseSettings();
 	}
@@ -121,7 +123,14 @@ bool Settings::OnGuiMouseClickEvent(GuiControl* control)
 	if (control->id == 7) {
 		app->audio->ChangeFxVolume(gcFSlider->percent);
 	}
-
+	if (control->id == 9) {
+		if (app->maxFrameDuration == 16) {
+			app->maxFrameDuration = 32;
+		}
+		else {
+			app->maxFrameDuration = 16;
+		}
+	}
 
 	if (control->id == 10) {
 		app->sceneManager->CloseSettings();

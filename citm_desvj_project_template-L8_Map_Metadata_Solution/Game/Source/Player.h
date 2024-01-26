@@ -78,6 +78,7 @@ public:
 	//Audio fx
 	int pickCoinFxId = -1;
 	int victory = -1;
+	int checkfx = -1;
 
 	// L07 DONE 5: Add physics to the player - declare a Physics body
 	PhysBody* pfeet = NULL;
@@ -102,12 +103,18 @@ public:
 	bool fxbossplayed = false;
 	bool bossing = false;
 	bool fight = false;
-	bool lost = false;
 
 	iPoint checkpointposlvl1[3];
 	iPoint checkpointposlvl2;
 	int lives = 3;
 	SString textLives;
+	SDL_Texture* wonTexture = NULL;
+	SDL_Texture* loseTexture = NULL;
+
+	int conins = 0;
+
+	bool won = false;
+	bool lose = false;
 };
 
 #endif // __PLAYER_H__

@@ -8,6 +8,7 @@
 #include "Map.h"
 #include "Audio.h"
 #include "Window.h"
+#include "Item.h"
 
 Level2::Level2() : Scene()
 {
@@ -44,13 +45,19 @@ bool Level2::Awake(pugi::xml_node config)
 		}
 	}
 
+	for (pugi::xml_node itemNode = config.child("item"); itemNode; itemNode = itemNode.next_sibling("item"))
+	{
+		Item* item = (Item*)app->entityManager->CreateEntity(EntityType::ITEM);
+		item->parameters = itemNode;
+		item->lvl = 2;
+	}
 
 	return true;
 }
 
 bool Level2::Start()
 {
-	if (player->lvl == 1) {
+	if (player->lvl == 1 || reset) {
 		app->sceneManager->level1->CleanUp();
 		app->map->name = sceneconfig.attribute("name").as_string();
 		app->map->path = sceneconfig.attribute("path").as_string();
@@ -86,6 +93,13 @@ bool Level2::PreUpdate()
 
 bool Level2::Update(float dt)
 {
+	OPTICK_EVENT();
+
+	if (hasToReload) {
+		app->LoadRequest();
+		hasToReload = false;
+	}
+
 	if (lockCamera) {
 		cameraLimit();
 	}
@@ -110,6 +124,8 @@ bool Level2::Update(float dt)
 		}
 	}
 
+	if (app->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN) app->SaveRequest();
+	if (app->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN) app->LoadRequest();
 
 	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN && !app->sceneManager->settings->menuSetings && settings == false) {
 		app->sceneManager->OpenSettings();
@@ -133,6 +149,11 @@ bool Level2::CleanUp()
 	app->map->CleanUp();
 	app->map->active = false;
 	app->entityManager->ActiveNone();
+	if (player != nullptr) {
+		if (player->pbody != NULL) {
+			player->pbody->body->SetTransform(b2Vec2(-200, -200), 0);
+		}
+	}
 	return true;
 }
 

@@ -44,6 +44,8 @@ public:
 	SDL_Rect quat;
 	uint windowW, windowH;
 
+	bool debug = false;
+
 };
 
 #endif // __GUIMANAGER_H__

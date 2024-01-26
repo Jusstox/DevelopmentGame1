@@ -74,6 +74,7 @@ bool EnemyFly::Start()
 
 bool EnemyFly::Update(float dt)
 {
+	OPTICK_EVENT();
 
 	if (abs(app->sceneManager->currentScene->GetPlayer()->getPlayerTileX() - getEnemyTileX()) > 50) {
 		velocity.x = 0;

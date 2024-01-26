@@ -220,6 +220,8 @@ PhysBody* Physics::CreateChain(int x, int y, int* points, int size, bodyType typ
 // 
 bool Physics::PostUpdate()
 {
+	OPTICK_EVENT();
+
 	bool ret = true;
 
 	// Activate or deactivate debug mode

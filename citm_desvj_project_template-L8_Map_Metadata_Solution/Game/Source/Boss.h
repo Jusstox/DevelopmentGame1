@@ -22,6 +22,8 @@ public:
 
 	bool Draw();
 
+	void MoveAway();
+
 	const char* texturePatha;
 	Animation flyinganim;
 	Animation atackanim;
@@ -36,6 +38,7 @@ public:
 
 	int fxdark = -1;
 	int fxatack = -1;
+	int fxdie = -1;
 	bool fxatackplayed = false;
 
 	PhysBody* patack = NULL;

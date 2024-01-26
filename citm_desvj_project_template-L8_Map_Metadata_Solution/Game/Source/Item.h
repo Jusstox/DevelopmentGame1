@@ -4,6 +4,7 @@
 #include "Entity.h"
 #include "Point.h"
 #include "SDL/include/SDL.h"
+#include "Physics.h"
 
 struct SDL_Texture;
 
@@ -22,6 +23,12 @@ public:
 
 	bool CleanUp();
 
+	void OnCollision(PhysBody* physA, PhysBody* physB);
+
+	void Respawn();
+
+	void MoveAway();
+
 public:
 
 	bool isPicked = false;
@@ -29,10 +36,12 @@ public:
 private:
 
 	//L07 DONE 4: Add a physics to an item
-	PhysBody* pbody;
+	PhysBody* pbody = NULL;
+	b2Transform inpos;
 	SDL_Texture* texture;
 	const char* texturePath;
 	uint texW, texH;
+	bool hit;
 
 };
 

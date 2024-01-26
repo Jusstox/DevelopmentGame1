@@ -6,6 +6,7 @@
 #include "PerfTimer.h"
 #include "Timer.h"
 #include "EntityManager.h"
+#include "Optick/include/optick.h"
 
 #include "PugiXml/src/pugixml.hpp"
 
@@ -104,6 +105,9 @@ public:
 	Physics* physics;
 	GuiManager* guiManager;
 
+	//L02 DONE 1: Set the maximun frame duration in miliseconds.
+	uint32 maxFrameDuration = 0;
+
 private:
 
 	int argc;
@@ -133,8 +137,7 @@ private:
 	float averageFps = 0.0f;
 	uint32 secondsSinceStartup = 0;
 
-	//L02 DONE 1: Set the maximun frame duration in miliseconds.
-	uint32 maxFrameDuration = 0;
+	
 
 	//
 	bool loadRequest = false;

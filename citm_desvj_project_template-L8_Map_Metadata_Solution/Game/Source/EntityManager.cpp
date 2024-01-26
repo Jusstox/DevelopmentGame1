@@ -169,6 +169,7 @@ void EntityManager::ActiveNone()
 	{
 		item->data->active = false;
 		item->data->CleanUp();
+		item->data->MoveAway();
 	}
 }
 
@@ -222,6 +223,8 @@ void EntityManager::respawnEntities(int lvl)
 
 bool EntityManager::Update(float dt)
 {
+	OPTICK_EVENT();
+
 	bool ret = true;
 	ListItem<Entity*>* item;
 	Entity* pEntity = NULL;

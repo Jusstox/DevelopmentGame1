@@ -89,6 +89,8 @@ bool Player::Start() {
 
 	texture = app->tex->Load(config.attribute("texturePath").as_string());
 	blendTexture = app->tex->Load(config.attribute("textureblendPath").as_string());
+	wonTexture = app->tex->Load(config.attribute("wonpath").as_string());
+	loseTexture = app->tex->Load(config.attribute("losepath").as_string());
 	app->tex->GetSize(texture, texW, texH);
 
 	currentSAnimation = &shurikenanim;
@@ -128,6 +130,7 @@ bool Player::Start() {
 	if (pickCoinFxId == -1) {
 		pickCoinFxId = app->audio->LoadFx(config.attribute("coinfxpath").as_string());
 		victory = app->audio->LoadFx(config.attribute("winfxpath").as_string());
+		checkfx = app->audio->LoadFx(config.attribute("checkfxpath").as_string());
 	}
 
 	speed = config.attribute("speed").as_float();
@@ -138,22 +141,45 @@ bool Player::Start() {
 	bossing = false;
 	fight = false;
 	fxbossplayed = false;
-	lives = 3;
-	lost = false;
 	lastcheckpoint = initPosition;
 	lastcheckpoint2 = iPoint(32, 1408);
 	checkpointposlvl1[0] = iPoint(2544, 740);
 	checkpointposlvl1[1] = iPoint(3792, 30);
 	checkpointposlvl1[2] = iPoint(6100, 30);
 	icheckiterator = 0;
+	won = false;
+	lose = false;
 
 	return true;
 }
 
 bool Player::Update(float dt)
 {
+	OPTICK_EVENT();
 	//dt = dt / 2;
 	// L07 DONE 5: Add physics to the player - updated player position using physics
+	if (won) {
+		if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
+			app->sceneManager->fade = true;
+			app->sceneManager->newScene = (Scene*)app->sceneManager->menu;
+			app->sceneManager->currentStep = TO_BLACK;
+			app->sceneManager->maxFadeFrames = 100;
+		}
+		app->render->DrawTexture(wonTexture, app->render->camera.x * -1, app->render->camera.y * -1, NULL);
+		return true;
+	}
+
+	if (lose) {
+		if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
+			app->sceneManager->fade = true;
+			app->sceneManager->newScene = (Scene*)app->sceneManager->menu;
+			app->sceneManager->currentStep = TO_BLACK;
+			app->sceneManager->maxFadeFrames = 100;
+		}
+		app->render->DrawTexture(loseTexture, app->render->camera.x * -1, app->render->camera.y * -1, NULL);
+		return true;
+	}
+
 	if (app->sceneManager->currentScene->settings) {
 		if (flip) {
 			app->render->DrawTexturePR(texture, position.x, position.y, &currentAnimation->GetCurrentFrame());
@@ -211,7 +237,10 @@ bool Player::Update(float dt)
 		}
 	}
 
-	app->render->DrawText(text.GetString(), bounds.x, bounds.y, bounds.w, bounds.h, 50, 50, 50);
+	std::string s = std::to_string(lives);
+	char const* pchar = s.c_str();
+	app->render->DrawText("LIVES", 20, 20, 100, 50, 255, 255, 255);
+	app->render->DrawText(pchar, 145, 20, 25, 50, 255, 255, 255);
 
 	switch (state)
 	{
@@ -265,6 +294,9 @@ bool Player::Update(float dt)
 			}
 		}
 		else {
+			if (!bossing) {
+				dark = false;
+			}
 			pbody->body->SetTransform(b2Vec2(PIXEL_TO_METERS(lastcheckpoint2.x), PIXEL_TO_METERS(lastcheckpoint2.y)), 0);
 		}
 	}
@@ -291,12 +323,7 @@ bool Player::Update(float dt)
 			death = false;
 			if (lives <= 0) {
 				//game over 
-				respawn();
-				lost = true;
-				bossing = false;
-				death = false;
-				fight = false;
-				app->entityManager->respawnEntities(lvl);
+				lose = true;
 			}
 			else {
 				respawnlastcheckpoint();
@@ -447,6 +474,8 @@ bool Player::CleanUp()
 {
 	app->tex->UnLoad(texture);
 	app->tex->UnLoad(blendTexture);
+	app->tex->UnLoad(wonTexture);
+	app->tex->UnLoad(loseTexture);
 	if (pbody != nullptr) {
 		pbody->body->SetActive(false);
 		pfeet->body->SetGravityScale(0);
@@ -482,10 +511,8 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 		}
 		break;
 	case ColliderType::ITEM:
-		if (physB->ctype == ColliderType::ITEM) {
-			app->entityManager->DestroyEntity(physB->listener);
-		}
-	//	app->audio->PlayFx(pickCoinFxId);
+		app->audio->PlayFx(pickCoinFxId);
+		conins++;
 		break;
 	case ColliderType::VICTORY:
 		if (physA == pbody) {
@@ -530,11 +557,15 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 				app->audio->PlayMusic("Assets/Audio/Music/Boss-music.ogg", 0);
 				fxbossplayed = true;
 			}
+			if (lastcheckpoint2 == iPoint(32, 1408)) {
+				lastcheckpoint2 = iPoint(310, 91);
+			}
 		}
 		break;
 	case ColliderType::CHECKPOINT:
 		if (physA == pbody) {
 			if (lvl == 1) {
+				app->audio->PlayFx(checkfx);
 				lastcheckpoint.x = METERS_TO_PIXELS(physB->body->GetTransform().p.x);
 				lastcheckpoint.y = METERS_TO_PIXELS(physB->body->GetTransform().p.y);
 			}
@@ -560,6 +591,7 @@ void Player::respawn()
 		pbody->body->SetActive(true);
 	}
 	else {
+
 		pbody->body->SetActive(true);
 		dark = false;
 		position.x = 32;
@@ -572,7 +604,13 @@ void Player::respawn()
 	if (fxbossplayed) {
 		app->audio->PlayMusic("Assets/Audio/Music/music.ogg", 0);
 	}
+	if (lose) {
+		conins = 0;
+		lives = 3;
+	}
 	fxbossplayed = false;
+	won = false;
+	lose = false;
 }
 
 int Player::getPlayerTileX()
@@ -588,6 +626,25 @@ int Player::getPlayerTileY()
 bool Player::LoadState(pugi::xml_node& node)
 {
 	pugi::xml_node PlayerNode = node.child(name.GetString());
+	if (lvl != PlayerNode.attribute("lvl").as_int())
+	{
+		if (lvl == 2) {
+			app->sceneManager->level1->hasToReload = true;
+			app->sceneManager->fade = true;
+			app->sceneManager->newScene = (Scene*)app->sceneManager->level1;
+			app->sceneManager->currentStep = TO_BLACK;
+			app->sceneManager->maxFadeFrames = 100;
+			return true;
+		}
+		else {
+			app->sceneManager->level2->hasToReload = true;
+			app->sceneManager->fade = true;
+			app->sceneManager->newScene = (Scene*)app->sceneManager->level2;
+			app->sceneManager->currentStep = TO_BLACK;
+			app->sceneManager->maxFadeFrames = 100;
+			return true;
+		}
+	}
 	position.x = PlayerNode.attribute("x").as_int();
 	position.y = PlayerNode.attribute("y").as_int();
 	dark = PlayerNode.attribute("dark").as_bool();
@@ -605,6 +662,7 @@ bool Player::SaveState(pugi::xml_node& node)
 	PlayerNode.append_attribute("x").set_value(position.x);
 	PlayerNode.append_attribute("y").set_value(position.y);
 	PlayerNode.append_attribute("dark").set_value(dark);
+	PlayerNode.append_attribute("lvl").set_value(lvl);
 	return true;
 }
 

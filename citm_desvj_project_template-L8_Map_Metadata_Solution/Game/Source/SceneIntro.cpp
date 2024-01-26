@@ -48,6 +48,8 @@ bool SceneIntro::Update(float dt)
 
 bool SceneIntro::PostUpdate()
 {
+	OPTICK_EVENT();
+
 	app->render->DrawTexture(img, windowW/2 - texW/2, windowH / 2 - texH / 2,NULL);
 	if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
 		app->sceneManager->fade = true;

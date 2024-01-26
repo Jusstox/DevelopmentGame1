@@ -42,6 +42,8 @@ bool Enemy::Start()
 
 bool Enemy::Update(float dt)
 {
+	OPTICK_EVENT();
+
 	if (!app->sceneManager->currentScene->settings) {
 		if (!hit) {
 			pbody->body->SetLinearVelocity(velocity);

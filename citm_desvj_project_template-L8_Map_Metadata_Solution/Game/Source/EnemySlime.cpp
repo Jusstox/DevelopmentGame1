@@ -68,6 +68,8 @@ bool EnemySlime::Start()
 
 bool EnemySlime::Update(float dt)
 {
+	OPTICK_EVENT();
+
 	if (abs(app->sceneManager->currentScene->GetPlayer()->getPlayerTileX() - getEnemyTileX()) > 50) {
 		velocity.x = 0;
 		velocity.y = 0;

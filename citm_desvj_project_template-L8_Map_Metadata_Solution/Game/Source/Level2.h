@@ -39,6 +39,9 @@ public:
 
 	bool lockCamera = true;
 	//L03: DONE 3b: Declare a Player attribute
-	Player* player;
+	Player* player = nullptr;
+	bool reset = false;
+
+	bool hasToReload = false;
 };
 

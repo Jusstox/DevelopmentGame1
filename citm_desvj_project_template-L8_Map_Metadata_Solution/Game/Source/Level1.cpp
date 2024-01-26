@@ -39,11 +39,12 @@ bool Level1::Awake(pugi::xml_node config)
 
 	// iterate all items in the scene
 	// Check https://pugixml.org/docs/quickstart.html#access
-	/*for (pugi::xml_node itemNode = config.child("item"); itemNode; itemNode = itemNode.next_sibling("item"))
+	for (pugi::xml_node itemNode = config.child("item"); itemNode; itemNode = itemNode.next_sibling("item"))
 	{
 		Item* item = (Item*)app->entityManager->CreateEntity(EntityType::ITEM);
 		item->parameters = itemNode;
-	}*/
+		item->lvl = 1;
+	}
 
 	//Load enemies
 	pugi::xml_node enemieNode = config.child("enemies");
@@ -118,6 +119,13 @@ bool Level1::PreUpdate()
 
 bool Level1::Update(float dt)
 {
+	OPTICK_EVENT();
+
+	if (hasToReload) {
+		app->LoadRequest();
+		hasToReload = false;
+	}
+
 	if (lockCamera) {
 		cameraLimit();
 	}
@@ -149,13 +157,6 @@ bool Level1::Update(float dt)
 	if (app->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN) app->SaveRequest();
 	if (app->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN) app->LoadRequest();
 
-	if (app->input->GetKey(SDL_SCANCODE_C) == KEY_DOWN) {
-		app->sceneManager->fade = true;
-		app->sceneManager->newScene = (Scene*)app->sceneManager->level2;
-		app->sceneManager->currentStep = TO_BLACK;
-		app->sceneManager->maxFadeFrames = 100;
-	}
-
 	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN && !app->sceneManager->settings->menuSetings && settings == false) {
 		app->sceneManager->OpenSettings();
 		settings = true;
@@ -184,6 +185,9 @@ bool Level1::CleanUp()
 	app->map->CleanUp();
 	app->map->active = false;
 	app->entityManager->ActiveNone();
+	if (player->pbody != NULL) {
+		player->pbody->body->SetTransform(b2Vec2(-200, -200), 0);
+	}
 	return true;
 }
 

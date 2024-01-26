@@ -2,6 +2,7 @@
 #include "Textures.h"
 #include "Render.h"
 #include "Window.h"
+#include "GuiManager.h"
 
 GuiCheckBox::GuiCheckBox(uint32 id, SDL_Rect bounds, const char* text) : GuiControl(GuiControlType::CHECKBOX, id)
 {
@@ -28,7 +29,7 @@ GuiCheckBox::~GuiCheckBox()
 
 bool GuiCheckBox::Update(float dt)
 {
-	debug = app->physics->debug;
+	debug = app->guiManager->debug;
 
 	if (checked) {
 		app->render->DrawTexture(check, bounds.x + 4 + app->render->camera.x*-1, bounds.y + 4 + app->render->camera.y*-1, NULL,1);

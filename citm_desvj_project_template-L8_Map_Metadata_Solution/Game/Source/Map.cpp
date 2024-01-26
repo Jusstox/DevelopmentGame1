@@ -45,6 +45,8 @@ bool Map::Start() {
 
 bool Map::Update(float dt)
 {
+    OPTICK_EVENT();
+
     bool ret = true;
 
     ListItem<MapLayer*>* mapLayer; 

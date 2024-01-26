@@ -33,6 +33,7 @@ bool Boss::Awake()
 
 	fxdark = app->audio->LoadFx(parameters.attribute("fxpathdark").as_string());
 	fxatack = app->audio->LoadFx(parameters.attribute("fxpathatack").as_string());
+	fxdie = app->audio->LoadFx(parameters.attribute("fxpathdie").as_string());
 
 	Enemy::Awake();
 
@@ -57,7 +58,7 @@ bool Boss::Start()
 	inpos = pbody->body->GetTransform();
 
 	if (patack == NULL) {
-		patack = app->physics->CreateRectangleSensor(-10, -10, 30, 40, bodyType::DYNAMIC);
+		patack = app->physics->CreateRectangleSensor(-250, -250, 30, 40, bodyType::DYNAMIC);
 		// L07 DONE 6: Assign player class (using "this") to the listener of the pbody. This makes the Physics module to call the OnCollision method
 		patack->listener = this;
 		// L07 DONE 7: Assign collider type
@@ -73,6 +74,7 @@ bool Boss::Start()
 	p2 = 0;
 	p3 = 0;
 	fxatackplayed = false;
+	dead = false;
 
 	Enemy::Start();
 
@@ -81,6 +83,25 @@ bool Boss::Start()
 
 bool Boss::Update(float dt)
 {
+	OPTICK_EVENT();
+
+	if (dead)
+	{
+		if (position.y > 0) {
+			pbody->body->SetLinearVelocity(b2Vec2(0, -5));
+		}else{
+			pbody->body->SetLinearVelocity(b2Vec2(0, 0));
+			app->sceneManager->currentScene->GetPlayer()->won = true;
+			return true;
+		}
+		currentAnimation = &flyinganim;
+		currentAnimation->Update(dt);
+		b2Transform pbodyPos = pbody->body->GetTransform();
+		position.x = METERS_TO_PIXELS(pbodyPos.p.x) - (currentAnimation->GetCurrentFrame().w / 2);
+		position.y = METERS_TO_PIXELS(pbodyPos.p.y) - (currentAnimation->GetCurrentFrame().h / 2 + 10);
+		Draw();
+		return true;
+	}
 
 	if (app->sceneManager->currentScene->GetPlayer()->fight) {
 		if (spawnp) {
@@ -132,7 +153,10 @@ bool Boss::Update(float dt)
 			}
 			else {
 				pbody->body->SetLinearVelocity(b2Vec2(0, 0));
-				pbody->body->SetTransform(b2Vec2(PIXEL_TO_METERS(0), PIXEL_TO_METERS(0)), 0);
+				pbody->body->SetTransform(b2Vec2(PIXEL_TO_METERS(-200), PIXEL_TO_METERS(-200)), 0);
+				currentAnimation = &flyinganim;
+				atackanim.Reset();
+				atacking = false;
 				return true;
 			}
 		}
@@ -144,7 +168,7 @@ bool Boss::Update(float dt)
 			}
 			else {
 				pbody->body->SetLinearVelocity(b2Vec2(0, 0));
-				pbody->body->SetTransform(b2Vec2(PIXEL_TO_METERS(0), PIXEL_TO_METERS(0)), 0);
+				pbody->body->SetTransform(b2Vec2(PIXEL_TO_METERS(-200), PIXEL_TO_METERS(-200)), 0);
 			}
 		}
 		else {
@@ -167,7 +191,7 @@ bool Boss::Update(float dt)
 			if (atackanim.HasFinished()) {
 				fxatackplayed = false;
 				currentAnimation = &flyinganim;
-				patack->body->SetTransform(b2Vec2(PIXEL_TO_METERS(-10), PIXEL_TO_METERS(-10)), 0);
+				patack->body->SetTransform(b2Vec2(PIXEL_TO_METERS(-200), PIXEL_TO_METERS(-200)), 0);
 				atackanim.Reset();
 				atacking = false;
 			}
@@ -193,11 +217,6 @@ bool Boss::Update(float dt)
 	}
 
 	Draw();
-
-	if (dead)
-	{
-
-	}
 
 	if (velocity.x < 0) {
 		right = true;
@@ -251,6 +270,12 @@ void Boss::OnCollision(PhysBody* physA, PhysBody* physB)
 				pawnsdead = 0;
 				app->audio->PlayFx(fxdark);
 			}
+			if (lives <= 0) {
+				if (!dead) {
+					app->audio->PlayFx(fxdie);
+				}
+				dead = true;
+			}
 		}
 		break;
 	default:
@@ -272,7 +297,7 @@ void Boss::Respawn()
 {
 	currentAnimation = &flyinganim;
 	atackanim.Reset();
-	patack->body->SetTransform(b2Vec2(PIXEL_TO_METERS(-10), PIXEL_TO_METERS(-10)), 0);
+	patack->body->SetTransform(b2Vec2(PIXEL_TO_METERS(-250), PIXEL_TO_METERS(-250)), 0);
 	waiting = false;
 	lives = 30;
 	pawnsdead = 0;
@@ -287,59 +312,63 @@ void Boss::Respawn()
 bool Boss::Draw()
 {
 	if (currentAnimation == &flyinganim) {
-		if (!dead) {
-			if ((app->sceneManager->currentScene->GetPlayer()->dark &&
-				(abs(app->sceneManager->currentScene->GetPlayer()->getPlayerTileX() - getEnemyTileX()) < 8) &&
-				(abs(app->sceneManager->currentScene->GetPlayer()->getPlayerTileY() - getEnemyTileY()) < 8))
-				|| app->sceneManager->currentScene->GetPlayer()->godmode) {
-				if (dark) {
-					if (right) {
-						app->render->DrawTexturePR(texture, position.x, position.y, &currentAnimation->GetCurrentFrame());
-					}
-					else {
-						app->render->DrawTexture(texture, position.x, position.y, &currentAnimation->GetCurrentFrame());
-					}
+		if ((app->sceneManager->currentScene->GetPlayer()->dark &&
+			(abs(app->sceneManager->currentScene->GetPlayer()->getPlayerTileX() - getEnemyTileX()) < 8) &&
+			(abs(app->sceneManager->currentScene->GetPlayer()->getPlayerTileY() - getEnemyTileY()) < 8))
+			|| app->sceneManager->currentScene->GetPlayer()->godmode) {
+			if (dark) {
+				if (right) {
+					app->render->DrawTexturePR(texture, position.x, position.y, &currentAnimation->GetCurrentFrame());
+				}
+				else {
+					app->render->DrawTexture(texture, position.x, position.y, &currentAnimation->GetCurrentFrame());
 				}
 			}
-			if (!app->sceneManager->currentScene->GetPlayer()->dark || app->sceneManager->currentScene->GetPlayer()->godmode) {
-				if (!dark) {
-					if (right) {
-						app->render->DrawTexturePR(texture, position.x, position.y - 10, &currentAnimation->GetCurrentFrame());
-					}
-					else {
-						app->render->DrawTexture(texture, position.x, position.y - 10, &currentAnimation->GetCurrentFrame());
-					}
+		}
+		if (!app->sceneManager->currentScene->GetPlayer()->dark || app->sceneManager->currentScene->GetPlayer()->godmode) {
+			if (!dark) {
+				if (right) {
+					app->render->DrawTexturePR(texture, position.x, position.y - 10, &currentAnimation->GetCurrentFrame());
+				}
+				else {
+					app->render->DrawTexture(texture, position.x, position.y - 10, &currentAnimation->GetCurrentFrame());
 				}
 			}
 		}
 	}
 	else {
-		if (!dead) {
-			if ((app->sceneManager->currentScene->GetPlayer()->dark &&
-				(abs(app->sceneManager->currentScene->GetPlayer()->getPlayerTileX() - getEnemyTileX()) < 8) &&
-				(abs(app->sceneManager->currentScene->GetPlayer()->getPlayerTileY() - getEnemyTileY()) < 8))
-				|| app->sceneManager->currentScene->GetPlayer()->godmode) {
-				if (dark) {
-					if (right) {
-						app->render->DrawTexturePR(texturea, position.x, position.y, &currentAnimation->GetCurrentFrame());
-					}
-					else {
-						app->render->DrawTexture(texturea, position.x, position.y, &currentAnimation->GetCurrentFrame());
-					}
+		if ((app->sceneManager->currentScene->GetPlayer()->dark &&
+			(abs(app->sceneManager->currentScene->GetPlayer()->getPlayerTileX() - getEnemyTileX()) < 8) &&
+			(abs(app->sceneManager->currentScene->GetPlayer()->getPlayerTileY() - getEnemyTileY()) < 8))
+			|| app->sceneManager->currentScene->GetPlayer()->godmode) {
+			if (dark) {
+				if (right) {
+					app->render->DrawTexturePR(texturea, position.x, position.y, &currentAnimation->GetCurrentFrame());
+				}
+				else {
+					app->render->DrawTexture(texturea, position.x, position.y, &currentAnimation->GetCurrentFrame());
 				}
 			}
-			if (!app->sceneManager->currentScene->GetPlayer()->dark || app->sceneManager->currentScene->GetPlayer()->godmode) {
-				if (!dark) {
-					if (right) {
-						app->render->DrawTexturePR(texturea, position.x, position.y-2, &currentAnimation->GetCurrentFrame());
-					}
-					else {
-						app->render->DrawTexture(texturea, position.x, position.y-2, &currentAnimation->GetCurrentFrame());
-					}
+		}
+		if (!app->sceneManager->currentScene->GetPlayer()->dark || app->sceneManager->currentScene->GetPlayer()->godmode) {
+			if (!dark) {
+				if (right) {
+					app->render->DrawTexturePR(texturea, position.x, position.y-2, &currentAnimation->GetCurrentFrame());
+				}
+				else {
+					app->render->DrawTexture(texturea, position.x, position.y-2, &currentAnimation->GetCurrentFrame());
 				}
 			}
 		}
 	}
 
 	return true;
+}
+
+void Boss::MoveAway()
+{
+	if (patack != NULL) {
+		patack->body->SetTransform(b2Vec2(-250, -250), 0);
+		pbody->body->SetTransform(b2Vec2(-250, -250), 0);
+	}
 }

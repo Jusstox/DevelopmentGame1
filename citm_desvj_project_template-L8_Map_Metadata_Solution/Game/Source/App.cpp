@@ -7,7 +7,7 @@
 #include "SceneManager.h"
 #include "Map.h"
 #include "Physics.h"
-#include "Optick/include/optick.h"
+
 #include "GuiManager.h"
 
 #include "Defs.h"

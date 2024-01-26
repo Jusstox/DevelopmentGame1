@@ -1,6 +1,7 @@
 #include "GuiControlButton.h"
 #include "Render.h"
 #include "App.h"
+#include "GuiManager.h"
 
 GuiControlButton::GuiControlButton(uint32 id, SDL_Rect bounds, const char* text) : GuiControl(GuiControlType::BUTTON, id)
 {
@@ -18,7 +19,7 @@ GuiControlButton::~GuiControlButton()
 
 bool GuiControlButton::Update(float dt)
 {
-	debug = app->physics->debug;
+	debug = app->guiManager->debug;
 
 	if (state != GuiControlState::DISABLED)
 	{

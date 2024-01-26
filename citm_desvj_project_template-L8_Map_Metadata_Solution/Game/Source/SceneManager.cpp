@@ -72,6 +72,8 @@ bool SceneManager::PreUpdate()
 
 bool SceneManager::Update(float dt)
 {
+	OPTICK_EVENT();
+
 	bool ret = true;
 	ListItem<Scene*>* item;
 	Scene* pScene = NULL;
@@ -96,6 +98,8 @@ bool SceneManager::Update(float dt)
 
 bool SceneManager::PostUpdate()
 {
+	OPTICK_EVENT();
+
 	bool ret = true;
 	ListItem<Scene*>* item;
 	Scene* pScene = NULL;

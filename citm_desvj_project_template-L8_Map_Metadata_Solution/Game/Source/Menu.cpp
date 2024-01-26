@@ -41,8 +41,8 @@ bool Menu::Start()
 	app->render->camera.y = 0;
 	app->win->GetWindowSize(windowW, windowH);
 	// 25px per letter
-	SDL_Rect playPos = { windowW / 20, windowH / 2 - 25 - (windowH/7)*2, 100,50 };
-	startButton = (GuiControlButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 1, "PLAY", playPos, this);
+	SDL_Rect playPos = { windowW / 20, windowH / 2 - 25 - (windowH/7)*2, 200,50 };
+	startButton = (GuiControlButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 1, "NEW GAME", playPos, this);
 	SDL_Rect continuePos = { windowW / 20, windowH / 2 - 25 - (windowH / 7), 200,50 };
 	continueButton = (GuiControlButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 2, "CONTINUE", continuePos, this);
 	SDL_Rect settingsPos = { windowW / 20, windowH / 2 - 25, 200,50 };
@@ -51,7 +51,11 @@ bool Menu::Start()
 	creditsButton = (GuiControlButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 4, "CREDITS", creditsPos, this);
 	SDL_Rect exitPos = { windowW / 20, windowH / 2 - 25 + (windowH / 7) * 2, 100,50 };
 	exitButton = (GuiControlButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 5, "EXIT", exitPos, this);
-	app->guiManager->GetFromID(2)->state = GuiControlState::DISABLED;
+	pugi::xml_document saveFile;
+	pugi::xml_parse_result result = saveFile.load_file("save_game.xml");
+	if (!result && saveFile.child("game_state").child("entitymanager").child("Player").attribute("lvl").as_int() == 1) {
+		app->guiManager->GetFromID(2)->state = GuiControlState::DISABLED;
+	}
 
 	return true;
 }
@@ -63,6 +67,8 @@ bool Menu::PreUpdate()
 
 bool Menu::Update(float dt)
 {
+	OPTICK_EVENT();
+
 	app->render->DrawTexture(img, windowW / 2 - texW / 2, windowH / 2 - texH / 2, NULL);
 	if (settings) {
 		quat.x = app->render->camera.x;
@@ -101,6 +107,18 @@ bool Menu::OnGuiMouseClickEvent(GuiControl* control)
 		app->sceneManager->currentStep = TO_BLACK;
 		app->sceneManager->maxFadeFrames = 100;
 		app->sceneManager->level1->reset = true;
+	}
+	if (control->id == 2) {
+		pugi::xml_document saveFile;
+		pugi::xml_parse_result result = saveFile.load_file("save_game.xml");
+		if (saveFile.child("game_state").child("entitymanager").child("Player").attribute("lvl").as_int() == 1) {
+			app->sceneManager->level1->hasToReload = true;
+			app->sceneManager->fade = true;
+			app->sceneManager->newScene = (Scene*)app->sceneManager->level1;
+			app->sceneManager->currentStep = TO_BLACK;
+			app->sceneManager->maxFadeFrames = 100;
+			app->sceneManager->level1->reset = true;
+		}
 	}
 	if (control->id == 3) {
 		app->guiManager->DesactvieAllGui();
